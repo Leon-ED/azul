@@ -33,6 +33,7 @@ def fabriques_plein(liste):
 def fabrique_est_vide():
     if len(fabrique1) == len(fabrique2) == len(fabrique3) == len(fabrique4) == len(fabrique5) == 0:
         return True
+    return False
 
 
 def select_fabriques():
@@ -47,20 +48,20 @@ def select_fabriques():
                 if y==0:
                     nombre = fabrique1.count(fabrique1[0])
                     couleur = fabrique1[0]
-                    return (couleur,nombre)                
+                    return couleur,nombre,fabrique1                
                 if y==1:
                     nombre = fabrique1.count(fabrique1[2])
                     couleur = fabrique1[2]
-                    return couleur,nombre
+                    return couleur,nombre,fabrique1
             if x ==2:
                 if y ==0:
                     nombre = fabrique1.count(fabrique1[1])
                     couleur = fabrique1[1]
-                    return couleur,nombre
+                    return couleur,nombre,fabrique1
                 if y==1:
                     nombre = fabrique1.count(fabrique1[3])
                     couleur= fabrique1[3]
-                    return couleur, nombre
+                    return couleur, nombre,fabrique1
 
     
         if 9<=x<=10: #Fabrique 2
@@ -142,12 +143,17 @@ def select_fabriques():
                     couleur= fabrique5[3]
                     return couleur, nombre
     else:
-        return (-10,-10)
+        return (-10,-10,-10)
     
+
+
+
+
+
 def affiche_fabrique():
     position = 0
-    for ligne in range(2):
-        for i in range(2):
+    for ligne in range(len(fabrique1)//2):
+        for i in range(len(fabrique1)//2):
             rectangle(50+50*i, 25+50*ligne, 100+50*i, 75+50*ligne,remplissage=fabrique1[position],couleur= "black",epaisseur=2)
             position += 1
     
@@ -173,7 +179,8 @@ def affiche_fabrique():
             position += 1
     
     
-def remove_fabrique(liste,couleur,nombre):
+def remove_fabrique(data):
+    couleur,nombre,liste = data
     for i in range(nombre):
         liste.remove(couleur)
     
@@ -229,15 +236,19 @@ if __name__ == "__main__":
 
 
     while True:
+        efface_tout()
         dessiner_plateau()
         affiche_fabrique()
 
-        couleur,nombre = select_fabriques()
+        data =couleur,nombre,fabrique_num = select_fabriques()
         print(couleur,nombre)
-        if couleur != nombre != -10:
+        if couleur != nombre != fabrique_num != -10:
             x,y,_ = attente_clic()
             remplir_cases(1, y, couleur, nombre)
+            print(data)
+            remove_fabrique(data)
             print(grille_j1)
+            print(fabrique1)
 
 
 
