@@ -8,7 +8,7 @@ A faire:
     Implémenter le 2nd joueur et les mécaniques
     Implémenter le comptage de points
     Créer un menu qui fait choisir si on veut jouer contre une IA ou un joueur
-    Créer une IA
+    Créer une IA.
   
 
 
