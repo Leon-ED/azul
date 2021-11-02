@@ -25,7 +25,6 @@ def dessiner_lignes_motif(nombre_joueurs): #Affiche les lignes du motif
         for nb_colonnes in range(0,nb_lignes):
             rectangle(250-60*nb_colonnes, 300+60*nb_lignes, 300-60*nb_colonnes, 350+60*nb_lignes) #Joueur 1
             rectangle(1400-60*nb_colonnes, 300+60*nb_lignes, 1450-60*nb_colonnes, 350+60*nb_lignes) #Joueur 2
-            cercle(250,300,20)
 
 def dessiner_murs_palais(nombre_joueurs):
     '''
