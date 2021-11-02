@@ -2,16 +2,22 @@ from upemtk import *
 
 #----------------------Module s'occupant de générer les graphismes de début de jeu----------------------#
 
-#Cote d'un carré: 50
+cote_carre = 50
+largeur_fenetre = 1800
+hauteur_fenetre = 900
 
-def dessiner_fabriques():
+def dessiner_fabriques(nombre_fabriques):
     '''
-    Dessine les 5 cercles des fabriques en haut de l'écran
+    Dessine les  cercles des fabriques en haut de l'écran
     '''
-    for i in range(5):
-        cercle(100+400*i,75,60,epaisseur=1)
+    ecart = largeur_fenetre/nombre_fabriques
+    for i in range(nombre_fabriques):
+        cercle(100+ecart*i,75,60,epaisseur=1)
 
-def dessiner_lignes_motif(): #Affiche les lignes du motif
+
+
+
+def dessiner_lignes_motif(nombre_joueurs): #Affiche les lignes du motif
     '''
     Dessine les lignes de motif des deux joueurs.
     '''
@@ -20,7 +26,7 @@ def dessiner_lignes_motif(): #Affiche les lignes du motif
             rectangle(250-60*nb_colonnes, 300+60*nb_lignes, 300-60*nb_colonnes, 350+60*nb_lignes) #Joueur 1
             rectangle(1400-60*nb_colonnes, 300+60*nb_lignes, 1450-60*nb_colonnes, 350+60*nb_lignes) #Joueur 2
 
-def dessiner_murs_palais():
+def dessiner_murs_palais(nombre_joueurs):
     '''
     Dessine les murs du palais des deux joueurs.
     '''   
@@ -31,21 +37,87 @@ def dessiner_murs_palais():
 
 
 
-def dessiner_plancher():
+def dessiner_plancher(nombre_joueurs):
     '''
     Dessine les lignes de plancher des deux joueurs
     '''
-    for i in range(8):
-        rectangle(250-50*i, 900, 300-50*i, 1050)
+    for i in range(7):
+        rectangle(50+50*i, 800, 100+50*i, 850)
+
+def dessiner_tuiles_plancher(liste_plancher):
+    if "vide" in liste_plancher or len(liste_plancher) == 0:
+        return
+    print("FONCTION DESSINER TUILES PLANCEHR")
+    i = 0   
+    for colors in liste_plancher:
+        rectangle(50+50*i, 800, 100+50*i, 850,remplissage=colors)
+        i+=1
+        #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
+
+
+def dessiner_tuiles_centre(liste_centre):
+    i = 0
+    j = 0
+    for colors in liste_centre:
+        if colors == -1:
+            continue
+        if i == 100:   #Détermine le nombre d'éléments au maximum sur une ligne
+            i = 0
+            j +=1
+        rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
+        i += 1
+
+
+def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
+    '''
+    Prend en paramètre une liste de couleur et dessine les rectangles
+    de chaque couleur de cette liste.
+    '''
+    if -10 in fabrique:
+        return
+    ecart = 200
+    #print(liste_positions)
+    j = 0
+    ligne = 0
+    x = liste_positions[i-1]
+    for line in fabrique:
+        for colors in line:
+            if j == 2:
+                j = 0
+                ligne = 1
+            rectangle(x+50*j, 50+50*ligne, (x+50)+50*j, 100+50*ligne,remplissage=colors,couleur='black',epaisseur=2)
+            
+            j+=1   
+
+def dessine_tuiles_lignes(grille,index):
+    #j = (y//60)-5
+    for i in range(len(grille)):
+        for j in range(len(grille[i])):
+            if grille[i][j] == "vide":
+                continue
+            print("graphique, dessine_tuiles_grilles",grille)
+            #rectangle(index[0]-60*i, index[1]+60*j, (index[0]+50)-60*i, (index[1]+50)+60*j,remplissage=grille[i][j])
+            rectangle(index[0]+60*j, index[1]+60*i, (index[0]+50)+60*j, (index[1]+50)+60*i,remplissage=grille[i][j])
 
 
 
-def dessiner_plateau():
+
+def dessiner_plateau(nombre_joueurs,nombre_fabriques):
     '''
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
     toutes les autres fonctions.
     '''
-    dessiner_fabriques()
-    dessiner_lignes_motif()
-    dessiner_murs_palais()
-    dessiner_plancher()
+    #dessiner_fabriques(nombre_fabriques)
+    dessiner_lignes_motif(nombre_joueurs)
+    dessiner_murs_palais(nombre_joueurs)
+    dessiner_plancher(nombre_joueurs)
+
+
+def position(nombre_fabriques):
+    ecart = 200
+    liste_positions = [50]
+    for i in range(1,nombre_fabriques):
+        liste_positions.append(liste_positions[i-1]+ecart)
+    return liste_positions
+
+

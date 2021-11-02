@@ -32,186 +32,139 @@ def fabriques_plein(liste):
     Prends en paramètre une liste et la retourne en ayant ajouté 4 couleurs aléatoires présentes dans le sac en supprimant l'élément
     choisit de la liste sac.
     '''
-    for i in range(4):
-        taille = len(sac)
-        r = randint(0,taille-1)
-        liste.append(sac[r])
-        sac.pop(r)
+    for i in range(2):
+        for j in range(2):
+            taille = len(sac)
+            r = randint(0,taille-1)
+            liste[i][j] = sac[r]
+            sac.pop(r)
 
     return liste
 
-def fabrique_est_vide():
+def plus_de_tuiles():
     '''
-    Retourne True si toutes les fabriques sont vides False si elles ne le sont pas.
+    Retourne True s'il n'y a plus de tuiles en jeu (fabriques et centre du plateau) sinon False
     '''
-    if len(fabrique1) == len(fabrique2) == len(fabrique3) == len(fabrique4) == len(fabrique5) == 0:
+    if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and len(centre_table) == 0:
         return True
     return False
 
-
-def select_fabriques():
+def liste_invalide(fabrique):
     '''
-    Si le clic se trouve dans la zone de fabrique: retourne la couleur, le nombre et dans quelle fabrique le clic a été effectué sinon retourne -10,-10,-10
+    Prend en paramètre une liste(fabrique) et renvoie True si elle est invalide
+    c'est à dire si sa taille est nulle ou que son type n'est pas une liste sinon renvoie False.
     '''
-    x,y,_ = attente_clic()
-    x = x // 50  # Divise le clic pour que chaque tuile ait sa position pour 
-    y = y // 73  # être précis
-    nombre = 0
-    couleur = ""
-    if 0<=y<=1: #Si le clic se trouve bien entre le haut et le bas des fabriques
-        if 1<=x<=2: #Fabrique 1, si le clic est bien entre les position de la première fabrique
-            if x==1:
-                if y==0:
-                    nombre = fabrique1.count(fabrique1[0])
-                    couleur = fabrique1[0]
-                    return couleur,nombre,fabrique1                
-                if y==1:
-                    nombre = fabrique1.count(fabrique1[2])
-                    couleur = fabrique1[2]
-                    return couleur,nombre,fabrique1
-            if x ==2:
-                if y ==0:
-                    nombre = fabrique1.count(fabrique1[1])
-                    couleur = fabrique1[1]
-                    return couleur,nombre,fabrique1
-                if y==1:
-                    nombre = fabrique1.count(fabrique1[3])
-                    couleur= fabrique1[3]
-                    return couleur, nombre,fabrique1
+    for i in range(len(fabrique)):
+        if type(fabrique[i]) != list:
+            return True
+        if len(fabrique[i]) == 0:
+            return True
+        if -10 in fabrique:
+            return True
+    return False
 
-    
-        if 9<=x<=10: #Fabrique 2
-            if x==9:
-                if y==0:
-                    nombre = fabrique2.count(fabrique2[0])
-                    couleur = fabrique2[0]
-                    return couleur,nombre,fabrique2             
-                if y==1:
-                    nombre = fabrique2.count(fabrique2[2])
-                    couleur = fabrique2[2]
-                    return couleur,nombre,fabrique2
-            if x ==10:
-                if y ==0:
-                    nombre = fabrique2.count(fabrique2[1])
-                    couleur = fabrique2[1]
-                    return couleur,nombre,fabrique2
-                if y==1:
-                    nombre = fabrique2.count(fabrique2[3])
-                    couleur= fabrique2[3]
-                    return couleur, nombre,fabrique2
-
-
-        if 17<=x<=18: #Fabrique 3
-            if x==17:
-                if y==0:
-                    nombre = fabrique3.count(fabrique3[0])
-                    couleur = fabrique3[0]
-                    return couleur,nombre,fabrique3                
-                if y==1:
-                    nombre = fabrique3.count(fabrique3[2])
-                    couleur = fabrique3[2]
-                    return couleur,nombre,fabrique3
-            if x ==18:
-                if y ==0:
-                    nombre = fabrique3.count(fabrique3[1])
-                    couleur = fabrique3[1]
-                    return couleur,nombre,fabrique3
-                if y==1:
-                    nombre = fabrique3.count(fabrique3[3])
-                    couleur= fabrique3[3]
-                    return couleur, nombre,fabrique3
-        if 25<=x<=26: #Fabrique 4
-            if x==25:
-                if y==0:
-                    nombre = fabrique4.count(fabrique4[0])
-                    couleur = fabrique4[0]
-                    return couleur,nombre,fabrique4            
-                if y==1:
-                    nombre = fabrique4.count(fabrique4[2])
-                    couleur = fabrique4[2]
-                    return couleur,nombre,fabrique4
-            if x ==26:
-                if y ==0:
-                    nombre = fabrique4.count(fabrique4[1])
-                    couleur = fabrique4[1]
-                    return couleur,nombre,fabrique4
-                if y==1:
-                    nombre = fabrique4.count(fabrique4[3])
-                    couleur= fabrique4[3]
-                    return couleur, nombre,fabrique4
-        if 33<=x<=34: #Fabrique 5
-            if x==33:
-                if y==0:
-                    nombre = fabrique5.count(fabrique5[0])
-                    couleur = fabrique5[0]
-                    return couleur,nombre,fabrique5                
-                if y==1:
-                    nombre = fabrique5.count(fabrique5[2])
-                    couleur = fabrique5[2]
-                    return couleur,nombre,fabrique5
-            if x ==34:
-                if y ==0:
-                    nombre = fabrique5.count(fabrique5[1])
-                    couleur = fabrique5[1]
-                    return couleur,nombre,fabrique5
-                if y==1:
-                    nombre = fabrique5.count(fabrique5[3])
-                    couleur= fabrique5[3]
-                    return couleur, nombre,fabrique5
-    else:
-        return (-10,-10,-10)
-    
-
-
-
-
-
-def affiche_fabrique():
+def select_fabrique(x,y):
     '''
-    Utilise upemtk afin d'afficher les éléments des fabriques selon leur couleur
+    Prends en paramètres les coordonnées d'un clic puis renvoie la fabrique correspondante au clic
+    selon le nombre de fabriques (lié au nombre de joueur) et renvoie l'indice i et j ainsi que la liste (fabrique)
+    sélectionnée. 
     '''
-    #Fabrique 1
-    position = 0
-    for ligne in range(len(fabrique1)//2):
-        for i in range(len(fabrique1)//2):
-            rectangle(50+50*i, 25+50*ligne, 100+50*i, 75+50*ligne,remplissage=fabrique1[position],couleur= "black",epaisseur=2)
-            position += 1
-    
-    #Fabrique 2
-    position = 0
-    for ligne in range(len(fabrique2)//2):
-        for i in range(len(fabrique2)//2):
-            rectangle(450+50*i, 25+50*ligne, 500+50*i, 75+50*ligne,remplissage=fabrique2[position],couleur= "black",epaisseur=2)
-            position += 1
-    
-    position = 0
-    for ligne in range(len(fabrique3)//2):
-        for i in range(len(fabrique3)//2):
-            rectangle(850+50*i, 25+50*ligne, 900+50*i, 75+50*ligne,remplissage=fabrique3[position],couleur= "black",epaisseur=2)
-            position += 1
-    
-    position = 0
-    for ligne in range(len(fabrique4)//2):
-        for i in range(len(fabrique4)//2):
-            rectangle(1250+50*i, 25+50*ligne, 1300+50*i, 75+50*ligne,remplissage=fabrique4[position],couleur= "black",epaisseur=2)
-            position += 1
-    
-    position = 0
-    for ligne in range(len(fabrique5)//2):
-        for i in range(len(fabrique5)//2):
-            rectangle(1650+50*i, 25+50*ligne, 1700+50*i, 75+50*ligne,remplissage=fabrique5[position],couleur= "black",epaisseur=2)
-            position += 1
-    
-    
-def remove_couleur(data):
+    i = (x//50)-1
+    j = (y//50)-1
+    fabrique = []
+    selection = []
+    emplacements = []
+    if nombre_joueurs >=2:
+        if i == 0 or i==1:
+            print("Fabrique 1")
+            fabrique = fabrique1
+
+        if i == 4 or i==5:
+            i-=4
+            print("Fabrique 2")
+            fabrique = fabrique2
+
+        if i == 8 or i==9:
+            i-=8
+            print("Fabrique 3")
+            fabrique = fabrique3
+
+        if i == 12 or i==13:
+            i-=12
+            print("Fabrique 4")
+            fabrique = fabrique4
+
+        if i == 16 or i==17:
+            i-=16
+            print("Fabrique 5")
+            fabrique = fabrique5
+
+    if nombre_joueurs >=3:
+        if i == 20 or i==21:
+            i-=20
+            print("Fabrique 6")
+            fabrique = fabrique6
+
+        if i == 24 or i==25:
+            i-=24
+            print("Fabrique 7")
+            fabrique = fabrique7
+
+    if nombre_joueurs >= 4:
+
+        if i == 28 or i==29:
+            i-=28
+            print("Fabrique 8")
+            fabrique = fabrique8
+        
+        if i == 32 or i==33:
+            i-=32
+            print("Fabrique 9")
+            fabrique = fabrique9
+    return i,j,fabrique
+
+
+def select_tuiles(i,j,fabrique):
     '''
-    Permet de supprimer toutes les couleurs utilisées dans la liste d'une fabrique.
+    Prend en paramètres les indices i et j et une liste (fabrique) renvoie la couleur ainsi que le nombre
+    d'occurence de la couleur dans la fabrique ainsi que la fabrique. Si cela ne correspond à rien la fonction renvoie
+    -10
     '''
-    couleur,nombre,liste = data
-    for i in range(nombre):
-        liste.remove(couleur)
-    print(liste)             ############################A enlever à la fin
+    print("i et j",i,j)
+    if  i>1 or liste_invalide(fabrique) == True:
+        return -10
+    compteur = 0
+    couleur = fabrique[j][i]
+    for lines in fabrique:
+        for elems in lines:
+            if elems == couleur:
+                compteur+=1
+    return couleur,compteur,fabrique
     
+
+def liste_non_valide(liste):
+    if -10 in liste:
+        return True
+    return False
+
+def un_select_fabrique(x,y):
+    pass
+
+
+
+    
+def remove_couleur(selection):
+    '''
+    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
+    d'où viennent ces tuiles. La fonction renvoie -10 si la liste ne peut pas être traitée sinon elle supprime toutes les occurences de la couleur
+    présente dans cette liste.
+    '''
+    couleur,nombre,fabrique = selection
+    if liste_invalide(fabrique):
+        return -10
+    for i in range(len(fabrique)):
+        while couleur in fabrique[i]:
+            fabrique[i].remove(couleur)
 
 def clic():
     '''
@@ -220,93 +173,238 @@ def clic():
     x, y, _ = attente_clic()
     return x, y
 
-def remplir_cases(joueur,y,couleur,nombre):
+def remplir_cases(selection,grille,y):
     '''
-    Permet de placer les fabriques sélectionnées par le joueur dans son plateau.
-    Si le nombre est plus grand que ce que peut accueillir la ligne alors la fonction retourne la couleur
-    ,le nombre de pièces restantes et le joueur
+    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
+    d'où viennent ces tuiles. Ainsi que la grille du joueur en train de jouer et la position y du clic de l'utilisateur.
+    La fonction renvoie -10 si les coordonnées du clic de sont pas bonnes. Sinon elle place dans la liste de la grille les éléments sélectionnés
+    et s'il le faut appelle la fonction remplir_plancher afin de traiter les cas où plus de tuiles sont sélectionnées qu'il n'y a de place sur la ligne choisie.
     '''
+    couleur,nombre,_ = selection
     y = (y//60)-6
-    if y < 0 or y > 4:
-        return
-    if joueur == 1:    #Remplit la grille du 1er joueur
-        longueur = len(grille_j1[y])
-        reste = 0
-        for i in range(1,nombre+1):
-            if nombre> longueur:
-                reste = nombre-longueur
-                if i == longueur:
-                    remplir_plancher(couleur,reste,1)
-                    return
-                grille_j1[y][-i]= couleur
-                print(grille_j1,reste)   ############################A enlever à la fin
-
-            else:
-                grille_j1[y][-i] = couleur
-
-
-    if joueur ==2:  #Remplit la grille du 2eme joueur 
-        longueur = len(grille_j1[y])
-        reste = 0
-        for i in range(nombre):
-            if nombre> longueur:
-                grille_j2[y][i]= couleur
-                reste = nombre-longueur
-            else:
-                grille_j2[y][i] = couleur
+    if (y < 0 or y > 4):
+        return -10 
+    if  (x<10 or x>300):
+        return -10
+    longueur = len(grille[y])
+    reste = 0
+    for i in range(1,nombre+1):
+        if nombre> longueur:
+            reste = nombre-longueur
+            if i == longueur:
+                remplir_plancher(couleur,reste,plancher)
+                grille[y][-i]= couleur
+                print("En trop",grille,reste)   ############################A enlever à la fin   
+                return           
+        else:
+            grille[y][-i] = couleur
+            print("Pas en trop",grille,reste)
 
 
-
-def remplir_plancher(couleur,reste,joueur):
+def remplir_plancher(couleur,reste,grille_plancher):
     '''
-    Prends en paramètre la couleur, le nombre et le joueur afin de remplir la ligne
-    de plancher du joueur concerné pour lui attribuer un malus.
+    Prends en paramètre, la couleur de la tuile, le nombre restant et la grille du plancher du joueur en train de jouer.
+    La fonction si la grille de plancher n'est pas pleine ajoute les éléments à celle-ci
     '''
-    if joueur == 1:
-        if len(ligne_plancher_j1) != 7:
-            for i in range(reste):
-                ligne_plancher_j1.append(couleur)
-        print("remplir plancher",ligne_plancher_j1) ############################A enlever à la fin
-    
-    if joueur == 2:
-        if len(ligne_plancher_j2) != 7:
-            for i in range(reste):
-                ligne_plancher_j2.append(couleur)
+    if len(grille_plancher) != 7:
+        for i in range(reste):
+            grille_plancher.append(couleur)
+    print("remplir plancher",grille_plancher) ############################A enlever à la fin
+
+
+def deplacer_vers_centre(selection):
+    '''
+    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
+    d'où viennent ces tuiles.
+    La fonction ajoute les éléments de la fabrique à la liste composant les tuilesdu centre de la table avant de remplacer celle-ci par la liste [-10]
+    '''    
+    _,_,fabrique = selection
+    for lignes in fabrique:
+        for elements in lignes:
+            centre_table.append(elements)
+    fabrique[:] = [-10]
+
+
 
 if __name__ == "__main__":
 
     #------Initialisation-------#
+    nombre_joueurs = 4
 
-    dessiner_plateau()
-
-    grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-    grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
     sac = sac_plein()
+    centre_table = [-1]
 
-    ligne_plancher_j1 = []
-    ligne_plancher_j2 = []
+    #Initialise les données selon le nombre de joueurs
+    if nombre_joueurs >= 2:
+        fabrique1 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique2 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique3 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique4 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique5 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        nombre_fabriques = 5
 
-    fabrique1 = fabriques_plein(list())
-    fabrique2 = fabriques_plein(list())
-    fabrique3 = fabriques_plein(list())
-    fabrique4 = fabriques_plein(list())
-    fabrique5 = fabriques_plein(list())
+        ligne_plancher_j1 = []
+        ligne_plancher_j2 = []
+
+        grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
+        grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
+
+    if nombre_joueurs >= 3:
+        fabrique6 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique7 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        nombre_fabriques = 7
+        
+        ligne_plancher_j3 = []
+
+        grille_j3 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
+
+    if nombre_joueurs == 4:
+
+        fabrique8 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique9 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        nombre_fabriques = 9
+
+        ligne_plancher_j4 = []
+
+        grille_j4 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
+
+    positions = position(nombre_fabriques)
+
+
+    joueurs_passes = 0 
+    tours = 0
+    joueur = 1
+    grille = grille_j1
+    plancher = ligne_plancher_j1
+    Tour_fini = False
 
     #-------Boucle principale------#
     while True:
-        efface_tout()
-        dessiner_plateau()
-        affiche_fabrique()
+        
+        dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
+       
+        #Detecte si un tour est finit dans ce cas là remet à zéro les variables pour le tour suivant
+        if joueurs_passes == nombre_joueurs:
+            tours += 1
+            joueurs_passes = 0
+            joueur = 1
+        
+        #Affiche et de met à jour le nombre de fabriques selon le nombre de joueurs
+        if nombre_joueurs >= 2:
+            dessiner_tuiles_fabriques(fabrique1,1,positions)
+            dessiner_tuiles_fabriques(fabrique2,2,positions)
+            dessiner_tuiles_fabriques(fabrique3,3,positions)
+            dessiner_tuiles_fabriques(fabrique4,4,positions)
+            dessiner_tuiles_fabriques(fabrique5,5,positions)
+            dessiner_tuiles_plancher(ligne_plancher_j1)
+            dessiner_tuiles_plancher(ligne_plancher_j2)
 
+            #Met à jour les variables en fonction du joueur qui doit jouer
+            if joueur == 1:
+                index_grille = (250,300)
+                index_plancher = 0
+                grille = grille_j1
+                plancher = ligne_plancher_j1
+            if joueur == 2:
+                grille = grille_j2
+                plancher = ligne_plancher_j2
+
+        if nombre_joueurs >= 3:
+            dessiner_tuiles_fabriques(fabrique6,6,positions)
+            dessiner_tuiles_fabriques(fabrique7,7,positions)
+
+            if joueur == 3:
+                grille = grille_j3
+                plancher = ligne_plancher_j3
+
+        if nombre_joueurs >= 4:
+            dessiner_tuiles_fabriques(fabrique8,8,positions)
+            dessiner_tuiles_fabriques(fabrique9,9,positions)
+
+            if joueur == 4:
+                grille = grille_j1
+                plancher = ligne_plancher_j4
+
+
+
+
+
+
+
+
+
+        print("Le joueur qui joue est le joueur ",joueur)
+        x,y,_ = attente_clic()
+        print(x,y)
+
+
+        if 1>=(y//50)-1 >=0:   #Si le clic se trouve dans la zone des fabriques on appelle la fonction select_fabrique
+            
+            x,y,fabrique_selectionnee = select_fabrique(x,y)
+            selection = select_tuiles(x, y, fabrique_selectionnee)
+            print(selection,"Selection")
+
+            
+            if selection != -10: #Si la selection est valide
+                x,y,type_clic = attente_clic()
+                if type_clic == 'ClicDroit' : #Pour déselectionner ce qu'on a sélectionné (pas implémenté)
+                    selection = -10
+                    continue
+                else:
+                    if remplir_cases(selection,grille,y) == -10: #Détecte si le clic est invalide
+                        print("Clic remplir_case invalide")
+                        continue
+
+                    efface_tout() #Efface tout pour mettre à jour les graphiques
+                    remove_couleur(selection) #Enleve les tuiles de la couleurs posée de la liste de la fabrique
+                    deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
+                    dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
+                    dessine_tuiles_lignes(grille, index_grille)
+                    Tour_fini = True
+                    
+                    
+                    #Debug
+                    print("TUILES AU CENTRE",centre_table)
+                    print("TUILES PLANCHER", plancher)
+                    print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
+            
+        if Tour_fini:
+            joueurs_passes += 1
+            joueur += 1
+            Tour_fini = False
+
+
+
+
+
+
+
+
+            '''
+            print(x,y)
+            print((x//50)-1,(y//50)-1)
+            print("Quelle fabrique ?", (x//50)//3.5)
+            '''
+
+
+
+
+
+
+
+
+        '''
         data =couleur,nombre,fabrique_num = select_fabriques()
-        print(couleur,nombre)            ############################A enlever à la fin
+        grille = grille_j1
         if couleur != nombre != fabrique_num != -10:
             x,y,_ = attente_clic()
-            remplir_cases(1, y, couleur, nombre)
-            print(data)                ############################A enlever à la fin
+            remplir_cases(couleur,nombre,joueur,grille,y)
+
             remove_couleur(data)
-            print(grille_j1)      ############################A enlever à la fin
-            print(fabrique1)       ############################A enlever à la fin
+
+        '''
+
+
 
 
 
