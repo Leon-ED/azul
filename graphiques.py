@@ -25,6 +25,7 @@ def dessiner_lignes_motif(nombre_joueurs): #Affiche les lignes du motif
         for nb_colonnes in range(0,nb_lignes):
             rectangle(250-60*nb_colonnes, 300+60*nb_lignes, 300-60*nb_colonnes, 350+60*nb_lignes) #Joueur 1
             rectangle(1400-60*nb_colonnes, 300+60*nb_lignes, 1450-60*nb_colonnes, 350+60*nb_lignes) #Joueur 2
+            cercle(250,300,20)
 
 def dessiner_murs_palais(nombre_joueurs):
     '''
@@ -92,14 +93,24 @@ def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
 def dessine_tuiles_lignes(grille,index):
     #j = (y//60)-5
     for i in range(len(grille)):
-        for j in range(len(grille[i])):
+        for j in range(i+1):
             if grille[i][j] == "vide":
                 continue
             print("graphique, dessine_tuiles_grilles",grille)
-            #rectangle(index[0]-60*i, index[1]+60*j, (index[0]+50)-60*i, (index[1]+50)+60*j,remplissage=grille[i][j])
-            rectangle(index[0]+60*j, index[1]+60*i, (index[0]+50)+60*j, (index[1]+50)+60*i,remplissage=grille[i][j])
-
-
+            rectangle(index[0]-60*j, index[1]+60*i, (index[0]+50)-60*j, (index[1]+50)+60*i,remplissage=grille[i][j])
+            
+    '''
+    i,j = -1,0
+    for lines in grille:
+        i+=1
+        j = 0
+        for colors in lines:
+            if colors == 'vide':
+                j+=1
+                continue
+            rectangle(250-60*j, 360+60*i+1, 300-60*j, 410+60*i+1,remplissage=grille[i][j])
+        
+    '''
 
 
 def dessiner_plateau(nombre_joueurs,nombre_fabriques):

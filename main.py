@@ -173,7 +173,7 @@ def clic():
     x, y, _ = attente_clic()
     return x, y
 
-def remplir_cases(selection,grille,y):
+def remplir_cases(selection,grille,y,index_grille):
     '''
     Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
     d'où viennent ces tuiles. Ainsi que la grille du joueur en train de jouer et la position y du clic de l'utilisateur.
@@ -182,23 +182,46 @@ def remplir_cases(selection,grille,y):
     '''
     couleur,nombre,_ = selection
     y = (y//60)-6
-    if (y < 0 or y > 4):
+    if (y < 0 or y > 4): #Detecte sur la position y n'est pas bonne
+        print("remplir_cases: y non valide")
         return -10 
-    if  (x<10 or x>300):
+    if  (x<10 or x>300): #Detecte si la position x n'est pas bonne
+        print("remplir_cases: x non valide")
         return -10
-    longueur = len(grille[y])
+
+    if 'vide' not in grille[y]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
+        print("remplir_cases: Plus de place dans ligne")
+        return -10
+
+    longueur = 0
+    for colors in grille[y]: #Detecte si une couleur autre est déja présente et si c'est le cas retourne -10
+        if colors == 'vide':
+            longueur += 1   
+            continue
+        if colors != couleur:
+            print("remplir_cases: Pas la bonne couleur")
+            return -10
     reste = 0
+    print("Place libre: ",longueur)
+    print("remplir_cases, y = ",y)
+
     for i in range(1,nombre+1):
         if nombre> longueur:
             reste = nombre-longueur
             if i == longueur:
                 remplir_plancher(couleur,reste,plancher)
                 grille[y][-i]= couleur
-                print("En trop",grille,reste)   ############################A enlever à la fin   
+                print("remplir_cases: Il y a un reste:",reste)   ############################A enlever à la fin
+                print("remplir_cases: Grille:",grille)
                 return           
         else:
-            grille[y][-i] = couleur
-            print("Pas en trop",grille,reste)
+            j=0
+            while j< len(grille[y])-1 and grille[y][j] != 'vide':
+                j+=1
+            grille[y][j] = couleur
+            print("remplir_cases: Pas de reste",grille)            
+            
+
 
 
 def remplir_plancher(couleur,reste,grille_plancher):
@@ -301,7 +324,7 @@ if __name__ == "__main__":
 
             #Met à jour les variables en fonction du joueur qui doit jouer
             if joueur == 1:
-                index_grille = (250,300)
+                index_grille = (250,360)
                 index_plancher = 0
                 grille = grille_j1
                 plancher = ligne_plancher_j1
@@ -348,10 +371,11 @@ if __name__ == "__main__":
             if selection != -10: #Si la selection est valide
                 x,y,type_clic = attente_clic()
                 if type_clic == 'ClicDroit' : #Pour déselectionner ce qu'on a sélectionné (pas implémenté)
+                    print("Clic droit")
                     selection = -10
                     continue
                 else:
-                    if remplir_cases(selection,grille,y) == -10: #Détecte si le clic est invalide
+                    if remplir_cases(selection,grille,y,index_grille) == -10: #Détecte si le clic est invalide
                         print("Clic remplir_case invalide")
                         continue
 
@@ -360,20 +384,23 @@ if __name__ == "__main__":
                     deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
                     dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
                     dessine_tuiles_lignes(grille, index_grille)
+                    
                     Tour_fini = True
                     
                     
                     #Debug
+                    '''
                     print("TUILES AU CENTRE",centre_table)
                     print("TUILES PLANCHER", plancher)
                     print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
-            
+                    '''
+            '''
         if Tour_fini:
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False
 
-
+            '''
 
 
 
