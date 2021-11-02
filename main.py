@@ -252,7 +252,7 @@ def deplacer_vers_centre(selection):
 if __name__ == "__main__":
 
     #------Initialisation-------#
-    nombre_joueurs = 4
+    nombre_joueurs = 2
 
     sac = sac_plein()
     centre_table = [-1]
@@ -271,7 +271,8 @@ if __name__ == "__main__":
 
         grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
         grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-
+        index_grille_j1 = (250,360)
+        index_grille_j2 = (1400,360)
     if nombre_joueurs >= 3:
         fabrique6 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique7 = fabriques_plein([["vide","vide"],["vide","vide"]])
@@ -280,7 +281,7 @@ if __name__ == "__main__":
         ligne_plancher_j3 = []
 
         grille_j3 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-
+        
     if nombre_joueurs == 4:
 
         fabrique8 = fabriques_plein([["vide","vide"],["vide","vide"]])
@@ -321,16 +322,21 @@ if __name__ == "__main__":
             dessiner_tuiles_fabriques(fabrique5,5,positions)
             dessiner_tuiles_plancher(ligne_plancher_j1)
             dessiner_tuiles_plancher(ligne_plancher_j2)
+            dessine_tuiles_lignes(grille_j1, index_grille_j1)
+            dessine_tuiles_lignes(grille_j2, index_grille_j2)
 
             #Met à jour les variables en fonction du joueur qui doit jouer
             if joueur == 1:
                 index_grille = (250,360)
-                index_plancher = 0
+                index_plancher = (0,0)
+
                 grille = grille_j1
                 plancher = ligne_plancher_j1
+
             if joueur == 2:
                 grille = grille_j2
                 plancher = ligne_plancher_j2
+                index_grille = (1400,360)
 
         if nombre_joueurs >= 3:
             dessiner_tuiles_fabriques(fabrique6,6,positions)
@@ -383,7 +389,7 @@ if __name__ == "__main__":
                     remove_couleur(selection) #Enleve les tuiles de la couleurs posée de la liste de la fabrique
                     deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
                     dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
-                    dessine_tuiles_lignes(grille, index_grille)
+                    #dessine_tuiles_lignes(grille, index_grille)
                     
                     Tour_fini = True
                     
@@ -394,13 +400,13 @@ if __name__ == "__main__":
                     print("TUILES PLANCHER", plancher)
                     print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
                     '''
-            '''
+            
         if Tour_fini:
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False
 
-            '''
+    
 
 
 
