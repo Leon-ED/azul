@@ -75,7 +75,7 @@ def select_fabriques():
                     return couleur, nombre,fabrique1
 
     
-        if 9<=x<=10: #Fabrique 2
+        if 9<=x<=10: #Fabrique 2.
             if x==9:
                 if y==0:
                     nombre = fabrique2.count(fabrique2[0])
