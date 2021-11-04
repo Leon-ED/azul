@@ -84,6 +84,8 @@ def dessiner_tuiles_centre(liste_centre):
 
 def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
+    if couleur == 'vide':
+        return
     for i in range(nombre):
         rectangle(index_plancher[0]+50*i, index_plancher[1]+60, (index_plancher[0]+50)+50*i, (index_plancher[1]+110),remplissage=couleur)
 
