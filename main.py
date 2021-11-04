@@ -215,11 +215,17 @@ def remplir_cases(selection,grille,y,index_grille):
             reste = nombre-longueur
             if i == longueur-1:
                 remplir_plancher(couleur,reste,plancher)
-                grille[y][i]= couleur
+                j=0
+                while j< len(grille[y])-1 and grille[y][j] != 'vide':
+                    j+=1
+                grille[y][j] = couleur
                 print("remplir_cases: Il y a un reste:",reste)   ############################A enlever à la fin
                 print("remplir_cases: Grille:",grille)
                 return
-            grille[y][i]= couleur           
+            j=0
+            while j< len(grille[y])-1 and grille[y][j] != 'vide':
+                j+=1
+            grille[y][j] = couleur           
         else:
             j=0
             while j< len(grille[y])-1 and grille[y][j] != 'vide':
@@ -278,7 +284,7 @@ if __name__ == "__main__":
                 
     #Initialise les données selon le nombre de joueurs
     if nombre_joueurs >= 2:
-        fabrique1 = [["black","black"],["black","black"]]                #fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique1 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique2 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique3 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique4 = fabriques_plein([["vide","vide"],["vide","vide"]])
