@@ -152,7 +152,6 @@ def liste_non_valide(liste):
 
 def un_select_fabrique(type_clic):
     if type_clic == 'ClicDroit':
-        efface_tout()
         return True
     return False
 
@@ -211,15 +210,16 @@ def remplir_cases(selection,grille,y,index_grille):
     print("Place libre: ",longueur)
     print("remplir_cases, y = ",y)
 
-    for i in range(1,nombre+1):
+    for i in range(0,nombre):
         if nombre> longueur:
             reste = nombre-longueur
-            if i == longueur:
+            if i == longueur-1:
                 remplir_plancher(couleur,reste,plancher)
-                grille[y][-i]= couleur
+                grille[y][i]= couleur
                 print("remplir_cases: Il y a un reste:",reste)   ############################A enlever à la fin
                 print("remplir_cases: Grille:",grille)
-                return           
+                return
+            grille[y][i]= couleur           
         else:
             j=0
             while j< len(grille[y])-1 and grille[y][j] != 'vide':
@@ -278,7 +278,7 @@ if __name__ == "__main__":
                 
     #Initialise les données selon le nombre de joueurs
     if nombre_joueurs >= 2:
-        fabrique1 = fabriques_plein([["vide","vide"],["vide","vide"]])
+        fabrique1 = [["black","black"],["black","black"]]                #fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique2 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique3 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique4 = fabriques_plein([["vide","vide"],["vide","vide"]])
@@ -333,7 +333,7 @@ if __name__ == "__main__":
     while True:
         
         dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
-       
+        dessiner_tuiles_centre(centre_table)
         #Detecte si un tour est finit dans ce cas là remet à zéro les variables pour le tour suivant
         if joueurs_passes == nombre_joueurs:
             tours += 1
@@ -417,23 +417,26 @@ if __name__ == "__main__":
             print("pos plancher",positions_plancher)
             x,y,type_clic = attente_clic()
             if un_select_fabrique(type_clic): #Pour déselectionner ce qu'on a sélectionné (pas implémenté)
+                efface_tout()
                 print("if : Clic droit")
                 selection = -10
                 continue
                 
-            else:                
+            else:
+                tour_valide = None                
                 if remplir_cases(selection,grille,y,positions_grille) == -10: #Détecte si le clic est invalide
                     print("Boucle True: Clic pas valide pour remplir cases")
                     while True:
                         x,y,type_clic = attente_clic()
                         if un_select_fabrique(type_clic):
-                            rejouer = True
+                            efface_tout()
+                            tour_valide = False
                             print("Boucle True: Clic droit > supp selection")
                             break
                         if remplir_cases(selection, grille, y, positions_grille) != -10:
                             print("Boucle True : Clic valide")
                             break
-                    if rejouer:
+                    if tour_valide == False:
                         continue
                     #print("Clic remplir_case invalide")
                     #print("selection;",selection)

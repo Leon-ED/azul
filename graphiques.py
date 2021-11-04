@@ -55,7 +55,7 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher):
         i+=1
         #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
 
-
+'''
 def dessiner_tuiles_centre(liste_centre):
     i = 0
     j = 0
@@ -68,7 +68,19 @@ def dessiner_tuiles_centre(liste_centre):
                 j +=1
             rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
             i += 1
-
+'''
+def dessiner_tuiles_centre(liste_centre):
+    i = 0
+    j = 0
+    for lines in liste_centre:
+        for colors in lines:
+            if colors == -1 or colors == 'vide':
+                continue
+            if i == 100:   #Détermine le nombre d'éléments au maximum sur une ligne
+                i = 0
+                j +=1
+            rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
+            i += 1
 
 def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
