@@ -483,6 +483,5 @@ if __name__ == "__main__":
 
 
 
-
 attente_clic()
 ferme_fenetre()
