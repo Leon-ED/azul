@@ -320,7 +320,7 @@ if __name__ == "__main__":
     
     
     
-    positions_tuiles_centre = [350,400]
+    positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
     tours = 0
@@ -397,16 +397,19 @@ if __name__ == "__main__":
 
 
         if 1>=(y//50)-1 >=0:   #Si le clic se trouve dans la zone des fabriques on appelle la fonction select_fabrique
-            
+            print("Zone fabriques")
             x,y,fabrique_selectionnee = select_fabrique(x,y)
             if x == -10:
                 continue
             selection = select_tuiles(x, y, fabrique_selectionnee)
             print(selection,"Selection")
         
-        elif positions_tuiles_centre[0]>= y >= positions_tuiles_centre[1] and joueurs_passes != 0:
-            selection = select_tuiles(x, y, liste_centre)
+        elif positions_tuiles_centre[1]*len(centre_table)>= y >= positions_tuiles_centre[0] and positions_tuiles_centre[1]*len(centre_table)>= x >= positions_tuiles_centre[0] :
+            print("Clic tuile centre")
+              #positions_tuiles_centre = [650,350]
+            selection = select_tuiles(((x-650)//50)-1, ((y-350)//50)-1, centre_table)
         else:
+            print("Else continue")
             continue
 
 
