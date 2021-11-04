@@ -42,15 +42,16 @@ def dessiner_plancher(nombre_joueurs):
     Dessine les lignes de plancher des deux joueurs
     '''
     for i in range(7):
-        rectangle(50+50*i, 800, 100+50*i, 850)
+        rectangle(150+50*i, 700, 200+50*i, 750)
+        rectangle(1300+50*i, 700, 1350+50*i, 750)
 
-def dessiner_tuiles_plancher(liste_plancher):
+def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     if "vide" in liste_plancher or len(liste_plancher) == 0:
         return
     print("FONCTION DESSINER TUILES PLANCEHR")
     i = 0   
     for colors in liste_plancher:
-        rectangle(50+50*i, 800, 100+50*i, 850,remplissage=colors)
+        rectangle(index_plancher[0]+50*i, index_plancher[1], (index_plancher[0]+50)+50*i, (index_plancher[1]+50),remplissage=colors)
         i+=1
         #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
 
@@ -58,14 +59,21 @@ def dessiner_tuiles_plancher(liste_plancher):
 def dessiner_tuiles_centre(liste_centre):
     i = 0
     j = 0
-    for colors in liste_centre:
-        if colors == -1:
-            continue
-        if i == 100:   #Détermine le nombre d'éléments au maximum sur une ligne
-            i = 0
-            j +=1
-        rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
-        i += 1
+    for lines in liste_centre:
+        for colors in lines:
+            if colors == -1 or 'vide':
+                continue
+            if i == 10:   #Détermine le nombre d'éléments au maximum sur une ligne
+                i = 0
+                j +=1
+            rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
+            i += 1
+
+
+def dessiner_selection(selection,index_plancher):
+    couleur,nombre,_ = selection
+    for i in range(nombre):
+        rectangle(index_plancher[0]+50*i, index_plancher[1]+60, (index_plancher[0]+50)+50*i, (index_plancher[1]+110),remplissage=couleur)
 
 
 def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
