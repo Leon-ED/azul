@@ -254,6 +254,8 @@ def deplacer_vers_centre(selection):
     La fonction ajoute les éléments de la fabrique à la liste composant les tuilesdu centre de la table avant de remplacer celle-ci par la liste [-10]
     '''    
     _,_,fabrique = selection
+    if fabrique == centre_table:
+        return
     i,j = 0,0
     for lignes in fabrique:
         for elements in lignes:
@@ -267,7 +269,14 @@ def deplacer_vers_centre(selection):
                 j+=1
     fabrique[:] = [-10]
 
+def compte_ignore_vide(liste):
+    compteur = 0
 
+    for elems in liste[0]:
+        if elems != 'vide':
+            compteur +=1
+    return compteur
+            
 
 if __name__ == "__main__":
 
@@ -402,6 +411,8 @@ if __name__ == "__main__":
         print(x,y)
 
 
+        xmax = positions_tuiles_centre[0]+50+(50*compte_ignore_vide(centre_table))
+
         if 1>=(y//50)-1 >=0:   #Si le clic se trouve dans la zone des fabriques on appelle la fonction select_fabrique
             print("Zone fabriques")
             x,y,fabrique_selectionnee = select_fabrique(x,y)
@@ -410,11 +421,20 @@ if __name__ == "__main__":
             selection = select_tuiles(x, y, fabrique_selectionnee)
             print(selection,"Selection")
         
-        elif positions_tuiles_centre[1]*len(centre_table)>= y >= positions_tuiles_centre[0] and positions_tuiles_centre[1]*len(centre_table)>= x >= positions_tuiles_centre[0] :
+
+
+        
+        elif xmax >= x >=positions_tuiles_centre[0] and positions_tuiles_centre[1]+50+(50*len(centre_table))  >= y >=positions_tuiles_centre[1]  and joueurs_passes != 0:
             print("Clic tuile centre")
+            print(centre_table)
               #positions_tuiles_centre = [650,350]
-            selection = select_tuiles(((x-650)//50)-1, ((y-350)//50)-1, centre_table)
+            print(((x-650)//50),((y-350)//50),"centre test")
+            selection = select_tuiles(((x-650)//50), ((y-350)//50), centre_table)
         else:
+            print("x max",xmax)
+            print("x min",positions_tuiles_centre[0])
+            print("y max",positions_tuiles_centre[1]+50+(50*len(centre_table)))
+            print("y min",positions_tuiles_centre[1])
             print("Else continue")
             continue
 
@@ -467,7 +487,7 @@ if __name__ == "__main__":
                 print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
         else:
             print("Selection = -10")
-            
+            continue
         if Tour_fini:
             joueurs_passes += 1
             joueur += 1
