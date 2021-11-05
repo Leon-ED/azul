@@ -41,7 +41,9 @@ def dessiner_plancher(nombre_joueurs):
     '''
     Dessine les lignes de plancher des deux joueurs
     '''
+    malus = [-1,-1,-2,-2,-2,-3,-3]
     for i in range(7):
+        texte(165+50*i,670,str(malus[i]),taille=15)
         rectangle(150+50*i, 700, 200+50*i, 750)
         rectangle(1300+50*i, 700, 1350+50*i, 750)
 
