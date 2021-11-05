@@ -48,44 +48,52 @@ def dessiner_plancher(nombre_joueurs):
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     if "vide" in liste_plancher or len(liste_plancher) == 0:
         return
-    print("FONCTION DESSINER TUILES PLANCEHR")
+    #print("FONCTION DESSINER TUILES PLANCEHR")
     i = 0   
     for colors in liste_plancher:
         rectangle(index_plancher[0]+50*i, index_plancher[1], (index_plancher[0]+50)+50*i, (index_plancher[1]+50),remplissage=colors)
         i+=1
         #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
 
-'''
+
 def dessiner_tuiles_centre(liste_centre):
+    '''
     i = 0
     j = 0
     for lines in liste_centre:
+
         for colors in lines:
-            if colors == -1 or 'vide':
+            if colors == -1 or colors == 'vide' or colors== -10:
                 continue
             if i == 10:   #Détermine le nombre d'éléments au maximum sur une ligne
                 i = 0
                 j +=1
             rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
             i += 1
-'''
-def dessiner_tuiles_centre(liste_centre):
-    i = 0
-    j = 0
-    for lines in liste_centre:
-        for colors in lines:
-            if colors == -1 or colors == 'vide':
+    '''
+    nb_elem = 0
+    nb_ligne = 0
+
+    for i in range(len(liste_centre)):
+        for j in range(len(liste_centre[i])):
+
+            if liste_centre[i][j] == 'vide':
+                nb_elem+=1
                 continue
-            if i == 100:   #Détermine le nombre d'éléments au maximum sur une ligne
-                i = 0
-                j +=1
-            rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
-            i += 1
+            rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black')
+            nb_elem +=1
+            if nb_elem == len(liste_centre[i]):
+                nb_elem = 0
+                nb_ligne +=1
+            
+
 
 def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
+    texte(index_plancher[0]-150, index_plancher[1]+70, "Selection:")
+    texte(index_plancher[0]-150, index_plancher[1]+110, "Clic droit pour effacer",taille=15)
     for i in range(nombre):
         rectangle(index_plancher[0]+50*i, index_plancher[1]+60, (index_plancher[0]+50)+50*i, (index_plancher[1]+110),remplissage=couleur)
 
@@ -117,7 +125,7 @@ def dessine_tuiles_lignes(grille,index):
         for j in range(i+1):
             if grille[i][j] == "vide":
                 continue
-            print("graphique, dessine_tuiles_grilles",grille)
+            #print("graphique, dessine_tuiles_grilles",grille)
             rectangle(index[0]-60*j, index[1]+60*i, (index[0]+50)-60*j, (index[1]+50)+60*i,remplissage=grille[i][j])
             
     '''

@@ -134,10 +134,15 @@ def select_tuiles(i,j,fabrique):
     -10
     '''
     print("i et j",i,j)
-    if  i>1 or liste_invalide(fabrique) == True:
+    print(fabrique)
+    if fabrique != centre_table and ( i>1 or liste_invalide(fabrique) or j>1):
+        return -10
+    if fabrique == centre_table and (j>=len(fabrique[i])):
         return -10
     compteur = 0
-    couleur = fabrique[j][i]
+    couleur = fabrique[i][j]
+    if couleur == 'vide':
+        return -10
     for lines in fabrique:
         for elems in lines:
             if elems == couleur:
@@ -166,9 +171,10 @@ def remove_couleur(selection):
     couleur,nombre,fabrique = selection
     if liste_invalide(fabrique):
         return -10
+
     for i in range(len(fabrique)):
         while couleur in fabrique[i]:
-            fabrique[i].remove(couleur)
+            fabrique[i].remove(couleur)       
 
 def clic():
     '''
@@ -255,10 +261,12 @@ def deplacer_vers_centre(selection):
     '''    
     _,_,fabrique = selection
     i,j = 0,0
+    if fabrique == centre_table:
+        return
     for lignes in fabrique:
         for elements in lignes:
-            while i < len(centre_table)-1:
-                if j == len(centre_table[i])-1:
+            while i <= len(centre_table)-1:
+                if j == len(centre_table[i]):
                     j = 0
                     i+=1
                 if centre_table[i][j] == 'vide':
@@ -266,6 +274,8 @@ def deplacer_vers_centre(selection):
                     break
                 j+=1
     fabrique[:] = [-10]
+
+
 
 
 
@@ -398,23 +408,32 @@ if __name__ == "__main__":
 
 
         print("Le joueur qui joue est le joueur ",joueur)
+        print(centre_table)
         x,y,_ = attente_clic()
         print(x,y)
-
 
         if 1>=(y//50)-1 >=0:   #Si le clic se trouve dans la zone des fabriques on appelle la fonction select_fabrique
             print("Zone fabriques")
             x,y,fabrique_selectionnee = select_fabrique(x,y)
+            print(centre_table)
             if x == -10:
                 continue
-            selection = select_tuiles(x, y, fabrique_selectionnee)
+            selection = select_tuiles(y, x, fabrique_selectionnee)
             print(selection,"Selection")
         
-        elif positions_tuiles_centre[1]*len(centre_table)>= y >= positions_tuiles_centre[0] and positions_tuiles_centre[1]*len(centre_table)>= x >= positions_tuiles_centre[0] :
+        elif 1 >= ((y-350)//50) >= 0 and 10>=(x-650)//50>=0 and (tours != 0 or joueurs_passes !=0):
+            i = (y-350)//50
+            j = (x-650)//50
             print("Clic tuile centre")
               #positions_tuiles_centre = [650,350]
-            selection = select_tuiles(((x-650)//50)-1, ((y-350)//50)-1, centre_table)
+              #positions_tuiles_centre = [700,400]
+            print((((y-350)//50)),((x-650)//50))
+            print(i,j)
+            selection = select_tuiles(i,j,centre_table)
+            
+
         else:
+            print(((y-350)//50) -1)
             print("Else continue")
             continue
 
@@ -435,7 +454,10 @@ if __name__ == "__main__":
                 tour_valide = None                
                 if remplir_cases(selection,grille,y,positions_grille) == -10: #Détecte si le clic est invalide
                     print("Boucle True: Clic pas valide pour remplir cases")
-                    while True:
+                    while selection !=-10:
+                        if selection[0] == 'vide':
+                            break
+                        print("true selection",selection[0])
                         x,y,type_clic = attente_clic()
                         if un_select_fabrique(type_clic):
                             efface_tout()
@@ -472,6 +494,8 @@ if __name__ == "__main__":
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False
+
+
 
     
 
