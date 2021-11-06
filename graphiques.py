@@ -78,6 +78,7 @@ def dessiner_tuiles_centre(liste_centre):
             
 
 def dessiner_selection(selection,index_plancher):
+    print("dessiner select")
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return

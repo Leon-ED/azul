@@ -9,9 +9,7 @@ from time import sleep
 from random import randint
 
 
-cree_fenetre(largeur_fenetre, hauteur_fenetre)
-            #1800             1900
-
+cree_fenetre(1800, 900)
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -379,7 +377,7 @@ if __name__ == "__main__":
     
     
     
-    joueur_ia = [1,2]
+    joueur_ia = [2]
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
