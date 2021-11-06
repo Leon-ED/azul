@@ -6,9 +6,6 @@ from random import randint
 
 cree_fenetre(1800, 900)
 
-
-
-
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -28,6 +25,8 @@ def sac_est_vide():
     return len(sac) != 0
 
 #------------------------------Fabriques-------------------------------#
+
+
 def fabriques_plein(liste):
     '''
     Prends en paramètre une liste et la retourne en ayant ajouté 4 couleurs aléatoires présentes dans le sac en supprimant l'élément
@@ -50,11 +49,22 @@ def plus_de_tuiles():
         return True
     return False
 
+
+
+
 def liste_invalide(fabrique):
     '''
     Prend en paramètre une liste(fabrique) et renvoie True si elle est invalide
     c'est à dire si sa taille est nulle ou que son type n'est pas une liste sinon renvoie False.
     '''
+    if fabrique == centre_table:
+        for lines in fabrique:
+            for colors in lines:
+                if colors != 'vide':
+                    return False
+        return True
+
+
     for i in range(len(fabrique)):
         if type(fabrique[i]) != list:
             print("pas liste")
@@ -62,11 +72,8 @@ def liste_invalide(fabrique):
 
         if -10 in fabrique:
             return True
-    for lines in fabrique:
-        for colors in lines:
-            if colors != 'vide':
-                return False
 
+    
     return False
 
 def select_fabrique(x,y):
@@ -298,17 +305,20 @@ def deplacer_vers_centre(selection):
 
 #---------------------------------Ordinateur---------------------------------#
 def tour_ordinateur(num_joueur,liste_joueurs_ia):
-    if num_joueur == 2:
+    if num_joueur in liste_joueurs_ia:
         return True
     return False
 
 
 def ordinateur_choisir_fabrique(liste_des_fabriques):
 
+
     position_hasard = randint(1,len(liste_des_fabriques)-1)
-    print(position_hasard,"pos hasard")
     fabrique_hasard = liste_des_fabriques[position_hasard]
-    print(fabrique_hasard)
+    while liste_invalide(fabrique_hasard):
+        position_hasard = randint(1,len(liste_des_fabriques)-1)
+        fabrique_hasard = liste_des_fabriques[position_hasard]  
+
 
 
 
@@ -319,21 +329,22 @@ def ordinateur_choisir_fabrique(liste_des_fabriques):
 def ordinateur_choisir_couleur(fabrique):
     if fabrique == [-10]:
         return -10
-    ia_i = randint(0,len(fabrique)-1)
-    ia_j = randint(0,len(fabrique[ia_i])-1)
+    i = randint(0,len(fabrique)-1)
+    j = randint(0,len(fabrique[i])-1)
 
 
-    while fabrique[ia_i][ia_j] == 'vide':
-        print("case vide couleur")
-        ia_i = randint(1,len(fabrique)-1)
-        ia_j = randint(0,len(fabrique[ia_i])-1)
-        print(fabrique)
+    while fabrique[i][j] == 'vide':
+        i = randint(0,len(fabrique)-1)
+        j = randint(0,len(fabrique[i])-1)
 
-    print(ia_i,ia_j)
-    selection_ordinateur = select_tuiles(ia_i, ia_j, fabrique)
+    print("Couleur choisie:", fabrique[i][j])
+    print("i = ",i," j= ",j)
+    selection_ordinateur = select_tuiles(i, j, fabrique)
+    print("Selection:", selection_ordinateur)
 
     remove_couleur(selection_ordinateur)
     deplacer_vers_centre(selection_ordinateur)
+    dessiner_selection(selection_ordinateur,positions_plancher)
     return selection_ordinateur
 
 def ordinateur_coup(selection_ordinateur,grille_joueur):
@@ -341,57 +352,24 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
     couleur, nombre, fabrique = selection_ordinateur
     colors.remove(couleur)
 
-
     while True:
-        print("mauvaise coup")
-        ia_i = randint(0,len(grille_joueur)-1)
-        ia_j = randint(0,len(grille_joueur[ia_i])-1)
-
-        if 'vide' not in grille_joueur[ia_i]:
-            continue
-        if grille_joueur[ia_i][ia_j] in colors:
-            continue
-        break
-    print(grille_joueur,"grille")
-    remplir_cases(selection_ordinateur, grille, ia_i,ordinateur=True)
-
-
-
-
-
-    '''
-
-    colors = ["black", "yellow", "green","orange","blue"]   
-def coup(fabrique,grille_joueur):
-    colors = ["black", "yellow", "green","orange","blue"]
-    if fabrique == [-10]:
-        return
-    i = randint(0,1)
-    j = randint(0,1)
-    selection= select_tuiles(i, j, fabrique)
-    colors.remove(selection[0])
-    #print(grille_joueur)
-    #print(selection)
-    while True:
-        i = randint(0, len(grille_joueur)-1)
+        i = randint(0,len(grille_joueur)-1)
         j = randint(0,len(grille_joueur[i])-1)
-        #print("i= ",i,"j= ",j)
+
         if 'vide' not in grille_joueur[i]:
-            #print("vide")
             continue
-        if grille_joueur[i][j] in colors:
-            #print("couleur deja la")
-            continue
+        for a in range(0,len(colors)):
+            if colors[a] in grille[i]:
+                break
+        else:
+            break
 
+    print("Grille ordinateur avant coup: \n",grille_joueur)
+    print("Ligne choisie: " ,grille_joueur[i])
+    print("i choisi: ",i)
 
-        break
-    efface_tout()
-    #print(remplir_cases(selection, grille, i,True),'remplir cases bot')
-    dessine_tuiles_lignes(grille, positions_grille)
-    remove_couleur(selection)
-    deplacer_vers_centre(selection)
-    dessiner_tuiles_centre(centre_table)
-    '''
+    remplir_cases(selection_ordinateur, grille_joueur, i,ordinateur=True)
+    print("Grille ordinateur après coup: \n", grille_joueur)
 
 
 
@@ -405,7 +383,6 @@ if __name__ == "__main__":
 
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
-                    ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                     ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
 
 
@@ -457,7 +434,7 @@ if __name__ == "__main__":
     
     
     
-    joueur_ia = [2]
+    joueur_ia = [1,2]
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
@@ -466,12 +443,16 @@ if __name__ == "__main__":
     grille = grille_j1
     plancher = ligne_plancher_j1
     Tour_fini = False
+    malus_centre = True
+
 
     #-------Boucle principale------#
     while True:
         dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
         dessiner_tuiles_centre(centre_table)
-        #Detecte si un tour est finit dans ce cas là remet à zéro les variables pour le tour suivant
+
+
+        #Detecte si tous les joueurs sont passés alors on remet à zéro les variables nécessaires
         if joueurs_passes == nombre_joueurs:
             tours += 1
             joueurs_passes = 0
@@ -484,21 +465,23 @@ if __name__ == "__main__":
             dessiner_tuiles_fabriques(fabrique3,3,positions)
             dessiner_tuiles_fabriques(fabrique4,4,positions)
             dessiner_tuiles_fabriques(fabrique5,5,positions)
+
             dessiner_tuiles_plancher(ligne_plancher_j1,positions_plancher_j1)
             dessiner_tuiles_plancher(ligne_plancher_j2,positions_plancher_j2)
+
             dessine_tuiles_lignes(grille_j1, positions_grille_j1)
             dessine_tuiles_lignes(grille_j2, positions_grille_j2)
 
-            print(centre_table)
 
             if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and liste_invalide(centre_table):
+                texte(500, 500, 'FINI')
                 print("Fini")
                 break
 
 
             #Met à jour les variables en fonction du joueur qui doit jouer
             if joueur == 1:
-                texte(positions_tuiles_centre[0],positions_tuiles_centre[1]-70,"1")
+
                 positions_grille = positions_grille_j1
                 positions_plancher = positions_plancher_j1
 
@@ -506,13 +489,16 @@ if __name__ == "__main__":
                 plancher = ligne_plancher_j1
 
             if joueur == 2:
-                texte(positions_tuiles_centre[0],positions_tuiles_centre[1]-70,"2")
+
                 grille = grille_j2
                 plancher = ligne_plancher_j2
                 
                 positions_grille = positions_grille_j2
                 positions_plancher = positions_plancher_j2
 
+
+            #sleep(1)
+            #mise_a_jour()
         if nombre_joueurs >= 3:
             dessiner_tuiles_fabriques(fabrique6,6,positions)
             dessiner_tuiles_fabriques(fabrique7,7,positions)
@@ -534,48 +520,33 @@ if __name__ == "__main__":
 
 
 
+        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur)) #Affiche quel joueur joue pour plus de clarté
+        print("-------------------------------------------------------------------TOUR",joueur,tours)
 
-        if tour_ordinateur(joueur, joueur_ia):
-            selection = 99999999
-            ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
 
-            selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
-
-            ordinateur_coup(selection_ordinateur, grille)
-
-            dessine_tuiles_lignes(grille, positions_grille)
-            Tour_fini = True
+            
   
 
-        else:
-            #print("Le joueur qui joue est le joueur ",joueur)
-            #print(centre_table)
+        if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
+
             x,y,_ = attente_clic()
-            #print(x,y)
 
             if 1>=(y//50)-1 >=0:   #Si le clic se trouve dans la zone des fabriques on appelle la fonction select_fabrique
-                #print("Zone fabriques")
                 x,y,fabrique_selectionnee = select_fabrique(x,y)
-                ##print(centre_table)
                 if x == -10:
                     continue
                 selection = select_tuiles(y, x, fabrique_selectionnee)
-                ##print(selection,"Selection")
-            
-            elif 1 >= ((y-350)//50) >= 0 and 10>=(x-650)//50>=0 and (tours != 0 or joueurs_passes !=0):
+
+            #Si le joueur souhaite prendre des tuiles dans la zone du milieu seulement possible après le premier coup de la partie
+            elif 1 >= ((y-350)//50) >= 0 and 10>=(x-650)//50>=0 and (tours != 0 or joueurs_passes !=0): 
                 i = (y-350)//50
                 j = (x-650)//50
-                ##print("Clic tuile centre")
-                #positions_tuiles_centre = [650,350]
-                #positions_tuiles_centre = [700,400]
-                ##print((((y-350)//50)),((x-650)//50))
-                ##print(i,j)
+
+
                 selection = select_tuiles(i,j,centre_table)
                 
-
-            else:
-                ##print(((y-350)//50) -1)
-                ##print("Else continue")
+            
+            else: #Tous les autres cas on fait rien
                 continue
 
 
@@ -583,57 +554,67 @@ if __name__ == "__main__":
 
             if selection != -10: #Si la selection est valide
                 dessiner_selection(selection, positions_plancher)
-                ##print("pos plancher",positions_plancher)
                 x,y,type_clic = attente_clic()
-                if un_select_fabrique(type_clic): #Pour déselectionner ce qu'on a sélectionné (pas implémenté)
+                if un_select_fabrique(type_clic): #Pour déselectionner ce qu'on a sélectionné on revient au début pour resélectionner des tuiles
                     efface_tout()
-                    ##print("if : Clic droit")
                     selection = -10
                     continue
                     
                 else:
                     tour_valide = None                
-                    if remplir_cases(selection,grille,y) == -10: #Détecte si le clic est invalide
-                        ##print("Boucle True: Clic pas valide pour remplir cases")
-                        while selection !=-10:
+                    if remplir_cases(selection,grille,y) == -10: #Détecte si la zone où le joueur veut poser ses tuiles est invalide
+                        while selection !=-10: 
+                            #Dans ce cas la tant que c'est invalide on garde la sélection et on attends que le joueur fasse un choix valide
                             if selection[0] == 'vide':
                                 break
-                            ##print("true selection",selection[0])
                             x,y,type_clic = attente_clic()
-                            if un_select_fabrique(type_clic):
+                            if un_select_fabrique(type_clic): #Il efface sa sélection on sort de la boucle
                                 efface_tout()
                                 tour_valide = False
-                                ##print("Boucle True: Clic droit > supp selection")
                                 break
-                            if remplir_cases(selection, grille, y) != -10:
-                                ##print("Boucle True : Clic valide")
+                            if remplir_cases(selection, grille, y) != -10: #Son choix est valide on sort 
                                 break
-                        if tour_valide == False:
+
+                        if tour_valide == 9999:
                             continue
-                        ##print("Clic remplir_case invalide")
-                        ##print("selection;",selection)
 
 
-                    efface_tout() #Efface tout pour mettre à jour les graphiques
+                    efface_tout()
+                    print("efface tout")
+                    dessine_tuiles_lignes(grille, positions_grille)         
+                    #efface_tout() #Efface tout pour mettre à jour les graphiques
                     remove_couleur(selection) #Enleve les tuiles de la couleurs posée de la liste de la fabrique
                     deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
-                    dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
+                    #dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
                     #dessine_tuiles_lignes(grille, positions_grille)
-                    
+                    if selection[2] == centre_table and malus_centre == True:
+                        plancher.append(-1)
+                        malus_centre = False
                     Tour_fini = True
-                    
-                    
-                    #Debug
-                    '''
-                    #print("TUILES AU CENTRE",centre_table)
-                    #print("TUILES PLANCHER", plancher)
-                    #print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
-                    '''
             else:
-                pass
+                continue
 
-               ##print("Selection = -10")
-            
+        elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
+            print("test")
+            dessine_tuiles_lignes(grille, positions_grille)
+            print("test2")
+            print("Tour du BOT")
+            ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
+            selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
+            dessiner_selection(selection_ordinateur, positions_plancher)
+            mise_a_jour()
+            sleep(1)      
+            ordinateur_coup(selection_ordinateur, grille)
+            if selection_ordinateur[2] == centre_table and malus_centre == True:
+                plancher.append(-1)
+                malus_centre = False
+
+
+            Tour_fini = True
+
+
+
+
         if Tour_fini:
             efface_tout()
             joueurs_passes += 1

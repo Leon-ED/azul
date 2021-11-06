@@ -53,6 +53,10 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     #print("FONCTION DESSINER TUILES PLANCEHR")
     i = 0   
     for colors in liste_plancher:
+        if colors == -1:
+            image(index_plancher[0]+50*i, index_plancher[1],'images/first.gif',ancrage='nw')
+            i+=1
+            continue
         rectangle(index_plancher[0]+50*i, index_plancher[1], (index_plancher[0]+50)+50*i, (index_plancher[1]+50),remplissage=colors)
         i+=1
         #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
@@ -91,6 +95,7 @@ def dessiner_tuiles_centre(liste_centre):
 
 
 def dessiner_selection(selection,index_plancher):
+    print("dessiner select")
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
