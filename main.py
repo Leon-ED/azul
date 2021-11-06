@@ -312,10 +312,13 @@ def tour_ordinateur(num_joueur,liste_joueurs_ia):
 
 def ordinateur_choisir_fabrique(liste_des_fabriques):
 
+
     position_hasard = randint(1,len(liste_des_fabriques)-1)
     fabrique_hasard = liste_des_fabriques[position_hasard]
-    
-    print("Fabrique choisie:", fabrique_hasard)
+    while liste_invalide(fabrique_hasard):
+        position_hasard = randint(1,len(liste_des_fabriques)-1)
+        fabrique_hasard = liste_des_fabriques[position_hasard]  
+
 
 
 
@@ -341,6 +344,7 @@ def ordinateur_choisir_couleur(fabrique):
 
     remove_couleur(selection_ordinateur)
     deplacer_vers_centre(selection_ordinateur)
+    dessiner_selection(selection_ordinateur,positions_plancher)
     return selection_ordinateur
 
 def ordinateur_coup(selection_ordinateur,grille_joueur):
@@ -430,7 +434,7 @@ if __name__ == "__main__":
     
     
     
-    joueur_ia = []
+    joueur_ia = [1,2]
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
@@ -492,6 +496,9 @@ if __name__ == "__main__":
                 positions_grille = positions_grille_j2
                 positions_plancher = positions_plancher_j2
 
+
+            #sleep(1)
+            #mise_a_jour()
         if nombre_joueurs >= 3:
             dessiner_tuiles_fabriques(fabrique6,6,positions)
             dessiner_tuiles_fabriques(fabrique7,7,positions)
@@ -513,21 +520,14 @@ if __name__ == "__main__":
 
 
 
-        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur))
-        if tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
-            print("Tour du BOT")
-            ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
-            selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
-            dessiner_selection(selection_ordinateur, positions_plancher)
+        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur)) #Affiche quel joueur joue pour plus de clarté
+        print("-------------------------------------------------------------------TOUR",joueur,tours)
 
-            ordinateur_coup(selection_ordinateur, grille)
 
-            dessine_tuiles_lignes(grille, positions_grille)
-            print(selection,"if tour ordi")
-            Tour_fini = True
+            
   
 
-        else: #Cas où c'est un humain qui doit jouer
+        if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
 
             x,y,_ = attente_clic()
 
@@ -575,11 +575,13 @@ if __name__ == "__main__":
                             if remplir_cases(selection, grille, y) != -10: #Son choix est valide on sort 
                                 break
 
-                        if tour_valide == False:
+                        if tour_valide == 9999:
                             continue
 
 
-                             
+                    efface_tout()
+                    print("efface tout")
+                    dessine_tuiles_lignes(grille, positions_grille)         
                     #efface_tout() #Efface tout pour mettre à jour les graphiques
                     remove_couleur(selection) #Enleve les tuiles de la couleurs posée de la liste de la fabrique
                     deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
@@ -589,21 +591,30 @@ if __name__ == "__main__":
                         plancher.append(-1)
                         malus_centre = False
                     Tour_fini = True
-                    
-                    
-                    #Debug
-                    '''
-                    #print("TUILES AU CENTRE",centre_table)
-                    #print("TUILES PLANCHER", plancher)
-                    #print("Fabriques",fabrique1,fabrique2,fabrique3,fabrique4)
-                    '''
             else:
-                pass
+                continue
 
-               ##print("Selection = -10")
+        elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
+            print("test")
+            dessine_tuiles_lignes(grille, positions_grille)
+            print("test2")
+            print("Tour du BOT")
+            ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
+            selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
+            dessiner_selection(selection_ordinateur, positions_plancher)
+            mise_a_jour()
+            sleep(1)      
+            ordinateur_coup(selection_ordinateur, grille)
+            if selection_ordinateur[2] == centre_table and malus_centre == True:
+                plancher.append(-1)
+                malus_centre = False
 
-        #dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
-        #dessine_tuiles_lignes(grille, positions_grille)   
+
+            Tour_fini = True
+
+
+
+
         if Tour_fini:
             efface_tout()
             joueurs_passes += 1
