@@ -1,6 +1,10 @@
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''Module qui a pour but d'afficher tous les graphismes à l'écran en fonction des données envoyées'''
+
+#---Imports
 from upemtk import *
 
-#----------------------Module s'occupant de générer les graphismes de début de jeu----------------------#
 
 cote_carre = 50
 largeur_fenetre = 1800
@@ -13,8 +17,6 @@ def dessiner_fabriques(nombre_fabriques):
     ecart = largeur_fenetre/nombre_fabriques
     for i in range(nombre_fabriques):
         cercle(100+ecart*i,75,60,epaisseur=1)
-
-
 
 
 def dessiner_lignes_motif(nombre_joueurs): #Affiche les lignes du motif
@@ -36,7 +38,6 @@ def dessiner_murs_palais(nombre_joueurs):
             rectangle(1500+60*nb_colonnes, 360+60*nb_lignes, 1550+60*nb_colonnes, 410+60*nb_lignes)
 
 
-
 def dessiner_plancher(nombre_joueurs):
     '''
     Dessine les lignes de plancher des deux joueurs
@@ -50,7 +51,6 @@ def dessiner_plancher(nombre_joueurs):
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     if "vide" in liste_plancher or len(liste_plancher) == 0:
         return
-    #print("FONCTION DESSINER TUILES PLANCEHR")
     i = 0   
     for colors in liste_plancher:
         if colors == -1:
@@ -59,24 +59,8 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher):
             continue
         rectangle(index_plancher[0]+50*i, index_plancher[1], (index_plancher[0]+50)+50*i, (index_plancher[1]+50),remplissage=colors)
         i+=1
-        #rectangle(50+50*i,800,100+50*i,850,remplissage='black',couleur='black')
-
 
 def dessiner_tuiles_centre(liste_centre):
-    '''
-    i = 0
-    j = 0
-    for lines in liste_centre:
-
-        for colors in lines:
-            if colors == -1 or colors == 'vide' or colors== -10:
-                continue
-            if i == 10:   #Détermine le nombre d'éléments au maximum sur une ligne
-                i = 0
-                j +=1
-            rectangle(650+50*i, 400+50*j, 700+50*i, 350+50*j,remplissage=colors,couleur='black')
-            i += 1
-    '''
     nb_elem = 0
     nb_ligne = 0
 
@@ -93,9 +77,7 @@ def dessiner_tuiles_centre(liste_centre):
                 nb_ligne +=1
             
 
-
 def dessiner_selection(selection,index_plancher):
-    print("dessiner select")
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
@@ -113,7 +95,6 @@ def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
     if -10 in fabrique:
         return
     ecart = 200
-    #print(liste_positions)
     j = 0
     ligne = 0
     x = liste_positions[i-1]
@@ -127,26 +108,11 @@ def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
             j+=1   
 
 def dessine_tuiles_lignes(grille,index):
-    #j = (y//60)-5
     for i in range(len(grille)):
         for j in range(i+1):
             if grille[i][j] == "vide":
                 continue
-            #print("graphique, dessine_tuiles_grilles",grille)
             rectangle(index[0]-60*j, index[1]+60*i, (index[0]+50)-60*j, (index[1]+50)+60*i,remplissage=grille[i][j])
-            
-    '''
-    i,j = -1,0
-    for lines in grille:
-        i+=1
-        j = 0
-        for colors in lines:
-            if colors == 'vide':
-                j+=1
-                continue
-            rectangle(250-60*j, 360+60*i+1, 300-60*j, 410+60*i+1,remplissage=grille[i][j])
-        
-    '''
 
 
 def dessiner_plateau(nombre_joueurs,nombre_fabriques):
@@ -154,7 +120,6 @@ def dessiner_plateau(nombre_joueurs,nombre_fabriques):
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
     toutes les autres fonctions.
     '''
-    #dessiner_fabriques(nombre_fabriques)
     dessiner_lignes_motif(nombre_joueurs)
     dessiner_murs_palais(nombre_joueurs)
     dessiner_plancher(nombre_joueurs)

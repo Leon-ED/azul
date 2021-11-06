@@ -1,10 +1,16 @@
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''Module principal du jeu s'occupant de la partie logique et de l'interaction avec l'utilisateur'''
+
+#---Imports
 from upemtk import *
 from graphiques import *
 from time import sleep
 from random import randint
 
 
-cree_fenetre(1800, 900)
+cree_fenetre(largeur_fenetre, hauteur_fenetre)
+            #1800             1900
 
 #---------------------------------Sac---------------------------------#
 def sac_plein():
@@ -41,16 +47,6 @@ def fabriques_plein(liste):
 
     return liste
 
-def plus_de_tuiles():
-    '''
-    Retourne True s'il n'y a plus de tuiles en jeu (fabriques et centre du plateau) sinon False
-    '''
-    if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and len(centre_table) == 0:
-        return True
-    return False
-
-
-
 
 def liste_invalide(fabrique):
     '''
@@ -67,12 +63,10 @@ def liste_invalide(fabrique):
 
     for i in range(len(fabrique)):
         if type(fabrique[i]) != list:
-            print("pas liste")
             return True
 
         if -10 in fabrique:
             return True
-
     
     return False
 
@@ -84,7 +78,6 @@ def select_fabrique(x,y):
     '''
     i = (x//50)-1
     j = (y//50)-1
-    #print("Select fabrique i et j",i,j)
     fabrique = []
     selection = []
     emplacements = []
@@ -92,50 +85,41 @@ def select_fabrique(x,y):
         return -10,-10,-10
     if nombre_joueurs >=2:
         if i == 0 or i==1:
-            #print("Fabrique 1")
             fabrique = fabrique1
 
         if i == 4 or i==5:
             i-=4
-            #print("Fabrique 2")
             fabrique = fabrique2
 
         if i == 8 or i==9:
             i-=8
-            #print("Fabrique 3")
             fabrique = fabrique3
 
         if i == 12 or i==13:
             i-=12
-            #print("Fabrique 4")
             fabrique = fabrique4
 
         if i == 16 or i==17:
             i-=16
-            #print("Fabrique 5")
             fabrique = fabrique5
 
     if nombre_joueurs >=3:
         if i == 20 or i==21:
             i-=20
-            #print("Fabrique 6")
             fabrique = fabrique6
 
         if i == 24 or i==25:
             i-=24
-            #print("Fabrique 7")
             fabrique = fabrique7
 
     if nombre_joueurs >= 4:
 
         if i == 28 or i==29:
             i-=28
-            #print("Fabrique 8")
             fabrique = fabrique8
         
         if i == 32 or i==33:
             i-=32
-            #print("Fabrique 9")
             fabrique = fabrique9
     return i,j,fabrique
 
@@ -146,8 +130,6 @@ def select_tuiles(i,j,fabrique):
     d'occurence de la couleur dans la fabrique ainsi que la fabrique. Si cela ne correspond à rien la fonction renvoie
     -10
     '''
-    #print("i et j",i,j)
-    #print(fabrique)
     if fabrique != centre_table and ( i>1 or liste_invalide(fabrique) or j>1):
         return -10
     if fabrique == centre_table and (j>=len(fabrique[i])):
@@ -181,9 +163,6 @@ def remove_couleur(selection):
     d'où viennent ces tuiles. La fonction renvoie -10 si la liste ne peut pas être traitée sinon elle supprime toutes les occurences de la couleur
     présente dans cette liste.
     '''
-
-
-
     couleur,nombre,fabrique = selection
     if liste_invalide(fabrique):
         return -10
@@ -199,13 +178,6 @@ def remove_couleur(selection):
         while couleur in fabrique[i]:
             fabrique[i].remove(couleur)       
 
-def clic():
-    '''
-    Retourne la position x,y du clic de l'utilisateur.
-    '''
-    x, y, _ = attente_clic()
-    return x, y
-
 def remplir_cases(selection,grille,y,ordinateur=False):
     '''
     Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
@@ -214,18 +186,16 @@ def remplir_cases(selection,grille,y,ordinateur=False):
     et s'il le faut appelle la fonction remplir_plancher afin de traiter les cas où plus de tuiles sont sélectionnées qu'il n'y a de place sur la ligne choisie.
     '''
     couleur,nombre,_ = selection
-    #positions_grille_j1 = (250,360,10,300,360,650)
     if ordinateur == False:
         if (y < positions_grille[4] or y > positions_grille[5]): #Detecte sur la position y n'est pas bonne
-            #print("remplir_cases: y non valide",y)
             return -10 
         if  (x<positions_grille[2] or x>positions_grille[3]): #Detecte si la position x n'est pas bonne
-            #print("remplir_cases: x non valide",x)
+
             return -10
         y = (y//60)-6
-        #print(y,'remplir cases y')
+
         if 'vide' not in grille[y]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
-            #print("remplir_cases: Plus de place dans ligne")
+
             return -10
 
     longueur = 0
@@ -234,11 +204,9 @@ def remplir_cases(selection,grille,y,ordinateur=False):
             longueur += 1   
             continue
         if colors != couleur:
-            #print("remplir_cases: Pas la bonne couleur")
+
             return -10
     reste = 0
-    #print("Place libre: ",longueur)
-    #print("remplir_cases, y = ",y)
 
     for i in range(0,nombre):
         if nombre> longueur:
@@ -249,8 +217,6 @@ def remplir_cases(selection,grille,y,ordinateur=False):
                 while j< len(grille[y])-1 and grille[y][j] != 'vide':
                     j+=1
                 grille[y][j] = couleur
-                #print("remplir_cases: Il y a un reste:",reste)   ############################A enlever à la fin
-                #print("remplir_cases: Grille:",grille)
                 return
             j=0
             while j< len(grille[y])-1 and grille[y][j] != 'vide':
@@ -261,10 +227,7 @@ def remplir_cases(selection,grille,y,ordinateur=False):
             while j< len(grille[y])-1 and grille[y][j] != 'vide':
                 j+=1
             grille[y][j] = couleur
-            #print("remplir_cases: Pas de reste",grille)            
             
-
-
 
 def remplir_plancher(couleur,reste,grille_plancher):
     '''
@@ -274,7 +237,6 @@ def remplir_plancher(couleur,reste,grille_plancher):
     if len(grille_plancher) != 7:
         for i in range(reste):
             grille_plancher.append(couleur)
-    #print("remplir plancher",grille_plancher) ############################A enlever à la fin
 
 
 def deplacer_vers_centre(selection):
@@ -298,10 +260,7 @@ def deplacer_vers_centre(selection):
                     break
                 j+=1
     fabriques_disponibles.remove(fabrique)
-    #print(fabriques_disponibles,"1 --------------")
     fabrique[:] = [-10]
-    #print(fabriques_disponibles,"2 --------------")
-
 
 #---------------------------------Ordinateur---------------------------------#
 def tour_ordinateur(num_joueur,liste_joueurs_ia):
@@ -312,18 +271,13 @@ def tour_ordinateur(num_joueur,liste_joueurs_ia):
 
 def ordinateur_choisir_fabrique(liste_des_fabriques):
 
-
     position_hasard = randint(1,len(liste_des_fabriques)-1)
     fabrique_hasard = liste_des_fabriques[position_hasard]
     while liste_invalide(fabrique_hasard):
         position_hasard = randint(1,len(liste_des_fabriques)-1)
         fabrique_hasard = liste_des_fabriques[position_hasard]  
 
-
-
-
     return fabrique_hasard
-
 
 
 def ordinateur_choisir_couleur(fabrique):
@@ -337,10 +291,7 @@ def ordinateur_choisir_couleur(fabrique):
         i = randint(0,len(fabrique)-1)
         j = randint(0,len(fabrique[i])-1)
 
-    print("Couleur choisie:", fabrique[i][j])
-    print("i = ",i," j= ",j)
     selection_ordinateur = select_tuiles(i, j, fabrique)
-    print("Selection:", selection_ordinateur)
 
     remove_couleur(selection_ordinateur)
     deplacer_vers_centre(selection_ordinateur)
@@ -363,13 +314,8 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
                 break
         else:
             break
-
-    print("Grille ordinateur avant coup: \n",grille_joueur)
-    print("Ligne choisie: " ,grille_joueur[i])
-    print("i choisi: ",i)
-
     remplir_cases(selection_ordinateur, grille_joueur, i,ordinateur=True)
-    print("Grille ordinateur après coup: \n", grille_joueur)
+
 
 
 
@@ -404,7 +350,6 @@ if __name__ == "__main__":
         grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
         grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
         positions_grille_j1 = (250,360,10,300,360,650)
-        #(x et y 1er carré coin gauche supérieur, largeur totale de la + grande ligne, et hauteur totale )
         positions_plancher_j1 = (150,700)
 
         positions_grille_j2 = (1400,360,1160,1450,360,650)
@@ -475,7 +420,6 @@ if __name__ == "__main__":
 
             if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and liste_invalide(centre_table):
                 texte(500, 500, 'FINI')
-                print("Fini")
                 break
 
 
@@ -496,9 +440,6 @@ if __name__ == "__main__":
                 positions_grille = positions_grille_j2
                 positions_plancher = positions_plancher_j2
 
-
-            #sleep(1)
-            #mise_a_jour()
         if nombre_joueurs >= 3:
             dessiner_tuiles_fabriques(fabrique6,6,positions)
             dessiner_tuiles_fabriques(fabrique7,7,positions)
@@ -516,16 +457,7 @@ if __name__ == "__main__":
                 plancher = ligne_plancher_j4
 
 
-
-
-
-
         texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur)) #Affiche quel joueur joue pour plus de clarté
-        print("-------------------------------------------------------------------TOUR",joueur,tours)
-
-
-            
-  
 
         if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
 
@@ -542,15 +474,10 @@ if __name__ == "__main__":
                 i = (y-350)//50
                 j = (x-650)//50
 
-
                 selection = select_tuiles(i,j,centre_table)
-                
-            
+                           
             else: #Tous les autres cas on fait rien
                 continue
-
-
-
 
             if selection != -10: #Si la selection est valide
                 dessiner_selection(selection, positions_plancher)
@@ -578,15 +505,12 @@ if __name__ == "__main__":
                         if tour_valide == 9999:
                             continue
 
-
                     efface_tout()
-                    print("efface tout")
                     dessine_tuiles_lignes(grille, positions_grille)         
-                    #efface_tout() #Efface tout pour mettre à jour les graphiques
+
                     remove_couleur(selection) #Enleve les tuiles de la couleurs posée de la liste de la fabrique
                     deplacer_vers_centre(selection) # Vide la fabrique et déplace les tuiles restantes vers le centre
-                    #dessiner_tuiles_centre(centre_table) #Affiche les tuiles au centre
-                    #dessine_tuiles_lignes(grille, positions_grille)
+
                     if selection[2] == centre_table and malus_centre == True:
                         plancher.append(-1)
                         malus_centre = False
@@ -595,10 +519,7 @@ if __name__ == "__main__":
                 continue
 
         elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
-            print("test")
             dessine_tuiles_lignes(grille, positions_grille)
-            print("test2")
-            print("Tour du BOT")
             ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
             dessiner_selection(selection_ordinateur, positions_plancher)
@@ -608,29 +529,13 @@ if __name__ == "__main__":
             if selection_ordinateur[2] == centre_table and malus_centre == True:
                 plancher.append(-1)
                 malus_centre = False
-
-
             Tour_fini = True
-
-
-
 
         if Tour_fini:
             efface_tout()
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False
-
-
-
-    
-
-
-
-
-
-
-
 
 
 attente_clic()
