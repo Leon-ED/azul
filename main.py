@@ -377,7 +377,7 @@ if __name__ == "__main__":
     
     
     
-    joueur_ia = [1,2]
+    joueur_ia = [2]
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
