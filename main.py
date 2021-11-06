@@ -9,9 +9,7 @@ from time import sleep
 from random import randint
 
 
-cree_fenetre(largeur_fenetre, hauteur_fenetre)
-            #1800             1900
-
+cree_fenetre(1800, 900)
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
