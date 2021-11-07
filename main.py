@@ -76,9 +76,12 @@ def liste_invalide(fabrique):
 
 def select_fabrique(x,y):
     '''
-    Prends en paramètres les coordonnées d'un clic puis renvoie la fabrique correspondante au clic
-    selon le nombre de fabriques (lié au nombre de joueur) et renvoie l'indice i et j ainsi que la liste (fabrique)
-    sélectionnée. 
+    Renvoie quelle fabrique a été sélectionnée
+
+    :param int x: Position x du clic
+    :param int y: Position y du clic
+
+    :return list: Liste sélectionnée par le joueur
     '''
     i = (x//50)-1
     j = (y//50)-1
@@ -130,9 +133,15 @@ def select_fabrique(x,y):
 
 def select_tuiles(i,j,fabrique):
     '''
-    Prend en paramètres les indices i et j et une liste (fabrique) renvoie la couleur ainsi que le nombre
-    d'occurence de la couleur dans la fabrique ainsi que la fabrique. Si cela ne correspond à rien la fonction renvoie
-    -10
+    Renvoie les tuiles choisie par le joueur
+
+    :param int i:
+    :param int j:
+    :param list fabrique:
+
+    :return int: -10 si la sélection est invalide
+    :return tuple: ('couleur',compteur,fabrique) > (str,int,list)
+
     '''
     if fabrique != centre_table and ( i>1 or liste_invalide(fabrique) or j>1):
         return -10
@@ -159,9 +168,12 @@ def un_select_fabrique(type_clic):
     
 def remove_couleur(selection):
     '''
-    Prends en paramètre la sélection: 'couleur, nombre, fabrique'. 
-    La fonction renvoie -10 si la liste ne peut pas être traitée sinon elle supprime toutes les occurences de la couleur
-    présente dans cette fabrique.
+    Supprime toutes les occurences de la couleur présente dans cette fabrique.
+
+    :param tuple selection: ('couleur',compteur,fabrique) > (str,int,list)
+
+    :return int: -10 si invalide
+    :return None: si valide
     '''
     couleur,nombre,fabrique = selection
     if liste_invalide(fabrique):
@@ -180,10 +192,15 @@ def remove_couleur(selection):
 
 def remplir_cases(selection,grille,y,ordinateur=False):
     '''
-    Paramètres sélection: 'couleur, nombre, fabrique'.La grille du joueur en train de jouer et la position y du clic.
-    Et si le joueur est l'ordinateur (dans ce cas là certaines vérification ne sont pas effectuées).
-    Renvoie -10 en cas d'erreur. Sinon place dans la liste de la grille les éléments sélectionnés
+    Place dans la liste de la grille les éléments sélectionnés
     Si besoin appelle la fonction remplir_plancher en cas de trop-plein.
+
+    :param tuple selection: ('couleur',compteur,fabrique) > (str,int,list)
+    :param list grille: Grille du joueur
+    :param int y: position du clic y
+    :param bool ordinateur: Entrer true si l'ordinateur joue
+
+    :return int: -10 en cas d'erreur
     '''
 
     couleur,nombre,_ = selection
@@ -246,9 +263,11 @@ def remplir_plancher(couleur,reste,grille_plancher):
 
     :return: rien
     '''
-    if len(grille_plancher) != 7:
-        for i in range(reste):
-            grille_plancher.append(couleur)
+    if len(grille_plancher) >= 7:
+        return
+    
+    for i in range(min(7-len(grille_plancher),reste)):
+        grille_plancher.append(couleur)
 
 
 def deplacer_vers_centre(selection):
@@ -279,11 +298,19 @@ def deplacer_vers_centre(selection):
 
 
 def grille_pleine(grille_joueur,couleur):
-    print("------------------------------------------------------------------------------------------------------------------")
+    '''
+    Permet de savoir s'il est possible de placer une couleur donnée dans la grille du joueur
+
+    :param list grille_joueur: Grille de jeu du joueur qui a le tour
+    :param str couleur: Couleur sélectionnée par le joueur
+
+    :return bool: True si impossible de joueur le coup
+    :return bool: True si possible de joueur le coup
+
+    '''
     lignes_prises = 0
     for i in range (len(grille_joueur)):
         if 'vide' not in grille_joueur[i]:
-            print(grille_joueur[i],"plus de place")
             lignes_prises += 1
             continue
         for elems in grille_joueur[i]:
@@ -294,9 +321,7 @@ def grille_pleine(grille_joueur,couleur):
                 lignes_prises += 1               
                 break
                 
-    print(lignes_prises)
     if lignes_prises == len(grille_joueur):
-        print("Grille pleine",lignes_prises)
         return True
     return False
 
@@ -382,8 +407,6 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
             else:
                 break
     remplir_cases(selection_ordinateur, grille_joueur, i,ordinateur=True)
-
-
 
 
 if __name__ == "__main__":

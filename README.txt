@@ -1,32 +1,37 @@
-v = fait , x = pas fait
-    v : Ecrire les docstrings des fonctions
-    x : Pouvoir déselectionner les tuiles choisies dans une fabrique (pas sur de le faire)
-    x : Pouvoir savoir quelles sont les tuiles qui ont étés sélectionnées (Les entourer ? ou afficher la couleur et le nombre ?)
-    v : Créer la zone de malus et implémenter le fait que le nombre de tuiles sélectionnées > nombre de cases dans le tableau et rediriger celles en trop dans la zone de malus
-        (fait a moitié la zone graphique ne marche pas mais la liste de la zone marche)
+Projet Développement Python 1 : Jeu Azul
+Réalisé par DOUMI Sofiane & EDMEE Léon.
 
-    v : Mettre les tuiles restantes d'une fabrique dans la zone du milieu
-    v : Effacer les tuiles posées des fabriques
 
-        (buggé la fonction affiche_fabrique() n'affiche qu'une seule fabrique quand on en a selectionné un autre alors qu'il en reste 3 ou moins
-          c'est à cause de (len(fabrique1)//2) ) =============> Réglé
+Dernière modification : 07/11/2021
 
-    x : Implémenter le malus du 1er joueur qui prend une tuile dans la zone du milieu
-  x/v : Implémenter correctement le 2nd joueur et les mécaniques
-        (pour l'instant seul le joueur 1 marche) =====> (Presque fait)
+Jeu:
 
-    x : Créer un bot qui joue aléatoirement
-    x : Créer un menu qui fait choisir si on veut jouer contre le bot ou un joueur
+Pour lancer le jeu exécuter le fichier main.py à l'aide de Python3
+ > Appuyer sur jouer puis sélectionner le mode de jeu
 
-    Phase 2:
-    x : Implémenter le comptage de points et afficher le score
-    x : Implémenter jusqu'à 4 joueurs (rip)
-    x : Remplir le mur du palais à la fin de la manche
-    x : Avoir plusieurs manches
-    x : Sauvegarder la partie ( ..... ????)
-    x : Ajouter de quoi décorer differement les murs du palais (..................)
+Un mode de test où les deux joueurs sont contrôlés par l'ordinateur est disponible en cliquant sur le carré
+en bas à gauche sur le menu 'accueil' dès le lancement du fichier.
 
-  
+> Le jeu s'arrête dès qu'il n'y a plus de tuiles en jeu : dans les fabriques ou dans la zone du centre.
+
+-----Phase 1 -----
+
+Implémentations :
+    - Intéraction avec le joueur via un menu (pas besoin de modifier le code ou d'ouvrir un éditeur)
+    - Mode Joueur contre Joueur & Joueur contre ordinateur
+    - Phase sélection des tuiles dans les fabriques ou la ligne du milieu
+    - Un seul clic suffit pour sélectionner toutes les tuiles d'une même couleur dans une fabrique
+    - Affichage des tuiles sélectionnées et possibilité de les déselectionner (clic droit)
+    - Docstrings des modules et des fonctions
+
+Problèmes rencontrés:
+
+    - La position des tuiles au milieu ne bouge pas même si celles avant ont étés prises : cela pose aucun problème au
+plan technique ou au niveau de la jouabilité mais un peu pour l'esthétisme.
+   
+    - La création du joueur contrôlé par l'ordinateur a posé des soucis car il faisait souvent planter le jeu
+en se bloquant dans un boucle infini car il ne trouvait pas de bonnes coordonnées pour choisir ses tuiles ou les poser
+ ----> Ca a été corrigé
 
 
 
