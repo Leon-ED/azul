@@ -319,6 +319,10 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
 
 
 if __name__ == "__main__":
+  
+    joueur_ia = menu_azul()
+    ferme_fenetre()
+    cree_fenetre(1800,900)
 
   
     joueur_ia = menu_azul()
@@ -396,6 +400,7 @@ if __name__ == "__main__":
     while True:
         if joueur_ia == None:
             break
+
 
         dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
         dessiner_tuiles_centre(centre_table)
