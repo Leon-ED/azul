@@ -9,7 +9,6 @@ from time import sleep
 from random import randint
 from menu import *
 
-
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -325,6 +324,12 @@ if __name__ == "__main__":
     ferme_fenetre()
     cree_fenetre(1800,900)
 
+  
+    joueur_ia = menu_azul()
+    ferme_fenetre()
+    cree_fenetre(1800,900)
+
+
     #------Initialisation-------#
 
     nombre_joueurs = 2
@@ -380,7 +385,6 @@ if __name__ == "__main__":
     positions = position(nombre_fabriques)
     
     
-   
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
@@ -543,9 +547,11 @@ if __name__ == "__main__":
             Tour_fini = False
 
 
+
 if joueur_ia == None:
     ferme_fenetre()
 
 else:
     attente_clic()
     ferme_fenetre()
+
