@@ -9,15 +9,6 @@ cote_carre = 50
 largeur_fenetre = 1800
 hauteur_fenetre = 900
 
-def dessiner_fabriques(nombre_fabriques):
-    '''
-    Dessine les  cercles des fabriques en haut de l'écran
-    '''
-    ecart = largeur_fenetre/nombre_fabriques
-    for i in range(nombre_fabriques):
-        cercle(100+ecart*i,75,60,epaisseur=1)
-
-
 def dessiner_lignes_motif(nombre_joueurs): #Affiche les lignes du motif
     '''
     Dessine les lignes de motif des deux joueurs.
