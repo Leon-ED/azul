@@ -11,10 +11,10 @@ def fenetre():
 
 def accueil():
     rectangle(100, 140, 300, 190)
-    texte(160, 150, "Jouer")
+    texte(160, 150, "Jouer",police='Arial')
 
     rectangle(100, 210, 300, 260)
-    texte(150, 220, "Quitter")
+    texte(150, 220, "Quitter",police='Arial')
     rectangle(10, 380, 20, 390)
 
 
@@ -31,13 +31,13 @@ def clic_menu():
 def choix_mode():
     efface_tout()
     rectangle(100, 105, 300, 155)
-    texte(125, 115, "Jouer à deux", taille = 20)
+    texte(125, 115, "Jouer à deux", taille = 20,police='Arial')
 
     rectangle(100, 175, 300, 225)
-    texte(110, 185, "Jouer contre IA", taille=20)
+    texte(110, 185, "Jouer contre IA", taille=20,police='Arial')
 
     rectangle(100, 245, 300, 295)
-    texte(160, 255, "Retour", taille = 20 )
+    texte(160, 255, "Retour", taille = 20 ,police='Arial')
 
 
 def clic_mode():

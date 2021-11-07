@@ -41,10 +41,10 @@ def dessiner_plancher(nombre_joueurs):
     '''
     malus = [-1,-1,-2,-2,-2,-3,-3]
     for i in range(7):
-        texte(25+60*i,710,str(malus[i]),taille=15)
+        texte(25+60*i,710,str(malus[i]),taille=15,police='Arial')
         rectangle(10+60*i, 730 , 60+60*i, 780)
 
-        texte(1175+60*i,710,str(malus[i]),taille=15)
+        texte(1175+60*i,710,str(malus[i]),taille=15,police='Arial')
         rectangle(1160+60*i, 730, 1210+60*i, 780)
 
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
@@ -104,8 +104,8 @@ def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
-    texte(index_plancher[0], index_plancher[1]-80, "Selection:",taille=23)
-    texte(index_plancher[0], index_plancher[1]-50, "Clic droit pour effacer",taille=13)
+    texte(index_plancher[0], index_plancher[1]-80, "Selection:",taille=23,police='Arial')
+    texte(index_plancher[0], index_plancher[1]-50, "Clic droit pour effacer",taille=13,police='Arial')
     for i in range(nombre):
         rectangle((index_plancher[0]+170)+60*i, index_plancher[1]-75, (index_plancher[0]+220)+60*i, (index_plancher[1]-25),remplissage=couleur)
         pass

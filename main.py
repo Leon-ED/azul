@@ -516,7 +516,7 @@ if __name__ == "__main__":
 
 
             if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and liste_invalide(centre_table):
-                texte((1800/2)-100, 900/2, 'Manche terminée')
+                texte((1800/2)-100, 900/2, 'Manche terminée',police='Arial')
                 break
 
 
@@ -554,7 +554,7 @@ if __name__ == "__main__":
                 plancher = ligne_plancher_j4
 
 
-        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur)) #Affiche quel joueur joue pour plus de clarté
+        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial') #Affiche quel joueur joue pour plus de clarté
 
         if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
 
