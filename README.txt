@@ -27,7 +27,6 @@ Implémentations :
 Non implémenté / Bugs:
     - Le placement des tuiles dans la grille se fait par rapport à la plus grande ligne c'est à dire qu'il est possible de placer une tuile 
 dans la plus petite ligne sans cliquer directement dessus.
-    - Les écritures ne sont pas centrées quand on lance le jeu sous Linux (pas de problème sur Windows).
 
 Problèmes rencontrés:
     - La position des tuiles au milieu ne bouge pas même si celles avant ont étés prises : cela pose aucun problème au
