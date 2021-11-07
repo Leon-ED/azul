@@ -9,7 +9,6 @@ from time import sleep
 from random import randint
 from menu import *
 
-
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -320,10 +319,12 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
 
 
 if __name__ == "__main__":
+
   
     joueur_ia = menu_azul()
     ferme_fenetre()
     cree_fenetre(1800,900)
+
 
     #------Initialisation-------#
 
@@ -380,7 +381,6 @@ if __name__ == "__main__":
     positions = position(nombre_fabriques)
     
     
-   
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
@@ -396,7 +396,6 @@ if __name__ == "__main__":
     while True:
         if joueur_ia == None:
             break
-
 
         dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
         dessiner_tuiles_centre(centre_table)
@@ -543,9 +542,11 @@ if __name__ == "__main__":
             Tour_fini = False
 
 
+
 if joueur_ia == None:
     ferme_fenetre()
 
 else:
     attente_clic()
     ferme_fenetre()
+
