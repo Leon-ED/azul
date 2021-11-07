@@ -5,7 +5,6 @@
 #---Imports
 from upemtk import *
 
-
 cote_carre = 50
 largeur_fenetre = 1800
 hauteur_fenetre = 900
@@ -44,9 +43,11 @@ def dessiner_plancher(nombre_joueurs):
     '''
     malus = [-1,-1,-2,-2,-2,-3,-3]
     for i in range(7):
-        texte(165+50*i,670,str(malus[i]),taille=15)
-        rectangle(150+50*i, 700, 200+50*i, 750)
-        rectangle(1300+50*i, 700, 1350+50*i, 750)
+        texte(25+60*i,710,str(malus[i]),taille=15)
+        rectangle(10+60*i, 730 , 60+60*i, 780)
+
+        texte(1175+60*i,710,str(malus[i]),taille=15)
+        rectangle(1160+60*i, 730, 1210+60*i, 780)
 
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     if "vide" in liste_plancher or len(liste_plancher) == 0:
@@ -54,10 +55,10 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     i = 0   
     for colors in liste_plancher:
         if colors == -1:
-            image(index_plancher[0]+50*i, index_plancher[1],'images/first.gif',ancrage='nw')
+            image(index_plancher[0]+60*i, index_plancher[1],'images/first.gif',ancrage='nw')
             i+=1
             continue
-        rectangle(index_plancher[0]+50*i, index_plancher[1], (index_plancher[0]+50)+50*i, (index_plancher[1]+50),remplissage=colors)
+        rectangle(index_plancher[0]+60*i, index_plancher[1], (index_plancher[0]+50)+60*i, (index_plancher[1]+50),remplissage=colors)
         i+=1
 
 def dessiner_tuiles_centre(liste_centre):
@@ -78,15 +79,14 @@ def dessiner_tuiles_centre(liste_centre):
             
 
 def dessiner_selection(selection,index_plancher):
-    print("dessiner select")
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
-    texte(index_plancher[0]-150, index_plancher[1]+70, "Selection:")
-    texte(index_plancher[0]-150, index_plancher[1]+110, "Clic droit pour effacer",taille=15)
+    texte(index_plancher[0], index_plancher[1]-80, "Selection:",taille=23)
+    texte(index_plancher[0], index_plancher[1]-50, "Clic droit pour effacer",taille=13)
     for i in range(nombre):
-        rectangle(index_plancher[0]+50*i, index_plancher[1]+60, (index_plancher[0]+50)+50*i, (index_plancher[1]+110),remplissage=couleur)
-
+        rectangle((index_plancher[0]+170)+60*i, index_plancher[1]-75, (index_plancher[0]+220)+60*i, (index_plancher[1]-25),remplissage=couleur)
+        pass
 
 def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
     '''

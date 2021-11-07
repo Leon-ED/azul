@@ -9,6 +9,7 @@ from time import sleep
 from random import randint
 from menu import *
 
+
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -32,8 +33,11 @@ def sac_est_vide():
 
 def fabriques_plein(liste):
     '''
-    Prends en paramètre une liste et la retourne en ayant ajouté 4 couleurs aléatoires présentes dans le sac en supprimant l'élément
-    choisit de la liste sac.
+    Remplit la liste de 4 couleurs parmis la liste sac et les supprime de celle-ci.
+
+    :param list liste: Liste renvoyée avec 4 couleurs aléatoires
+
+    :return: La liste remplie
     '''
     for i in range(2):
         for j in range(2):
@@ -47,8 +51,11 @@ def fabriques_plein(liste):
 
 def liste_invalide(fabrique):
     '''
-    Prend en paramètre une liste(fabrique) et renvoie True si elle est invalide
-    c'est à dire si sa taille est nulle ou que son type n'est pas une liste sinon renvoie False.
+    Evalue si la liste donnée est valide pour jouer.
+
+    :param list fabrique: Fabrique ou liste à évaluer
+
+    :return: False si on peut jouer avec. True si on ne peut pas jouer avec.
     '''
     if fabrique == centre_table:
         for lines in fabrique:
@@ -142,12 +149,8 @@ def select_tuiles(i,j,fabrique):
     return couleur,compteur,fabrique
     
 
-def liste_non_valide(liste):
-    if -10 in liste:
-        return True
-    return False
-
 def un_select_fabrique(type_clic):
+    '''Return True si le clic est un clic droit. False sinon.'''
     if type_clic == 'ClicDroit':
         return True
     return False
@@ -156,9 +159,9 @@ def un_select_fabrique(type_clic):
     
 def remove_couleur(selection):
     '''
-    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
-    d'où viennent ces tuiles. La fonction renvoie -10 si la liste ne peut pas être traitée sinon elle supprime toutes les occurences de la couleur
-    présente dans cette liste.
+    Prends en paramètre la sélection: 'couleur, nombre, fabrique'. 
+    La fonction renvoie -10 si la liste ne peut pas être traitée sinon elle supprime toutes les occurences de la couleur
+    présente dans cette fabrique.
     '''
     couleur,nombre,fabrique = selection
     if liste_invalide(fabrique):
@@ -177,23 +180,29 @@ def remove_couleur(selection):
 
 def remplir_cases(selection,grille,y,ordinateur=False):
     '''
-    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
-    d'où viennent ces tuiles. Ainsi que la grille du joueur en train de jouer et la position y du clic de l'utilisateur.
-    La fonction renvoie -10 si les coordonnées du clic de sont pas bonnes. Sinon elle place dans la liste de la grille les éléments sélectionnés
-    et s'il le faut appelle la fonction remplir_plancher afin de traiter les cas où plus de tuiles sont sélectionnées qu'il n'y a de place sur la ligne choisie.
+    Paramètres sélection: 'couleur, nombre, fabrique'.La grille du joueur en train de jouer et la position y du clic.
+    Et si le joueur est l'ordinateur (dans ce cas là certaines vérification ne sont pas effectuées).
+    Renvoie -10 en cas d'erreur. Sinon place dans la liste de la grille les éléments sélectionnés
+    Si besoin appelle la fonction remplir_plancher en cas de trop-plein.
     '''
+
     couleur,nombre,_ = selection
-    if ordinateur == False:
+    if ordinateur == False and (y//60)-6 != 6:
         if (y < positions_grille[4] or y > positions_grille[5]): #Detecte sur la position y n'est pas bonne
             return -10 
         if  (x<positions_grille[2] or x>positions_grille[3]): #Detecte si la position x n'est pas bonne
 
             return -10
-        y = (y//60)-6
 
-        if 'vide' not in grille[y]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
+
+        if 'vide' not in grille[(y//60)-6]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
 
             return -10
+
+    y = (y//60)-6
+    if y == 6: #Si le joueur sélectionne la ligne du plancher alors on le remplit et on arrête la fonction
+        remplir_plancher(couleur, nombre, plancher)
+        return
 
     longueur = 0
     for colors in grille[y]: #Detecte si une couleur autre est déja présente et si c'est le cas retourne -10
@@ -206,30 +215,36 @@ def remplir_cases(selection,grille,y,ordinateur=False):
     reste = 0
 
     for i in range(0,nombre):
-        if nombre> longueur:
+        if nombre> longueur: #Si la place sur la ligne est inférieure au nombre de tuiles
             reste = nombre-longueur
             if i == longueur-1:
-                remplir_plancher(couleur,reste,plancher)
+                remplir_plancher(couleur,reste,plancher) #Les tuiles en trop sont déplacées sur le plancher du joueur
                 j=0
-                while j< len(grille[y])-1 and grille[y][j] != 'vide':
+                while j< len(grille[y])-1 and grille[y][j] != 'vide': #Trouve une place où mettre la tuile sur la ligne
                     j+=1
                 grille[y][j] = couleur
                 return
             j=0
-            while j< len(grille[y])-1 and grille[y][j] != 'vide':
+            while j< len(grille[y])-1 and grille[y][j] != 'vide':  #Trouve une place où mettre la tuile sur la ligne
                 j+=1
-            grille[y][j] = couleur           
-        else:
+            grille[y][j] = couleur 
+
+        else: #S'il y a assez de place pour les tuiles sur la ligne
             j=0
-            while j< len(grille[y])-1 and grille[y][j] != 'vide':
+            while j< len(grille[y])-1 and grille[y][j] != 'vide':  #Trouve une place où mettre la tuile sur la ligne
                 j+=1
             grille[y][j] = couleur
             
 
 def remplir_plancher(couleur,reste,grille_plancher):
     '''
-    Prends en paramètre, la couleur de la tuile, le nombre restant et la grille du plancher du joueur en train de jouer.
-    La fonction si la grille de plancher n'est pas pleine ajoute les éléments à celle-ci
+    Si son plancher n'est pas plein elle ajoute les tuiles à celui-ci.
+
+    :param str couleur: Couleur de la tuile
+    :param int reste: Nombre de tuiles à placer
+    :param list grille_plancher: Liste du plancher du joueur qui joue
+
+    :return: rien
     '''
     if len(grille_plancher) != 7:
         for i in range(reste):
@@ -238,9 +253,12 @@ def remplir_plancher(couleur,reste,grille_plancher):
 
 def deplacer_vers_centre(selection):
     '''
-    Prends en paramètre la sélection composée de la couleur de la tuile, du nombre d'occurence de cette couleur et la liste (fabrique)
-    d'où viennent ces tuiles.
     La fonction ajoute les éléments de la fabrique à la liste composant les tuilesdu centre de la table avant de remplacer celle-ci par la liste [-10]
+
+    :param tuple selection: couleur, nombre, fabrique
+
+    :return: rien
+
     '''    
     _,_,fabrique = selection
     i,j = 0,0
@@ -261,12 +279,27 @@ def deplacer_vers_centre(selection):
 
 #---------------------------------Ordinateur---------------------------------#
 def tour_ordinateur(num_joueur,liste_joueurs_ia):
+    '''
+    Permet de savoir si l'ordinateur doit jouer
+
+    :param int num_joueur: numéro du joueur qui joue
+    :param list liste_joueurs_ia: liste des joueurs contrôlés par l'ordinateur
+
+    :return: True si l'ordinateur doit jouer. False sinon.
+    '''
     if num_joueur in liste_joueurs_ia:
         return True
     return False
 
 
 def ordinateur_choisir_fabrique(liste_des_fabriques):
+    '''
+    Permet à l'ordinateur de choisir aléatoirement une fabrique.
+
+    :param list liste_des_fabriques: Liste de toutes les fabriques disponibles (non vides) et des tuiles au milieu
+
+    :return: la fabrique choisie
+    '''
 
     position_hasard = randint(1,len(liste_des_fabriques)-1)
     fabrique_hasard = liste_des_fabriques[position_hasard]
@@ -278,8 +311,13 @@ def ordinateur_choisir_fabrique(liste_des_fabriques):
 
 
 def ordinateur_choisir_couleur(fabrique):
-    if fabrique == [-10]:
-        return -10
+    '''
+    L'ordinateur choisit une tuile au hasard parmi la fabrique donnée
+
+    :param list fabrique: Fabrique dans laquelle l'ordinateur va choisir aléatoirement
+
+    :return tuple selection_ordinateur: ('couleur',nombre,[fabrique]) 
+    '''
     i = randint(0,len(fabrique)-1)
     j = randint(0,len(fabrique[i])-1)
 
@@ -296,6 +334,12 @@ def ordinateur_choisir_couleur(fabrique):
     return selection_ordinateur
 
 def ordinateur_coup(selection_ordinateur,grille_joueur):
+    '''
+    L'ordinateur choisit une ligne aléatoirement parmi grille_joueur et y place ses tuiles
+
+    :param tuple selection_ordinateur: ('couleur',nombre,[fabrique])
+    :param list grille_joueur: Grille dans laquelle l'ordinateur va placer ses tuiles (selection_ordinateur)
+    '''
     colors = ["black", "yellow", "green","orange","blue"] 
     couleur, nombre, fabrique = selection_ordinateur
     colors.remove(couleur)
@@ -324,12 +368,6 @@ if __name__ == "__main__":
     ferme_fenetre()
     cree_fenetre(1800,900)
 
-  
-    joueur_ia = menu_azul()
-    ferme_fenetre()
-    cree_fenetre(1800,900)
-
-
     #------Initialisation-------#
 
     nombre_joueurs = 2
@@ -357,10 +395,10 @@ if __name__ == "__main__":
         grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
         grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
         positions_grille_j1 = (250,360,10,300,360,650)
-        positions_plancher_j1 = (150,700)
+        positions_plancher_j1 = (10,730)
 
         positions_grille_j2 = (1400,360,1160,1450,360,650)
-        positions_plancher_j2 = (1300,700)
+        positions_plancher_j2 = (1160,730)
     if nombre_joueurs >= 3:
         fabrique6 = fabriques_plein([["vide","vide"],["vide","vide"]])
         fabrique7 = fabriques_plein([["vide","vide"],["vide","vide"]])
@@ -385,6 +423,7 @@ if __name__ == "__main__":
     positions = position(nombre_fabriques)
     
     
+   
     positions_tuiles_centre = [650,350]
 
     joueurs_passes = 0 
@@ -506,12 +545,12 @@ if __name__ == "__main__":
                             x,y,type_clic = attente_clic()
                             if un_select_fabrique(type_clic): #Il efface sa sélection on sort de la boucle
                                 efface_tout()
-                                tour_valide = False
+                                tour_valide = False 
                                 break
                             if remplir_cases(selection, grille, y) != -10: #Son choix est valide on sort 
                                 break
 
-                        if tour_valide == 9999:
+                        if tour_valide == False: #Permet de revenir au début de la phase de sélection de la tuile. Sinon on continue
                             continue
 
                     efface_tout()
@@ -547,11 +586,9 @@ if __name__ == "__main__":
             Tour_fini = False
 
 
-
 if joueur_ia == None:
     ferme_fenetre()
 
 else:
     attente_clic()
     ferme_fenetre()
-

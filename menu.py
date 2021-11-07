@@ -1,3 +1,8 @@
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
+'''Module permettant de créer les menus pour permettre au joueur de choisir ses paramètres de jeu'''
+
+#---Imports
 from upemtk import *
 from time import sleep
 
@@ -5,55 +10,47 @@ def fenetre():
     cree_fenetre(400, 400)
 
 def accueil():
-    rectangle(100, 150, 300, 200)
-    texte(150, 160, "Jouer")
+    rectangle(100, 140, 300, 190)
+    texte(160, 150, "Jouer")
 
-    rectangle(100, 250, 300, 300)
-    texte(150, 260, "Quitter")
+    rectangle(100, 210, 300, 260)
+    texte(150, 220, "Quitter")
 
-def clic():
-    x,y,_ = attente_clic()
-    return x,y
 
 def clic_menu():
-    clic_joueur = clic() 
-    if 100<=clic_joueur[0]<=300 and 250<=clic_joueur[1]<=300: #Quitter
-        print("Quitter")
-        return False  #Pour que ça ferme la fenêtre dans le cas où on appuie sur quitter
-    if 100 <=clic_joueur[0]<= 300 and 150<=clic_joueur[1]<=200:  #Jouer
-        print("Jouer")
+    x,y,_ = attente_clic()
+    if 100<=x<= 300 and 140<=y<=190:  #Jouer
         return True  
+    if 100<=x<=300 and 210<=y<=260: #Quitter
+        return False  #Pour que ça ferme la fenêtre dans le cas où on appuie sur quitter
+    return
 
 def choix_mode():
     efface_tout()
-    rectangle(100, 50, 300, 100)
-    texte(130, 60, "Jouer à deux", taille = 20)
+    rectangle(100, 105, 300, 155)
+    texte(125, 115, "Jouer à deux", taille = 20)
 
-    rectangle(100, 150, 300, 200)
-    texte(110, 160, "Jouer contre IA", taille=20)
+    rectangle(100, 175, 300, 225)
+    texte(110, 185, "Jouer contre IA", taille=20)
 
-    rectangle(100, 250, 300, 300)
-    texte(160, 260, "Retour", taille = 20 )
-    return True
+    rectangle(100, 245, 300, 295)
+    texte(160, 255, "Retour", taille = 20 )
 
 def clic_mode():
-    clic_joueur = clic()
-    if 100 <=clic_joueur[0]<= 300 and 50<=clic_joueur[1]<=100:  #Jouer
-        print("Jouer à deux")
+    x,y,_ = attente_clic()
+    if 100 <=x<= 300 and 105<=y<=155:  #Jouer à 2
         return 1   
-    if 100<=clic_joueur[0]<=300 and 150<=clic_joueur[1]<=200: 
-        print("Jouer contre IA")
+    if 100<=x<=300 and 175<=y<=225: #Jouer contre l'ordinateur
         return 2  
-    if 100<=clic_joueur[0]<=300 and 250<=clic_joueur[1]<=300: #Retour
-        print("Retour")
-        return False  #Pour que ça retourne dans la fenêtre de l'accueil
+    if 100<=x<=300 and 245<=y<=295: #Retour
+        return False  
+    
+    return #Clics qui correspondent à rien
 
 def recup_choix_joueur(a):
     choix_joueur = []
     if a == 2:
         choix_joueur.append(2)
-    if a == 1:
-        choix_joueur.append(1)
     return choix_joueur
 
 
@@ -62,52 +59,25 @@ def menu_azul():
     fenetre()
     accueil()
     while True:
-        if clic_menu():
+        clic_accueil = clic_menu()
+        if clic_accueil:
             choix_mode()
+
             while True:
                 choix_j = clic_mode()
-                if choix_j != False:
-                    print(recup_choix_joueur(choix_j))
+                if choix_j != None and choix_j != False:
+                    choix_j = recup_choix_joueur(choix_j)
                     return choix_j
+                elif choix_j == None:
+                    continue
                 else:
                     efface_tout()
                     accueil()     
-                    break 
-        else: 
-            break 
-    
-
-
-
-
-
-if __name__ == '__main__':
-
-    fenetre()
-    accueil()
-    while True:
-        if clic_menu():
-            choix_mode()
-            while True:
-                choix_j = clic_mode()
-                if choix_j != False:
-                    print(recup_choix_joueur(choix_j))
                     break
-                else:
-                    efface_tout()
-                    accueil()     
-                    break 
-        else: 
-            break 
-            
-            
 
+        elif clic_accueil == False:
+            break
 
-        
-
-
+        else:
+            continue 
     
-''' Si on joue contre un bot, return une liste avec un 2. Puisque le joueur 2 est le bot
-récupérer un choix joueur pour l'implémenter dans le main 
-
-'''
