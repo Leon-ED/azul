@@ -187,19 +187,19 @@ def remplir_cases(selection,grille,y,ordinateur=False):
     '''
 
     couleur,nombre,_ = selection
-    if ordinateur == False and (y//60)-6 != 6:
-        if (y < positions_grille[4] or y > positions_grille[5]): #Detecte sur la position y n'est pas bonne
-            return -10 
-        if  (x<positions_grille[2] or x>positions_grille[3]): #Detecte si la position x n'est pas bonne
+    if ordinateur == False:
+        if (y//60)-6 != 6:
+            if (y < positions_grille[4] or y > positions_grille[5]): #Detecte sur la position y n'est pas bonne
+                return -10 
+            if  (x<positions_grille[2] or x>positions_grille[3]): #Detecte si la position x n'est pas bonne
 
-            return -10
+                return -10
 
 
-        if 'vide' not in grille[(y//60)-6]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
+            if 'vide' not in grille[(y//60)-6]: #Detecte s'il n'y a plus de place dans la ligne et retourne -10 si c'est le cas
 
-            return -10
-
-    y = (y//60)-6
+                return -10
+        y = (y//60)-6
     if y == 6: #Si le joueur sélectionne la ligne du plancher alors on le remplit et on arrête la fonction
         remplir_plancher(couleur, nombre, plancher)
         return
@@ -277,6 +277,27 @@ def deplacer_vers_centre(selection):
     fabriques_disponibles.remove(fabrique)
     fabrique[:] = [-10]
 
+
+def grille_pleine(grille_joueur,couleur):
+    coup = None
+    colors = ["black", "yellow", "green","orange","blue"]
+    colors.remove(couleur) 
+    lignes_prises = 0
+    for i in range (len(grille_joueur)):
+        if 'vide' not in grille_joueur[i]:
+            lignes_prises += 1
+            continue
+        for elems in grille_joueur[i]:
+            if elems == 'vide':
+                continue
+            if elems != couleur:
+                lignes_prises += 1
+
+    if lignes_prises == len(grille_joueur)-1:
+        return True
+    return False
+
+
 #---------------------------------Ordinateur---------------------------------#
 def tour_ordinateur(num_joueur,liste_joueurs_ia):
     '''
@@ -343,11 +364,18 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
     colors = ["black", "yellow", "green","orange","blue"] 
     couleur, nombre, fabrique = selection_ordinateur
     colors.remove(couleur)
+    i_min = 0
+    i_max = 4
+    if grille_pleine(grille_joueur,couleur):
+        i_max = 6
+        i_min=6
 
     while True:
-        i = randint(0,len(grille_joueur)-1)
-        j = randint(0,len(grille_joueur[i])-1)
-
+        i = randint(i_min,i_max)
+        if i == 5:
+            continue
+        if i == 6:
+            break
         if 'vide' not in grille_joueur[i]:
             continue
         for a in range(0,len(colors)):
@@ -356,8 +384,6 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
         else:
             break
     remplir_cases(selection_ordinateur, grille_joueur, i,ordinateur=True)
-
-
 
 
 
@@ -467,7 +493,7 @@ if __name__ == "__main__":
 
 
             if fabrique1 == fabrique2 == fabrique3 == fabrique4 == fabrique5 == [-10] and liste_invalide(centre_table):
-                texte(500, 500, 'FINI')
+                texte((1800/2)-100, 900/2, 'Manche terminée')
                 break
 
 
@@ -572,7 +598,7 @@ if __name__ == "__main__":
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
             dessiner_selection(selection_ordinateur, positions_plancher)
             mise_a_jour()
-            sleep(1)      
+            sleep(1.5)      
             ordinateur_coup(selection_ordinateur, grille)
             if selection_ordinateur[2] == centre_table and malus_centre == True:
                 plancher.append(-1)

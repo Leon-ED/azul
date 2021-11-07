@@ -15,6 +15,7 @@ def accueil():
 
     rectangle(100, 210, 300, 260)
     texte(150, 220, "Quitter")
+    rectangle(10, 380, 20, 390)
 
 
 def clic_menu():
@@ -23,6 +24,8 @@ def clic_menu():
         return True  
     if 100<=x<=300 and 210<=y<=260: #Quitter
         return False  #Pour que ça ferme la fenêtre dans le cas où on appuie sur quitter
+    if 10<=x<=20 and 380<=y<=390:
+        return -1 
     return
 
 def choix_mode():
@@ -35,6 +38,7 @@ def choix_mode():
 
     rectangle(100, 245, 300, 295)
     texte(160, 255, "Retour", taille = 20 )
+
 
 def clic_mode():
     x,y,_ = attente_clic()
@@ -60,6 +64,8 @@ def menu_azul():
     accueil()
     while True:
         clic_accueil = clic_menu()
+        if clic_accueil == -1:
+            return [1,2]
         if clic_accueil:
             choix_mode()
 
