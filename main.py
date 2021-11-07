@@ -279,21 +279,24 @@ def deplacer_vers_centre(selection):
 
 
 def grille_pleine(grille_joueur,couleur):
-    coup = None
-    colors = ["black", "yellow", "green","orange","blue"]
-    colors.remove(couleur) 
+    print("------------------------------------------------------------------------------------------------------------------")
     lignes_prises = 0
     for i in range (len(grille_joueur)):
         if 'vide' not in grille_joueur[i]:
+            print(grille_joueur[i],"plus de place")
             lignes_prises += 1
             continue
         for elems in grille_joueur[i]:
             if elems == 'vide':
                 continue
             if elems != couleur:
-                lignes_prises += 1
-
-    if lignes_prises == len(grille_joueur)-1:
+                print(grille_joueur[i],couleur)
+                lignes_prises += 1               
+                break
+                
+    print(lignes_prises)
+    if lignes_prises == len(grille_joueur):
+        print("Grille pleine",lignes_prises)
         return True
     return False
 
@@ -367,32 +370,32 @@ def ordinateur_coup(selection_ordinateur,grille_joueur):
     i_min = 0
     i_max = 4
     if grille_pleine(grille_joueur,couleur):
-        i_max = 6
-        i_min=6
-
-    while True:
-        i = randint(i_min,i_max)
-        if i == 5:
-            continue
-        if i == 6:
-            break
-        if 'vide' not in grille_joueur[i]:
-            continue
-        for a in range(0,len(colors)):
-            if colors[a] in grille[i]:
+        i = 6
+    else:
+        while True :
+            i = randint(i_min,i_max)
+            if 'vide' not in grille_joueur[i]:
+                continue
+            for a in range(0,len(colors)):
+                if colors[a] in grille[i]:
+                    break
+            else:
                 break
-        else:
-            break
     remplir_cases(selection_ordinateur, grille_joueur, i,ordinateur=True)
 
 
 
 
 if __name__ == "__main__":
-  
+    fermeture = False
+
     joueur_ia = menu_azul()
-    ferme_fenetre()
-    cree_fenetre(1800,900)
+    if joueur_ia == None:
+        fermeture = True
+        ferme_fenetre()
+    else:
+        ferme_fenetre()
+        cree_fenetre(1800,900)
 
     #------Initialisation-------#
 
@@ -462,10 +465,7 @@ if __name__ == "__main__":
 
 
     #-------Boucle principale------#
-    while True:
-        if joueur_ia == None:
-            break
-
+    while fermeture == False:
 
         dessiner_plateau(nombre_joueurs=nombre_joueurs,nombre_fabriques=nombre_fabriques)
         dessiner_tuiles_centre(centre_table)
@@ -598,7 +598,7 @@ if __name__ == "__main__":
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
             dessiner_selection(selection_ordinateur, positions_plancher)
             mise_a_jour()
-            sleep(1.5)      
+            sleep(0.9)      
             ordinateur_coup(selection_ordinateur, grille)
             if selection_ordinateur[2] == centre_table and malus_centre == True:
                 plancher.append(-1)
@@ -612,9 +612,10 @@ if __name__ == "__main__":
             Tour_fini = False
 
 
-if joueur_ia == None:
-    ferme_fenetre()
 
+if fermeture:
+    print("Menu fermé")
 else:
+    print("Fin du jeu")
     attente_clic()
     ferme_fenetre()

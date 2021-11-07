@@ -4,6 +4,7 @@
 
 #---Imports
 from upemtk import *
+from menu import *
 
 cote_carre = 50
 largeur_fenetre = 1800
@@ -79,23 +80,29 @@ def dessiner_selection(selection,index_plancher):
         rectangle((index_plancher[0]+170)+60*i, index_plancher[1]-75, (index_plancher[0]+220)+60*i, (index_plancher[1]-25),remplissage=couleur)
         pass
 
+
+
+
 def dessiner_tuiles_fabriques(fabrique,i,liste_positions):
     '''
     Prend en paramètre une liste de couleur et dessine les rectangles
     de chaque couleur de cette liste.
     '''
+    ligne(-100,200,2200,200,epaisseur=3)
+    x = liste_positions[i-1]
+    cercle(x+50,100,60,epaisseur=2)
     if -10 in fabrique:
         return
     ecart = 200
     j = 0
-    ligne = 0
-    x = liste_positions[i-1]
+    lignes = 0
+
     for line in fabrique:
         for colors in line:
             if j == 2:
                 j = 0
-                ligne = 1
-            rectangle(x+50*j, 50+50*ligne, (x+50)+50*j, 100+50*ligne,remplissage=colors,couleur='black',epaisseur=2)
+                lignes = 1
+            rectangle(x+50*j, 50+50*lignes, (x+50)+50*j, 100+50*lignes,remplissage=colors,couleur='black',epaisseur=2)
             
             j+=1   
 
@@ -112,6 +119,7 @@ def dessiner_plateau(nombre_joueurs,nombre_fabriques):
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
     toutes les autres fonctions.
     '''
+    #affiche_boutons()
     dessiner_lignes_motif(nombre_joueurs)
     dessiner_murs_palais(nombre_joueurs)
     dessiner_plancher(nombre_joueurs)

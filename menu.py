@@ -57,6 +57,15 @@ def recup_choix_joueur(a):
         choix_joueur.append(2)
     return choix_joueur
 
+'''
+def affiche_boutons():
+    rectangle(1600, 840, 1700, 880)
+    texte(1603, 840, "Quitter")
+'''
+
+
+
+
 
 def menu_azul():
 
@@ -82,7 +91,7 @@ def menu_azul():
                     break
 
         elif clic_accueil == False:
-            break
+            return
 
         else:
             continue 
