@@ -9,7 +9,7 @@ from main import return_positions
 
 cote= 50
 ecart = 10
-largeur_fenetre = 1800
+largeur_fenetre = 1900
 hauteur_fenetre = 900
 
 def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
@@ -19,12 +19,13 @@ def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
     :param int nombre_joueurs: Pas implémenté
     '''
     x,y,_,_,_,_= return_positions(joueur, 0)
+    print(x,y)
     for nb_lignes in range(0,6):
         for nb_colonnes in range(0,nb_lignes):
-            rectangle(x-(cote+ecart)*nb_colonnes, y+(cote+ecart)*nb_lignes, (x+cote)-(cote+ecart)*nb_colonnes,(y+cote)+(cote+ecart)*nb_lignes)
-            #rectangle(250-60*nb_colonnes, 300+60*nb_lignes, 300-60*nb_colonnes, 350+60*nb_lignes) #Joueur 1
+            rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
+            #rectangle(250-60*nb_colonnes, 150+60*nb_lignes, 300-60*nb_colonnes, 200+60*nb_lignes) #Joueur 1
             #rectangle(1400-60*nb_colonnes, 300+60*nb_lignes, 1450-60*nb_colonnes, 350+60*nb_lignes) #Joueur 2
-
+            
 def dessiner_murs_palais(nombre_joueurs):
     '''
     Dessine les murs du palais des deux joueurs.
@@ -44,13 +45,14 @@ def dessiner_plancher(joueur):
     :param int nombre_joueurs: Pas implémenté
     '''
     malus = [-1,-1,-2,-2,-2,-3,-3]
+    x,y = return_positions(joueur,1)
     for i in range(7):
-        texte(25+60*i,710,str(malus[i]),taille=15,police='Arial')
-        rectangle(10+60*i, 730 , 60+60*i, 780)
-
+        texte(x+15+(cote+ecart)*i,y-20,str(malus[i]),taille=15,police='Arial')
+        rectangle(x+(cote+ecart)*i, y , (ecart+cote)+(cote+ecart)*i, y+cote)
+        '''
         texte(1175+60*i,710,str(malus[i]),taille=15,police='Arial')
         rectangle(1160+60*i, 730, 1210+60*i, 780)
-
+        '''
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     '''
     Dessine les tuiles présentes dans le plancher du joueur
@@ -91,7 +93,7 @@ def dessiner_tuiles_centre(liste_centre):
                 nb_elem = 0
                 nb_ligne +=1
             if liste_centre[i][j] != 'vide':
-                rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black')
+                rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black',tag="fin_tour")
                 nb_elem +=1
 
             
@@ -108,10 +110,11 @@ def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
-    texte(index_plancher[0], index_plancher[1]-80, "Selection:",taille=23,police='Arial',tag="selection")
-    texte(index_plancher[0], index_plancher[1]-50, "Clic droit pour effacer",taille=13,police='Arial',tag="selection")
+        positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50
+    texte(index_plancher[0]+120, index_plancher[1]-110, "Selection:",taille=23,police='Arial',tag="selection")
+    texte(index_plancher[0]+120, index_plancher[1]-80, "Clic droit pour effacer",taille=13,police='Arial',tag="selection")
     for i in range(nombre):
-        rectangle((index_plancher[0]+170)+60*i, index_plancher[1]-75, (index_plancher[0]+220)+60*i, (index_plancher[1]-25),remplissage=couleur,tag="selection")
+        rectangle((index_plancher[0]+290)+60*i, index_plancher[1]-110, (index_plancher[0]+340)+60*i, (index_plancher[1]-60),remplissage=couleur,tag="selection")
         pass
 
 
@@ -123,10 +126,10 @@ def dessiner_toutes_tuiles_fabriques(lst_fabriques):
             i+=1
 
 def dessiner_toutes_tuiles_grilles(lst_grilles,positions):
-    i = 1
+    i = 0
     print(lst_grilles)
-    for grilles in lst_grilles[1:]:
-        dessine_tuiles_lignes(grilles,return_positions(i,0))
+    for grilles in lst_grilles:
+        dessine_tuiles_lignes(grilles,i+1)
         i+=1
 def dessiner_tuiles_fabriques(fabrique,i):
     '''
@@ -156,7 +159,7 @@ def dessiner_tuiles_fabriques(fabrique,i):
             
             j+=1   
 
-def dessine_tuiles_lignes(grille,index):
+def dessine_tuiles_lignes(grille,joueur):
     '''
     Dessine les tuiles dans la grille du joueur
 
@@ -164,13 +167,15 @@ def dessine_tuiles_lignes(grille,index):
     :param list index: Position de la grille du joueur dans la fenêtre
 
     '''
-    for i in range(len(grille)):
-        for j in range(i+1):
-            if grille[i][j] == "vide":
+    x,y,_,_,_,_= return_positions(joueur, 0)
+    for nb_lignes in range(len(grille)):
+        for nb_colonnes in range(nb_lignes+1):
+            if grille[nb_lignes][nb_colonnes] == "vide":
                 continue
-            rectangle(index[0]-(cote+ecart)*j, index[1]+(cote+ecart)*i, (index[0]+cote)-(cote+ecart)*j, (index[1]+cote)+(cote+ecart)*i,remplissage=grille[i][j])
 
-
+            #rectangle(index[0]-(cote+ecart)*j, index[1]+(cote+ecart)*i, (index[0]+cote)-(cote+ecart)*j, (index[1]+cote)+(cote+ecart)*i,remplissage=grille[i][j])
+            rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes])
+            #rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
 def dessiner_plateau(joueur,nombre_fabriques):
     '''
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
@@ -181,8 +186,12 @@ def dessiner_plateau(joueur,nombre_fabriques):
     '''
     dessiner_lignes_motif(2)
     dessiner_lignes_motif(1)
+    dessiner_lignes_motif(3)
     #dessiner_murs_palais(nombre_joueurs)
-    #dessiner_plancher(nombre_joueurs)
+    dessiner_plancher(1)
+    dessiner_plancher(3)
+    #dessiner_plancher(4)
+    dessiner_lignes_motif(4)
 
 
 
