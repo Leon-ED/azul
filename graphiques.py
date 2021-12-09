@@ -9,7 +9,7 @@ from main import return_positions
 
 cote= 50
 ecart = 10
-largeur_fenetre = 1800
+largeur_fenetre = 1900
 hauteur_fenetre = 900
 
 def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
@@ -45,13 +45,14 @@ def dessiner_plancher(joueur):
     :param int nombre_joueurs: Pas implémenté
     '''
     malus = [-1,-1,-2,-2,-2,-3,-3]
+    x,y = return_positions(joueur,1)
     for i in range(7):
-        texte(25+60*i,710,str(malus[i]),taille=15,police='Arial')
-        rectangle(10+60*i, 730 , 60+60*i, 780)
-
+        texte(x+15+(cote+ecart)*i,y-20,str(malus[i]),taille=15,police='Arial')
+        rectangle(x+(cote+ecart)*i, y , (ecart+cote)+(cote+ecart)*i, y+cote)
+        '''
         texte(1175+60*i,710,str(malus[i]),taille=15,police='Arial')
         rectangle(1160+60*i, 730, 1210+60*i, 780)
-
+        '''
 def dessiner_tuiles_plancher(liste_plancher,index_plancher):
     '''
     Dessine les tuiles présentes dans le plancher du joueur
@@ -109,10 +110,11 @@ def dessiner_selection(selection,index_plancher):
     couleur,nombre,_ = selection
     if couleur == 'vide':
         return
-    texte(index_plancher[0], index_plancher[1]-80, "Selection:",taille=23,police='Arial',tag="selection")
-    texte(index_plancher[0], index_plancher[1]-50, "Clic droit pour effacer",taille=13,police='Arial',tag="selection")
+        positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50
+    texte(index_plancher[0]+120, index_plancher[1]-110, "Selection:",taille=23,police='Arial',tag="selection")
+    texte(index_plancher[0]+120, index_plancher[1]-80, "Clic droit pour effacer",taille=13,police='Arial',tag="selection")
     for i in range(nombre):
-        rectangle((index_plancher[0]+170)+60*i, index_plancher[1]-75, (index_plancher[0]+220)+60*i, (index_plancher[1]-25),remplissage=couleur,tag="selection")
+        rectangle((index_plancher[0]+290)+60*i, index_plancher[1]-110, (index_plancher[0]+340)+60*i, (index_plancher[1]-60),remplissage=couleur,tag="selection")
         pass
 
 
@@ -172,8 +174,8 @@ def dessine_tuiles_lignes(grille,joueur):
                 continue
 
             #rectangle(index[0]-(cote+ecart)*j, index[1]+(cote+ecart)*i, (index[0]+cote)-(cote+ecart)*j, (index[1]+cote)+(cote+ecart)*i,remplissage=grille[i][j])
-            rectangle(x-(cote+ecart)*nb_colonnes, y+(cote+ecart)*nb_lignes, (x+cote)-(cote+ecart)*nb_colonnes,(y+cote)+(cote+ecart)*nb_lignes,remplissage=grille[nb_lignes][nb_colonnes])
-
+            rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes])
+            #rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
 def dessiner_plateau(joueur,nombre_fabriques):
     '''
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
@@ -184,8 +186,12 @@ def dessiner_plateau(joueur,nombre_fabriques):
     '''
     dessiner_lignes_motif(2)
     dessiner_lignes_motif(1)
+    dessiner_lignes_motif(3)
     #dessiner_murs_palais(nombre_joueurs)
-    #dessiner_plancher(nombre_joueurs)
+    dessiner_plancher(1)
+    dessiner_plancher(3)
+    #dessiner_plancher(4)
+    dessiner_lignes_motif(4)
 
 
 
