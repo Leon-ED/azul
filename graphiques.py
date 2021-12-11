@@ -26,17 +26,6 @@ def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
             #rectangle(250-60*nb_colonnes, 150+60*nb_lignes, 300-60*nb_colonnes, 200+60*nb_lignes) #Joueur 1
             #rectangle(1400-60*nb_colonnes, 300+60*nb_lignes, 1450-60*nb_colonnes, 350+60*nb_lignes) #Joueur 2
             
-def dessiner_murs_palais(nombre_joueurs):
-    '''
-    Dessine les murs du palais des deux joueurs.
-
-    :param int nombre_joueurs: Pas implémenté
-    '''   
-    for nb_lignes in range(0,5):
-        for nb_colonnes in range(0,5):
-            rectangle(350+60*nb_colonnes, 360+60*nb_lignes, 400+60*nb_colonnes, 410+60*nb_lignes)
-            rectangle(1500+60*nb_colonnes, 360+60*nb_lignes, 1550+60*nb_colonnes, 410+60*nb_lignes)
-
 
 def dessiner_plancher(joueur):
     '''
@@ -48,12 +37,13 @@ def dessiner_plancher(joueur):
     x,y = return_positions(joueur,1)
     for i in range(7):
         texte(x+15+(cote+ecart)*i,y-20,str(malus[i]),taille=15,police='Arial')
-        rectangle(x+(cote+ecart)*i, y , (ecart+cote)+(cote+ecart)*i, y+cote)
+        rectangle(x+(cote+ecart)*i, y , (x+cote)+(ecart+cote)*i, y+cote)
+        # (index_plancher[0]+50)+60*i
         '''
         texte(1175+60*i,710,str(malus[i]),taille=15,police='Arial')
         rectangle(1160+60*i, 730, 1210+60*i, 780)
         '''
-def dessiner_tuiles_plancher(liste_plancher,index_plancher):
+def dessiner_tuiles_plancher(liste_plancher,index_plancher,low_graphismes):
     '''
     Dessine les tuiles présentes dans le plancher du joueur
 
@@ -71,10 +61,13 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher):
             image(index_plancher[0]+60*i, index_plancher[1],'images/first.gif',ancrage='nw')
             i+=1
             continue
-        rectangle(index_plancher[0]+60*i, index_plancher[1], (index_plancher[0]+50)+60*i, (index_plancher[1]+50),remplissage=colors,tag="fin_manche")
+        if low_graphismes:
+            rectangle(index_plancher[0]+60*i, index_plancher[1], (index_plancher[0]+50)+60*i, (index_plancher[1]+50),remplissage=colors,tag="fin_manche")
+        else:
+            image(index_plancher[0]+(60*i)+1, index_plancher[1]+1, "./images/"+str(colors)+str("_h.gif"),ancrage="nw",tag="fin_manche")
         i+=1
 
-def dessiner_tuiles_centre(liste_centre):
+def dessiner_tuiles_centre(liste_centre,low_graphismes):
     '''
     Dessine les tuiles au centre du plateau
 
@@ -93,12 +86,15 @@ def dessiner_tuiles_centre(liste_centre):
                 nb_elem = 0
                 nb_ligne +=1
             if liste_centre[i][j] != 'vide':
-                rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black',tag="fin_tour")
+                if low_graphismes:
+                    rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black',tag="fin_tour")
+                else:
+                    image(650+50*nb_elem, 400+1*nb_ligne, "./images/"+str(liste_centre[i][j])+str("_h.gif"),ancrage="nw",tag="fin_tour")
                 nb_elem +=1
 
             
 
-def dessiner_selection(selection,index_plancher):
+def dessiner_selection(selection,index_plancher,low_graphismes):
     '''
     Dessine les tuiles actuellement sélectionnées par le joueur.
 
@@ -114,24 +110,34 @@ def dessiner_selection(selection,index_plancher):
     texte(index_plancher[0]+120, index_plancher[1]-110, "Selection:",taille=23,police='Arial',tag="selection")
     texte(index_plancher[0]+120, index_plancher[1]-80, "Clic droit pour effacer",taille=13,police='Arial',tag="selection")
     for i in range(nombre):
-        rectangle((index_plancher[0]+290)+60*i, index_plancher[1]-110, (index_plancher[0]+340)+60*i, (index_plancher[1]-60),remplissage=couleur,tag="selection")
-        pass
+        if low_graphismes:
+            rectangle((index_plancher[0]+290)+60*i, index_plancher[1]-110, (index_plancher[0]+340)+60*i, (index_plancher[1]-60),remplissage=couleur,tag="selection")
+            continue
+        image((index_plancher[0]+290)+60*i, index_plancher[1]-110, "./images/"+str(couleur)+str("_h.gif"),ancrage="nw",tag="selection")
 
 
-def dessiner_toutes_tuiles_fabriques(lst_fabriques):
+def dessiner_toutes_tuiles_fabriques(lst_fabriques,low_graphismes):
     i = 0
     for nom_fabrique in lst_fabriques[:-1]:
         if nom_fabrique != "vide":
-            dessiner_tuiles_fabriques(nom_fabrique, i)
+            dessiner_tuiles_fabriques(nom_fabrique, i,low_graphismes)
             i+=1
 
-def dessiner_toutes_tuiles_grilles(lst_grilles,positions):
+def dessiner_toutes_tuiles_grilles(lst_grilles,positions,low_graphismes):
     i = 0
     print(lst_grilles)
     for grilles in lst_grilles:
         dessine_tuiles_lignes(grilles,i+1)
         i+=1
-def dessiner_tuiles_fabriques(fabrique,i):
+
+def dessiner_tout_planchers(lst_planchers):
+    i = 0
+    for planchers in lst_planchers:
+        dessiner_plancher(i+1)
+        i+=1
+
+
+def dessiner_tuiles_fabriques(fabrique,i,low_graphismes):
     '''
     Prend en paramètre une liste de couleur et dessine les rectangles
     de chaque couleur de cette liste.
@@ -155,9 +161,54 @@ def dessiner_tuiles_fabriques(fabrique,i):
                 j = 0
                 lignes = 1
             if colors != "vide":
-                rectangle(x+50*j, 50+50*lignes, (x+50)+50*j, 100+50*lignes,remplissage=colors,couleur='black',epaisseur=2,tag="fin_tour")
+                if low_graphismes:
+                    rectangle(x+50*j, 50+50*lignes, (x+50)+50*j, 100+50*lignes,couleur='black',remplissage=colors,epaisseur=3,tag="fin_tour")
+
+                else:
+                        
+                    image(x+50*j,50+50*lignes, "./images/"+str(colors)+str("_h.gif"),ancrage="nw",tag="fin_tour")
+                    rectangle(x+50*j, 50+50*lignes, (x+50)+50*j, 100+50*lignes,couleur='black',epaisseur=3,tag="fin_tour")
             
             j+=1   
+
+def dessiner_murs_palais(joueur):
+    '''
+    Dessine les murs du palais des deux joueurs.
+
+    :param int nombre_joueurs: Pas implémenté
+    '''   
+    x,y,_,_,_,_ = return_positions(joueur, 0)
+    x +=70
+    for nb_lignes in range(0,5):
+        for nb_colonnes in range(0,5):
+            couple =palais[nb_lignes][nb_colonnes]
+            rectangle((x)+60*nb_colonnes, (y+10)+60*nb_lignes, (x+cote)+(cote+ecart)*nb_colonnes, (y+cote+10)+(ecart+cote)*nb_lignes,epaisseur=2)
+            image((x)+60*nb_colonnes, (y+10)+60*nb_lignes, "./images/"+str(couple[0])+str("_l.gif"),ancrage="nw",tag=(str(joueur)+str(nb_lignes)+str(nb_colonnes)))
+            #rectangle(1500+60*nb_colonnes, 360+60*nb_lignes, 1550+60*nb_colonnes, 410+60*nb_lignes)
+
+palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],
+            [["green",False],["blue",False],["yellow",False],["red",False],["black",False]],
+            [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
+            [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
+            [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+
+def afficher_mur_palais(joueur,palais_j,i,j):
+    print("la")
+    x,y,_,_,_,_ = return_positions(joueur, 0)
+    x+=70
+    print("la2")
+    '''
+    for i in range(0,5):
+        for j in range(0,5):
+            if palais_j[i][j][1]:
+                couple = palais_j[i][j]
+                print(palais_j)
+                #efface(str(joueur)+str(0)+str(0))
+            '''
+    print("=========================",i,j)
+    image((x)+60*j, (y+10)+60*i, "./images/"+str(palais_j[i][j][0])+str("_h.gif"),ancrage="nw")
+
+
 
 def dessine_tuiles_lignes(grille,joueur):
     '''
@@ -174,7 +225,7 @@ def dessine_tuiles_lignes(grille,joueur):
                 continue
 
             #rectangle(index[0]-(cote+ecart)*j, index[1]+(cote+ecart)*i, (index[0]+cote)-(cote+ecart)*j, (index[1]+cote)+(cote+ecart)*i,remplissage=grille[i][j])
-            rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes])
+            rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes],tag="fin_manche")
             #rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
 def dessiner_plateau(joueur,nombre_fabriques):
     '''
@@ -188,10 +239,17 @@ def dessiner_plateau(joueur,nombre_fabriques):
     dessiner_lignes_motif(1)
     dessiner_lignes_motif(3)
     #dessiner_murs_palais(nombre_joueurs)
+    '''
     dessiner_plancher(1)
     dessiner_plancher(3)
-    #dessiner_plancher(4)
+    dessiner_plancher(4)
+    '''
     dessiner_lignes_motif(4)
+    dessiner_murs_palais(1)
+    dessiner_murs_palais(2)
+    dessiner_murs_palais(3)
+    dessiner_murs_palais(4)
+
 
 
 

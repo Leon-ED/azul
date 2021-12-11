@@ -15,7 +15,7 @@ def sac_plein():
     '''
     Retourne une liste de taille 100 comportant 20 elements de chaque couleurs: black,yellow,green,orange,blue.
     '''
-    couleurs = ["black", "yellow", "green","orange","blue"]
+    couleurs = ["black", "yellow", "green","red","blue"]
     sac = []
     for colors in couleurs:
         for i in range(20):
@@ -233,6 +233,7 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
             return False
         if colors == 'vide':
             longueur_ligne += 1
+    print("La tailles est de",longueur_ligne)
 
     '''S'il y a plus de cases que de place'''
     if nombre_cases > longueur_ligne:
@@ -250,11 +251,13 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
         return True
 
     elif nombre_cases <= longueur_ligne:
+        cases_posees = 0
         for k in range(len(grille[i])):
-            if k == nombre_cases:
+            if cases_posees == nombre_cases:
                 return True
             if grille[i][k] == 'vide':
                 grille[i][k] = couleur_selection
+                cases_posees +=1
                 continue     
         return True
            
@@ -371,7 +374,7 @@ def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille
     while selection == -10:
             i,j, fabrique = select_fabrique(liste_des_fabriques)
             selection = select_tuiles(i, j, fabrique)
-    dessiner_selection(selection,positions_tuiles_centre)
+    dessiner_selection(selection,positions_tuiles_centre,low_graphismes)
     x,y,clic = attente_clic()
     if un_select_fabrique(clic):
         return False
@@ -384,7 +387,7 @@ def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille
         cases_valides = remplir_cases(selection, grille, x,y,positions_grille)
     remove_couleur(selection)
     deplacer_vers_centre(selection)
-    dessiner_tuiles_plancher(plancher, return_positions(joueur, 1))
+    dessiner_tuiles_plancher(plancher, return_positions(joueur, 1),low_graphismes)
     efface("fin_tour")
     efface("selection")
     return True
@@ -464,7 +467,7 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille):
     :param tuple selection_ordinateur: ('couleur',nombre,[fabrique])
     :param list grille_joueur: Grille dans laquelle l'ordinateur va placer ses tuiles (selection_ordinateur)
     '''
-    colors = ["black", "yellow", "green","orange","blue"] 
+    colors = ["black", "yellow", "green","red","blue"] 
     couleur, nombre, fabrique = selection_ordinateur
     colors.remove(couleur)
     i_min = 0
@@ -512,7 +515,7 @@ def generer_planchers(nombre_joueurs):
         ligne_plancher_j1 = []
         global ligne_plancher_j2
         ligne_plancher_j2 = []
-        liste_plancher = ["vide",ligne_plancher_j1,ligne_plancher_j2]
+        liste_plancher = [ligne_plancher_j1,ligne_plancher_j2]
     if nombre_joueurs >=3:
         global ligne_plancher_j3
         ligne_plancher_j3 = []
@@ -543,6 +546,64 @@ def generer_grilles_joueurs(nombre_joueurs):
         liste_grilles_joueurs.append(grille_j4)
     return liste_grilles_joueurs
 
+def generer_palais(nombre_joueurs,palais):
+    liste_palais= []
+
+    if nombre_joueurs >=2:
+        global palais_j1
+        palais_j1 = palais.copy()
+        global palais_j2
+        palais_j2 = palais.copy()
+        liste_palais=[palais_j1,palais_j2]
+    if nombre_joueurs >=3:
+        global palais_j3
+        palais_j3 = palais.copy()
+        liste_palais.append(palais_j3)
+    if nombre_joueurs >=4:
+        global palais_j4
+        palais_j4 = palais.copy()
+        liste_palais.append(palais_j4)
+
+    return liste_palais
+
+
+
+
+
+def remplir_palais(lst_palais,lst_grilles):
+    m = 0
+    for grille_j in lst_grilles:
+        palais_j = lst_palais[m]
+        for i in range(len(grille_j)):
+            if 'vide' not in grille_j[i]:
+                print("ici")
+                k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
+                print(palais_j[i][k][1])
+                palais_j[i][k][1] = True
+
+                afficher_mur_palais(m+1, palais_j,i,k)
+        m+=1
+
+
+
+
+def cherche_couleur_palais(palais_j,couleur,i):
+    for j in range(len(palais_j[i])):
+        if palais_j[i][j][0] == couleur:
+            return j
+
+
+def manche_finie(liste_fabriques,centre_table):
+    for fabriques in liste_fabriques[1:]:
+        if not liste_invalide(fabriques):
+            return False
+    if not liste_invalide(centre_table):
+        return False
+    return True
+
+
+
+
 if __name__ == "__main__":
     fermeture = False
 
@@ -556,18 +617,25 @@ if __name__ == "__main__":
 
     #------Initialisation-------#
 
-    nombre_joueurs = 4
+    nombre_joueurs = 2
+    low_graphismes = True
 
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                     ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
+    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],
+             [["green",False],["blue",False],["yellow",False],["red",False],["black",False]],
+             [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
+             [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
+             [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
 
-
+    palais_j1 = palais.copy()
 
     fabriques_disponibles= generer_fabriques(nombre_joueurs)
     nombre_fabriques = 5 #len(fabriques_disponibles)-1
     liste_planchers = generer_planchers(nombre_joueurs)
-    liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)  
+    liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+    liste_palais = generer_palais(nombre_joueurs, palais)
     
     #Initialise les données selon le nombre de joueurs
     positions_tuiles_centre = [650,350]
@@ -575,11 +643,12 @@ if __name__ == "__main__":
     tours = 0
     joueur = 1
     grille = liste_grilles_joueurs[joueur-1]
-    plancher = liste_planchers[joueur]
+    plancher = liste_planchers[joueur-1]
     Tour_fini = False
     malus_centre = True
 
     dessiner_plateau(nombre_joueurs,nombre_fabriques)
+    dessiner_tout_planchers(liste_planchers)
 
     #-------Boucle principale------#
     while fermeture == False:
@@ -590,15 +659,16 @@ if __name__ == "__main__":
         positions_plancher = return_positions(joueur, 1)
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
-        plancher = liste_planchers[joueur]
+        plancher = liste_planchers[joueur-1]
         print(positions_grille)
 
-        dessiner_tuiles_centre(centre_table)
-        dessiner_toutes_tuiles_fabriques(fabriques_disponibles)
-        dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,positions_grille)
+        dessiner_tuiles_centre(centre_table,low_graphismes)
+        dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
+        dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,positions_grille,low_graphismes)
         texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
 
         if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
+ 
 
             tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles)
 
@@ -606,12 +676,13 @@ if __name__ == "__main__":
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles)
 
 
+
         elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
             positions_grille = return_positions(joueur, 0)
-            dessine_tuiles_lignes(grille, positions_grille)
+            dessine_tuiles_lignes(grille, positions_grille,low_graphismes)
             ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
-            dessiner_selection(selection_ordinateur, positions_tuiles_centre)
+            dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
             mise_a_jour()
             sleep(0.9)      
             ordinateur_coup(selection_ordinateur, grille,positions_grille)
@@ -620,7 +691,14 @@ if __name__ == "__main__":
                 malus_centre = False
             tour_fini = True
 
-        if tour_fini:              
+
+
+
+
+
+
+        if tour_fini:
+       
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False            
@@ -629,7 +707,13 @@ if __name__ == "__main__":
             joueurs_passes = 0
             joueur = 1
 
-
+        if manche_finie(fabriques_disponibles, centre_table):
+            remplir_palais(liste_palais,liste_grilles_joueurs)
+            fabriques_disponibles= generer_fabriques(nombre_joueurs)
+            nombre_fabriques = 5 #len(fabriques_disponibles)-1
+            liste_planchers = generer_planchers(nombre_joueurs)
+            liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+            efface("fin_manche")
 
 
 
