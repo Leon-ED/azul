@@ -695,6 +695,7 @@ if __name__ == "__main__":
             tour_fini = True
 
 
+
         if tour_fini:
             efface("fin_tour")
             joueurs_passes += 1
@@ -717,6 +718,7 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
+
 
 
 
