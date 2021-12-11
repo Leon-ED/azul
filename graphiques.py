@@ -127,7 +127,7 @@ def dessiner_toutes_tuiles_grilles(lst_grilles,positions,low_graphismes):
     i = 0
     print(lst_grilles)
     for grilles in lst_grilles:
-        dessine_tuiles_lignes(grilles,i+1)
+        dessine_tuiles_lignes(grilles,i+1,low_graphismes)
         i+=1
 
 def dessiner_tout_planchers(lst_planchers):
@@ -210,7 +210,7 @@ def afficher_mur_palais(joueur,palais_j,i,j):
 
 
 
-def dessine_tuiles_lignes(grille,joueur):
+def dessine_tuiles_lignes(grille,joueur,low_graphismes):
     '''
     Dessine les tuiles dans la grille du joueur
 

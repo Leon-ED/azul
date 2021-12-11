@@ -223,7 +223,8 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
         if 'vide' not in grille[i]:
             print(x,y,"Pas de place")
             return False
-        
+    else:
+        i = y   
         
     '''Calcule la taille disponible dans la ligne choisie'''
     longueur_ligne = 0
@@ -457,7 +458,7 @@ def ordinateur_choisir_couleur(fabrique):
 
     remove_couleur(selection_ordinateur)
     deplacer_vers_centre(selection_ordinateur)
-    dessiner_selection(selection_ordinateur,positions_tuile_centre)
+    dessiner_selection(selection_ordinateur,positions_tuiles_centre,low_graphismes)
     return selection_ordinateur
 
 def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille):
@@ -678,11 +679,13 @@ if __name__ == "__main__":
 
 
         elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
+            print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
-            dessine_tuiles_lignes(grille, positions_grille,low_graphismes)
+            dessine_tuiles_lignes(grille, joueur,low_graphismes)
             ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
             dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
+            efface("selection")
             mise_a_jour()
             sleep(0.9)      
             ordinateur_coup(selection_ordinateur, grille,positions_grille)
@@ -692,13 +695,8 @@ if __name__ == "__main__":
             tour_fini = True
 
 
-
-
-
-
-
         if tour_fini:
-       
+            efface("fin_tour")
             joueurs_passes += 1
             joueur += 1
             Tour_fini = False            
@@ -708,12 +706,17 @@ if __name__ == "__main__":
             joueur = 1
 
         if manche_finie(fabriques_disponibles, centre_table):
+            mise_a_jour()
+            sleep(0.3)
             remplir_palais(liste_palais,liste_grilles_joueurs)
             fabriques_disponibles= generer_fabriques(nombre_joueurs)
             nombre_fabriques = 5 #len(fabriques_disponibles)-1
             liste_planchers = generer_planchers(nombre_joueurs)
             liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
             efface("fin_manche")
+            tours+=1
+            joueurs_passes = 0
+            joueur = 1
 
 
 
