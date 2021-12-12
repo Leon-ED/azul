@@ -1,6 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
-'''Module qui a pour but d'afficher tous les graphismes à l'écran en fonction des données envoyées'''
+'''Module qui a pour but d'afficher tous les graphismes à l'écran en fonction des données envoyées.'''
 
 #---Imports
 from upemtk import *

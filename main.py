@@ -1,6 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
-'''Module principal du jeu s'occupant de la partie logique et de l'interaction avec l'utilisateur'''
+'''Module principal du jeu s'occupant de la partie logique et de l'interaction avec l'utilisateur.'''
 
 #---Imports
 from upemtk import *
