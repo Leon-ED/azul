@@ -89,7 +89,7 @@ def dessiner_tuiles_centre(liste_centre,low_graphismes):
                 if low_graphismes:
                     rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black',tag="fin_tour")
                 else:
-                    image(650+50*nb_elem, 400+1*nb_ligne, "./images/"+str(liste_centre[i][j])+str("_h.gif"),ancrage="nw",tag="fin_tour")
+                    image(650+50*nb_elem, 350+50*nb_ligne, "./images/"+str(liste_centre[i][j])+str("_h.gif"),ancrage="nw",tag="fin_tour")
                 nb_elem +=1
 
             
@@ -123,7 +123,7 @@ def dessiner_toutes_tuiles_fabriques(lst_fabriques,low_graphismes):
             dessiner_tuiles_fabriques(nom_fabrique, i,low_graphismes)
             i+=1
 
-def dessiner_toutes_tuiles_grilles(lst_grilles,positions,low_graphismes):
+def dessiner_toutes_tuiles_grilles(lst_grilles,low_graphismes):
     i = 0
     print(lst_grilles)
     for grilles in lst_grilles:
@@ -136,6 +136,16 @@ def dessiner_tout_planchers(lst_planchers):
         dessiner_plancher(i+1)
         i+=1
 
+def dessiner_tout_palais(lst_palais):
+    i = 0
+    for palais in lst_palais:
+        dessiner_murs_palais(i+1)
+        i +=1
+def dessiner_tout_grilles_joueurs(liste_grilles_joueurs):
+    i = 0
+    for grilles in liste_grilles_joueurs:
+        dessiner_lignes_motif(i+1)
+        i+=1
 
 def dessiner_tuiles_fabriques(fabrique,i,low_graphismes):
     '''
@@ -223,10 +233,12 @@ def dessine_tuiles_lignes(grille,joueur,low_graphismes):
         for nb_colonnes in range(nb_lignes+1):
             if grille[nb_lignes][nb_colonnes] == "vide":
                 continue
-
+            if low_graphismes:
             #rectangle(index[0]-(cote+ecart)*j, index[1]+(cote+ecart)*i, (index[0]+cote)-(cote+ecart)*j, (index[1]+cote)+(cote+ecart)*i,remplissage=grille[i][j])
-            rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes],tag="fin_manche")
+                rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes],tag="fin_manche")
             #rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
+            else:
+                image(x-(cote+ecart)*nb_colonnes,  (y+(cote+ecart)*nb_lignes)+10, "./images/"+str(grille[nb_lignes][nb_colonnes])+str("_h.gif"),ancrage="nw",tag="fin_manche")
 def dessiner_plateau(joueur,nombre_fabriques):
     '''
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
@@ -235,21 +247,23 @@ def dessiner_plateau(joueur,nombre_fabriques):
     :param int nombre_joueurs: Pas implémenté
     :param int nombre_fabriques: Nombre de fabriques à créer
     '''
+    '''
     dessiner_lignes_motif(2)
     dessiner_lignes_motif(1)
     dessiner_lignes_motif(3)
     #dessiner_murs_palais(nombre_joueurs)
-    '''
+
     dessiner_plancher(1)
     dessiner_plancher(3)
     dessiner_plancher(4)
-    '''
+
     dessiner_lignes_motif(4)
+
     dessiner_murs_palais(1)
     dessiner_murs_palais(2)
     dessiner_murs_palais(3)
     dessiner_murs_palais(4)
-
+    '''
 
 
 

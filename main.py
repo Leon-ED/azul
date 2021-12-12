@@ -210,6 +210,8 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
 
     if not ordinateur: #(10,10,10,10,10,10)
         i = (y-pos_grille[1])//(cote+ecart)
+        if coup_possible(couleur_selection, i, liste_palais[joueur-1]):
+            return False
         px,py = positions_plancher
         print(px,py)
         if i == 5 and (x>=px and x<=px+(cote+ecart)*7):
@@ -602,7 +604,9 @@ def manche_finie(liste_fabriques,centre_table):
         return False
     return True
 
-
+def coup_possible(couleur,i,palais_j):
+    j = cherche_couleur_palais(palais_j, couleur, i)
+    return palais_j[i][j][1]
 
 
 if __name__ == "__main__":
@@ -619,7 +623,7 @@ if __name__ == "__main__":
     #------Initialisation-------#
 
     nombre_joueurs = 2
-    low_graphismes = True
+    low_graphismes = False
 
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
@@ -650,6 +654,8 @@ if __name__ == "__main__":
 
     dessiner_plateau(nombre_joueurs,nombre_fabriques)
     dessiner_tout_planchers(liste_planchers)
+    dessiner_tout_palais(liste_palais)
+    dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
 
     #-------Boucle principale------#
     while fermeture == False:
@@ -665,7 +671,7 @@ if __name__ == "__main__":
 
         dessiner_tuiles_centre(centre_table,low_graphismes)
         dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
-        dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,positions_grille,low_graphismes)
+        dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,low_graphismes)
         texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
 
         if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
