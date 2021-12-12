@@ -2,7 +2,7 @@ Projet Développement Python 1 : Jeu Azul
 Réalisé par DOUMI Sofiane & EDMEE Léon.
 
 
-Dernière modification : 07/11/2021
+Dernière modification : 12/12/2021
 
 Jeu:
 
@@ -37,4 +37,10 @@ en se bloquant dans un boucle infini car il ne trouvait pas de bonnes coordonné
  ----> Ca a été corrigé
 
 
+-----Phase 2 -----
+Implémentations:
+    - Menu options où on peut choisir entre un mode bas graphiques (dessins avec upemtk) ou haut graphiques (utilisation d'images)
+    - Le jeu complet avec la phase décoration du mur et les manches (re-remplissage des fabriques etc...)
 
+Non implémenté / Bugs:
+    - Sauvegarde / chargement d'une sauvegarde ---> Sera prêt pour la phase 3
