@@ -47,8 +47,6 @@ Implémentations:
 
 
 
-
-
 Non implémenté / Bugs / Problèmes rencontrés:
     - Sauvegarde / chargement d'une sauvegarde ---> Sera prêt pour la phase 3
     - Récupérer les tuiles "tombées" pour les remettre en jeu ---> Sera prêt pour la phase 3

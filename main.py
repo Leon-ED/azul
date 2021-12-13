@@ -655,7 +655,8 @@ def fin_partie(lst_grilles,lst_palais):
     print("La partie n'est pas finie.")
     return False
 if __name__ == "__main__":
-
+    print("ATTENTION !!! : Le menu n'est pas encore finalisé, ainsi les choix faits dans celui-ci ne mettent pas à jour les variables du jeu !\n privilégier le fichier\
+        settings.txt dans le dossier files en suivant les consignes présentes dans le README.txt")
     joueur_ia = menu_azul()
     if joueur_ia == None:
         fermeture = True
