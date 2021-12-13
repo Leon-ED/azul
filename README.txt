@@ -39,8 +39,20 @@ en se bloquant dans un boucle infini car il ne trouvait pas de bonnes coordonné
 
 -----Phase 2 -----
 Implémentations:
-    - Menu options où on peut choisir entre un mode bas graphiques (dessins avec upemtk) ou haut graphiques (utilisation d'images)
     - Le jeu complet avec la phase décoration du mur et les manches (re-remplissage des fabriques etc...)
+    - Jouer de 2 à 4 joueurs (Pour l'instant sans bot au dela du 2 joueurs car le menu n'est pas fini mais les bots marchent à 4)
+    - Possibilité de forcer le jeu à 2,3,4 dans le fichier settings.txt dans le dossier files
+    --Settings.txt : 2 lignes pour le moment la première indique le nombre de joueurs : de 2 à 4
+        - La seconde les joueurs controlés par l'ordinateur a noté sous la forme : 1,2 ou 1,3,4 ou 1,2,3,4 etc..
 
-Non implémenté / Bugs:
+
+
+
+
+Non implémenté / Bugs / Problèmes rencontrés:
     - Sauvegarde / chargement d'une sauvegarde ---> Sera prêt pour la phase 3
+    - Récupérer les tuiles "tombées" pour les remettre en jeu ---> Sera prêt pour la phase 3
+    - Menu options où on peut choisir entre un mode bas graphiques (dessins avec upemtk) ou haut graphiques (utilisation d'images) ---> Sera prêt pour la phase 3
+    (Toujours possible de choisir l'option soit même dans le main.py)
+
+    - Le comptage des points ---> Sera prêt pour la phase 3

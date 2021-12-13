@@ -19,7 +19,7 @@ def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
     :param int nombre_joueurs: Pas implémenté
     '''
     x,y,_,_,_,_= return_positions(joueur, 0)
-    print(x,y)
+    #print(x,y)
     for nb_lignes in range(0,6):
         for nb_colonnes in range(0,nb_lignes):
             rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
@@ -58,7 +58,7 @@ def dessiner_tuiles_plancher(liste_plancher,index_plancher,low_graphismes):
     i = 0   
     for colors in liste_plancher:
         if colors == -1:
-            image(index_plancher[0]+60*i, index_plancher[1],'images/first.gif',ancrage='nw')
+            image(index_plancher[0]+60*i, index_plancher[1],'images/first.gif',ancrage='nw',tag="fin_manche")
             i+=1
             continue
         if low_graphismes:
@@ -76,7 +76,7 @@ def dessiner_tuiles_centre(liste_centre,low_graphismes):
     '''
     nb_elem = 0
     nb_ligne = 0
-    print(liste_centre)
+    #print(liste_centre)
     for i in range(len(liste_centre)):
         for j in range(len(liste_centre[i])):
 
@@ -125,7 +125,7 @@ def dessiner_toutes_tuiles_fabriques(lst_fabriques,low_graphismes):
 
 def dessiner_toutes_tuiles_grilles(lst_grilles,low_graphismes):
     i = 0
-    print(lst_grilles)
+    #print(lst_grilles)
     for grilles in lst_grilles:
         dessine_tuiles_lignes(grilles,i+1,low_graphismes)
         i+=1
@@ -159,7 +159,7 @@ def dessiner_tuiles_fabriques(fabrique,i,low_graphismes):
     ligne(-100,200,2200,200,epaisseur=3)
     x = 50+200*i
     cercle(x+50,100,60,epaisseur=2,tag="fin_tour")
-    print(fabrique)
+    #print(fabrique)
     if -10 in fabrique:
         return
     ecart = 200
@@ -203,19 +203,19 @@ palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green
             [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
 
 def afficher_mur_palais(joueur,palais_j,i,j):
-    print("la")
+    #print("la")
     x,y,_,_,_,_ = return_positions(joueur, 0)
     x+=70
-    print("la2")
+    #print("la2")
     '''
     for i in range(0,5):
         for j in range(0,5):
             if palais_j[i][j][1]:
                 couple = palais_j[i][j]
-                print(palais_j)
+                #print(palais_j)
                 #efface(str(joueur)+str(0)+str(0))
             '''
-    print("=========================",i,j)
+    #print("=========================",i,j)
     image((x)+60*j, (y+10)+60*i, "./images/"+str(palais_j[i][j][0])+str("_h.gif"),ancrage="nw")
 
 
@@ -238,7 +238,15 @@ def dessine_tuiles_lignes(grille,joueur,low_graphismes):
                 rectangle(x-(cote+ecart)*nb_colonnes, (y+(cote+ecart)*nb_lignes)+10, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)+10,remplissage=grille[nb_lignes][nb_colonnes],tag="fin_manche")
             #rectangle(x-(cote+ecart)*nb_colonnes, (y+ ((cote+ecart)*nb_lignes))-50, (x+cote)-(cote+ecart)*nb_colonnes,((y+cote)+(cote+ecart)*nb_lignes)-50)
             else:
-                image(x-(cote+ecart)*nb_colonnes,  (y+(cote+ecart)*nb_lignes)+10, "./images/"+str(grille[nb_lignes][nb_colonnes])+str("_h.gif"),ancrage="nw",tag="fin_manche")
+                image(x-(cote+ecart)*nb_colonnes,  (y+(cote+ecart)*nb_lignes)+10, "./images/"+str(grille[nb_lignes][nb_colonnes])+str("_h.gif"),ancrage="nw",tag='fin_manche')
+
+
+
+
+
+
+
+
 def dessiner_plateau(joueur,nombre_fabriques):
     '''
     Permet de dessiner tous les éléments du jeu en une seule fois en regroupant
