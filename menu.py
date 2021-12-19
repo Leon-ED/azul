@@ -6,149 +6,178 @@
 from upemtk import *
 from time import sleep
 
+
 def fenetre():
-    cree_fenetre(400, 400)
+    cree_fenetre(400,600)
+    return True
 
 def accueil():
-    texte(140,60,"Jeu : Azul",police="Arial")
-    texte(350,380,"v1.9.0-b",police="Arial",taille=10)
-
-    rectangle(100, 140, 300, 190)
-    texte(160, 150, "Jouer",police='Arial')
-
-    rectangle(100, 210, 300, 260)
-    texte(150, 220, "Quitter",police='Arial')
-
-
-    rectangle(100, 280, 300, 330)
-    texte(150, 290, "Options",police='Arial')
-
-
-    rectangle(10, 380, 20, 390)
-
-def clic_menu():
-    x,y,_ = attente_clic()
-    print(x,y)
-    if 100<=x<=300 and 280<=y<=330: #options
-        return "settings"
-    if 100<=x<= 300 and 140<=y<=190:  #Jouer
-        return True  
-    if 100<=x<=300 and 210<=y<=260: #Quitter
-        return False  #Pour que ça ferme la fenêtre dans le cas où on appuie sur quitter
-    if 10<=x<=20 and 380<=y<=390: #Mode bot vs bot
-        return -1 
-
-
-
-    return
-
-def choix_mode():
     efface_tout()
-    rectangle(100, 105, 300, 155)
-    texte(125, 115, "Jouer à deux", taille = 20,police='Arial')
+    #Nom du jeu
+    texte(145,100,police='Arial',chaine='Jeu Azul')
 
-    rectangle(100, 175, 300, 225)
-    texte(110, 185, "Jouer contre IA", taille=20,police='Arial')
+    #Jouer
+    rectangle(100,200,300,250)
+    texte(155,205,"Jouer")
 
-    rectangle(100, 245, 300, 295)
-    texte(160, 255, "Retour", taille = 20 ,police='Arial')
+    #Options
+    rectangle(100,270,300,320)
+    texte(150,275,"Options")
 
+    #Quitter
+    rectangle(100,340,300,390)
+    texte(155,345,"Quitter")
 
-def show_settings():
-    pass
-    '''
-    efface_tout()
-    texte(120,60,"Paramètres",police="Arial")
-    texte(360,380,"v1.9.0",police="Arial",taille=10)
-    settings = open("./files/settings.txt","r")
-    lignes = settings.readlines()
-    etat = lignes[0][:-1]
-    #settings.seek(0)
-
-    rectangle(90, 140, 310, 190)
-    texte(100,150,"Graphiques bas :"+str(etat),police="Arial",taille=15)
-
-    rectangle(100, 245, 300, 295)
-    texte(160, 255, "Retour", taille = 20 ,police='Arial')
-
-
+def clic_accueil():
     while True:
         x,y,_ = attente_clic()
-        print(x,y)
-        if 100<=x<=300 and 245<=y<=295: #Retour
-            print("retour")
-            settings.close()
-            return "accueil"
-
-        if 90<=x<=310 and 140<=y<=190: #Graphiques
-            settings = open("./files/settings.txt","w")
-            new_lignes = ""
-            new_etat = not bool(etat)
-            print(new_etat)
-            lignes[0] = str(new_etat)
-            for mots in lignes:
-                new_lignes+=mots
-            print(new_lignes)
-            settings.write(new_lignes)
-            settings.close()
-            break
-            '''
-
-def clic_mode():
-    x,y,_ = attente_clic()
-    if 100 <=x<= 300 and 105<=y<=155:  #Jouer à 2
-        return 1   
-    if 100<=x<=300 and 175<=y<=225: #Jouer contre l'ordinateur
-        return 2  
-    if 100<=x<=300 and 245<=y<=295: #Retour
-        return False  
-    
-    return #Clics qui correspondent à rien
-
-def recup_choix_joueur(a):
-    choix_joueur = []
-    if a == 2:
-        choix_joueur.append(2)
-    return choix_joueur
+        if 100<=x<=250 and 200<=y<=250:
+            return 1
+        if 100<=x<=250 and 270<=y<=320:
+            return 2
+        if 100<=x<=250 and 340<=y<=390:
+            return False
 
 
 
 
-def menu_azul():
-
-    fenetre()
-    accueil()
+def clic_ia(nombre_joueurs):
     while True:
-        clic_accueil = clic_menu()
-        if clic_accueil == -1:
-            return [1,2]
+        x,y,_ = attente_clic()
+        if 100<=x<=250 and 200<=y<=250:
+            return [None]
+        if 100<=x<=250 and 270<=y<=320:
+            return list(range(2,nombre_joueurs+1))
+        if 100<=x<=250 and 340<=y<=390:
+            return False
+        '''
+        if 100<=x<=250 and 410<=y<=460:
+            return False
+        '''
 
-        if clic_accueil == "settings":
-            print("Erreur : Les paramètres ne sont pas encore implémentés ! ")
-            #show_settings()
-        if clic_accueil:
-            choix_mode()
+def jouer_ia():
+    efface_tout()
+    texte(120,100,police='Arial',chaine='Jouer contre ?')
 
-            while True:
-                choix_j = clic_mode()
-                if choix_j != None and choix_j != False:
-                    choix_j = recup_choix_joueur(choix_j)
-                    return choix_j
-                elif choix_j == None:
-                    continue
-                else:
-                    efface_tout()
-                    accueil()     
-                    break
+    #Jouer
+    rectangle(100,200,300,250)
+    texte(145,205,"Un humain")
 
-        elif clic_accueil == False:
-            return
+    #Options
+    rectangle(100,270,300,320)
+    texte(145,275,"L'ordinateur")
 
-        else:
-            continue 
-    
+    #Quitter
+    rectangle(100,340,300,390)
+    texte(145,345,"Accueil")
 
 
-if __name__ =="__main__":
+
+def clic_jouer():
+    while True:
+        x,y,_ = attente_clic()
+        if 100<=x<=250 and 200<=y<=250:
+            return 2
+        if 100<=x<=250 and 270<=y<=320:
+            return 3
+        if 100<=x<=250 and 340<=y<=390:
+            return 4
+        if 100<=x<=250 and 410<=y<=460:
+            return False
+
+def jouer():
+    efface_tout()
+    texte(80,100,police='Arial',chaine='Choisir mode de jeu')
+
+    #Jouer
+    rectangle(100,200,300,250)
+    texte(145,205,"2 joueurs")
+
+    #Options
+    rectangle(100,270,300,320)
+    texte(145,275,"3 joueurs")
+
+    #Quitter
+    rectangle(100,340,300,390)
+    texte(145,345,"4 joueurs")
+
+    rectangle(100,410,300,460)
+    texte(150,415,"Retour")
+
+def options(settings_config):
+    efface_tout()
+    texte(140,100,police='Arial',chaine='Options')
+
+    #Jouer
+    rectangle(100,200,300,250)
+    texte(105,205,"Low Graphiques: "+str(settings_config[2]),taille="10")
+
+    #Options
+    rectangle(100,270,300,320)
+    texte(145,275,"3 joueurs")
+
+    #Quitter
+    rectangle(100,340,300,390)
+    texte(145,345,"4 joueurs")
+
+    rectangle(100,410,300,460)
+    texte(150,415,"Retour")
+
+
+def copy_file(chemin):
+    file_list = []
+    with open(chemin,'r') as files:
+        for lines in files:
+            file_list.append(eval(lines.strip()))
+
+    return file_list
+
+def ecrire_config(liste,chemin):
+    with open(chemin,'w') as files:
+        for elems in liste:
+            files.write(str(elems)+'\n')
+    return True
+
+
+
+
+def menu_jeu():
     fenetre()
-    show_settings()
+    config = copy_file("./files/settings.txt")
+    if config == []:
+        config = [2,[2],False]
+    print(config)
+    
+    while True:
+        accueil()
+        choix = clic_accueil()
+        if not choix:
+            print("Quitter")
+            return False
+        if choix == 1:
+            jouer()
+            nombre_joueurs = clic_jouer()
+            if not nombre_joueurs:
+                print("Retour")
+                continue
+            config[0] = nombre_joueurs
+            jouer_ia()
+            choix = clic_ia(nombre_joueurs)
+            if not choix:
+                print("Accueil")
+                continue
+            config[1] = choix
+            ecrire_config(config,"./files/settings.txt")
+            return True
+        if choix == 2:
+            options(config)
+            choix = clic_accueil()
+
+
+
+
+
+if __name__ == '__main__':
+    menu_jeu()
+
+    attente_clic()

@@ -673,8 +673,11 @@ if __name__ == "__main__":
     partie_finie = False
     low_graphismes = False
     with open ("./files/settings.txt","r") as settings:
-        nombre_joueurs = int(settings.readline().split("=")[1])
-        joueur_ia = list(map(lambda x : int(x),settings.readline().split("=")[1].split(",")))
+        nombre_joueurs = eval(settings.readline().strip())
+        joueur_ia = eval(settings.readline().strip())
+        low_graphismes = eval(settings.readline().strip())
+
+
 
     joueurs_passes = 0
     tours = 0

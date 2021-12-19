@@ -1,2 +1,3 @@
-nombre_joueurs=4
-joueurs_ia=2,3,4
+2
+[None]
+None
