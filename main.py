@@ -4,6 +4,7 @@
 
 #---Imports
 from upemtk import *
+from sauvegarde import *
 from graphiques import *
 from time import sleep
 from random import randint
@@ -690,14 +691,24 @@ if __name__ == "__main__":
         low_graphismes = eval(settings.readline().strip())
 
 
-    #------Génère les variables des joueurs selon leur nombre-------#
-    fabriques_disponibles= generer_fabriques(nombre_joueurs)
-    liste_planchers = generer_planchers(nombre_joueurs)
-    liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-    liste_palais = generer_palais(nombre_joueurs, palais)
+
+
+    save = copy_file("./files/save.txt")
+    print("EEEE",save[0])
+
     positions_tuiles_centre = [650,350]
-    grille = liste_grilles_joueurs[joueur-1]
-    plancher = liste_planchers[joueur-1]
+
+    
+    if save[0]!= True:
+    #------Génère les variables des joueurs selon leur nombre-------#
+        fabriques_disponibles= generer_fabriques(nombre_joueurs)
+        liste_planchers = generer_planchers(nombre_joueurs)
+        liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+        liste_palais = generer_palais(nombre_joueurs, palais)
+        grille = liste_grilles_joueurs[joueur-1]
+        plancher = liste_planchers[joueur-1]
+    else:
+        _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre = save
 
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
@@ -778,3 +789,4 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
+        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre)

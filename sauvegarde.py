@@ -15,3 +15,9 @@ def ecrire_config(liste,chemin):
         for elems in liste:
             files.write(str(elems)+'\n')
     return True
+
+
+def ecrire_save(nombre_joueurs,joueur,jours_ia,joueurs_passes,liste_grilles,liste_planchers,tuiles_centres,liste_fabriques,liste_palais,malus_centre):
+    liste_save = [True,nombre_joueurs,joueur,jours_ia,joueurs_passes,liste_grilles,liste_planchers,tuiles_centres,liste_fabriques,liste_palais,malus_centre]
+    return ecrire_config(liste_save,'./files/save.txt')
+
