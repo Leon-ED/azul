@@ -61,11 +61,11 @@ def jouer_ia():
 
     #Jouer
     rectangle(100,200,300,250)
-    texte(145,205,"Un humain")
+    texte(130,205,"Un humain")
 
     #Options
     rectangle(100,270,300,320)
-    texte(145,275,"L'ordinateur")
+    texte(120,275,"L'ordinateur")
 
     #Quitter
     rectangle(100,340,300,390)
@@ -112,6 +112,7 @@ def options(settings_config):
     rectangle(100,200,300,250)
     texte(105,205,"Low Graphiques: "+str(settings_config[2]),taille="10")
 
+    '''
     #Options
     rectangle(100,270,300,320)
     texte(145,275,"3 joueurs")
@@ -119,9 +120,28 @@ def options(settings_config):
     #Quitter
     rectangle(100,340,300,390)
     texte(145,345,"4 joueurs")
+    '''
 
     rectangle(100,410,300,460)
     texte(150,415,"Retour")
+
+
+def clic_options(settings_config):
+    while True:
+        x,y,_ = attente_clic()
+        if 100<=x<=250 and 200<=y<=250:
+            settings_config[2] = not settings_config[2]
+            options(settings_config)
+        '''
+        if 100<=x<=250 and 270<=y<=320:
+            return 3
+        if 100<=x<=250 and 340<=y<=390:
+            return 4
+        '''
+        if 100<=x<=250 and 410<=y<=460:
+            return False
+
+
 
 
 def copy_file(chemin):
@@ -152,6 +172,7 @@ def menu_jeu():
         accueil()
         choix = clic_accueil()
         if not choix:
+            ecrire_config(config,"./files/settings.txt")
             print("Quitter")
             return False
         if choix == 1:
@@ -171,7 +192,7 @@ def menu_jeu():
             return True
         if choix == 2:
             options(config)
-            choix = clic_accueil()
+            choix = clic_options(config)
 
 
 
@@ -179,5 +200,3 @@ def menu_jeu():
 
 if __name__ == '__main__':
     menu_jeu()
-
-    attente_clic()

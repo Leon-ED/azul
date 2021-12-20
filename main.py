@@ -655,34 +655,18 @@ def fin_partie(lst_grilles,lst_palais):
     print("La partie n'est pas finie.")
     return False
 if __name__ == "__main__":
-    print("ATTENTION !!! : Le menu n'est pas encore finalisé, ainsi les choix faits dans celui-ci ne mettent pas à jour les variables du jeu !\n privilégier le fichier\
-        settings.txt dans le dossier files en suivant les consignes présentes dans le README.txt")
-    joueur_ia = menu_azul()
-    if joueur_ia == None:
-        fermeture = True
-        ferme_fenetre()
-    else:
-        ferme_fenetre()
-        cree_fenetre(1800,1080)
-    joueur_ia = [1]
+    '''
+    Tour : Se finit quand tous les joueurs composant la partie on joué
+    Manche : Se finit quand il n'y a plus de fabriques avec lesquelles jouer
+    '''
+    #------Affiche le menu-------#
+    while not menu_jeu():
+        pass
+    #------Ferme le menu et lance la fenetre du jeu-------#
+    ferme_fenetre()
+    cree_fenetre(1800,1080)
 
     #------Initialisation des variables du jeu-------#
-
-    malus_centre = True
-    Tour_fini = False
-    partie_finie = False
-    low_graphismes = False
-    with open ("./files/settings.txt","r") as settings:
-        nombre_joueurs = eval(settings.readline().strip())
-        joueur_ia = eval(settings.readline().strip())
-        low_graphismes = eval(settings.readline().strip())
-
-
-
-    joueurs_passes = 0
-    tours = 0
-    joueur = 1
-    #------------------------------------------------#
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                     ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
@@ -691,8 +675,22 @@ if __name__ == "__main__":
              [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
              [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
              [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+    malus_centre = True
+    Tour_fini = False
+    partie_finie = False
+    low_graphismes = False
+    joueurs_passes = 0
+    tours = 0
+    joueur = 1
+
+    #------Lit le fichier des paramètres-------#
+    with open ("./files/settings.txt","r") as settings:
+        nombre_joueurs = eval(settings.readline().strip())
+        joueur_ia = eval(settings.readline().strip())
+        low_graphismes = eval(settings.readline().strip())
 
 
+    #------Génère les variables des joueurs selon leur nombre-------#
     fabriques_disponibles= generer_fabriques(nombre_joueurs)
     liste_planchers = generer_planchers(nombre_joueurs)
     liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
@@ -701,34 +699,38 @@ if __name__ == "__main__":
     grille = liste_grilles_joueurs[joueur-1]
     plancher = liste_planchers[joueur-1]
 
-
+    #------Dessine les éléments à ne jamais effacer-------#
+    '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
     dessiner_tout_palais(liste_palais)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
 
-    #-------Boucle principale------#
+    #------Boucle principale-------#
     while True:
 
+    #------Met à jour les éléments relatifs au joueur qui joue-------#
         positions_plancher = return_positions(joueur, 1)
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
         #print(positions_grille)
 
+    #------Met à jour les graphiques susceptibles de changer à chaque tour-------#
         dessiner_tuiles_centre(centre_table,low_graphismes)
         dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
         dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,low_graphismes)
         texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
 
-        if tour_ordinateur(joueur, joueur_ia) == False: #Cas où c'est un humain qui doit jouer
-
-
+        #------Fait jouer le joueur humain-------#
+        if tour_ordinateur(joueur, joueur_ia) == False:
             tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
-
+                
+            #------Si son tour n'est pas valide on le refait jouer jusqu'à qu'il soit valide-------#
             while not tour_fini:
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
-
-        elif tour_ordinateur(joueur, joueur_ia): #Cas où le joueur est contrôlé par l'ordinateur
+        
+        #------Fait jouer l'ordinateur-------#
+        elif tour_ordinateur(joueur, joueur_ia):
             #print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
             dessine_tuiles_lignes(grille, joueur,low_graphismes)
@@ -744,6 +746,8 @@ if __name__ == "__main__":
                 malus_centre = False
             dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
             tour_fini = True
+
+
 
         if fin_partie(liste_grilles_joueurs,liste_palais):
             texte((1800/2)-100, 900/2, 'Partie terminée',police='Arial')
