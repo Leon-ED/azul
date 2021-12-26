@@ -3,6 +3,7 @@
 '''Module permettant de créer les menus pour permettre au joueur de choisir ses paramètres de jeu'''
 
 #---Imports
+from genericpath import exists
 from upemtk import *
 from sauvegarde import *
 
@@ -27,6 +28,10 @@ def accueil():
     #Quitter
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
+
+    if existe("./files/settings.txt"):
+        rectangle(100,410,300,460)
+        texte(110,415,"Reprendre partie",police='Arial',taille=17)
 
 def clic_accueil():
     while True:

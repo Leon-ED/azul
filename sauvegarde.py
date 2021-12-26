@@ -1,6 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''Module qui s'occupe de sauvegarder les fichiers'''
+import os
 
 def copy_file(chemin):
     file_list = []
@@ -21,3 +22,5 @@ def ecrire_save(nombre_joueurs,joueur,jours_ia,joueurs_passes,liste_grilles,list
     liste_save = [True,nombre_joueurs,joueur,jours_ia,joueurs_passes,liste_grilles,liste_planchers,tuiles_centres,liste_fabriques,liste_palais,malus_centre]
     return ecrire_config(liste_save,'./files/save.txt')
 
+def existe(chemin):
+    return os.path.exists(chemin) and os.path.getsize(chemin) > 0
