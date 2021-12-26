@@ -3,9 +3,9 @@ True
 2
 [None]
 1
-[[['green'], ['yellow', 'vide'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide']], [['vide'], ['black', 'black'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide']]]
-[['green', 'green'], []]
-[['green', 'black', 'red', 'yellow', 'yellow', 'yellow', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]
-['vide', [-10], [['black', 'green'], ['red', 'green']], [-10], [['black', 'blue'], ['black', 'green']], [-10], [['green', 'black', 'red', 'yellow', 'yellow', 'yellow', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]]
+[[['vide'], ['red', 'red'], ['blue', 'blue', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide']], [['vide'], ['black', 'black'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide']]]
+[[], []]
+[['yellow', 'yellow', 'red', 'green', 'black', 'red', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]
+['vide', [['yellow', 'green'], ['blue', 'green']], [-10], [-10], [-10], [['green', 'green'], ['red', 'green']], [['yellow', 'yellow', 'red', 'green', 'black', 'red', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]]
 [[[['blue', False], ['yellow', False], ['red', False], ['black', False], ['green', False]], [['green', False], ['blue', False], ['yellow', False], ['red', False], ['black', False]], [['black', False], ['green', False], ['blue', False], ['yellow', False], ['red', False]], [['red', False], ['black', False], ['green', False], ['blue', False], ['yellow', False]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]], [[['blue', False], ['yellow', False], ['red', False], ['black', False], ['green', False]], [['green', False], ['blue', False], ['yellow', False], ['red', False], ['black', False]], [['black', False], ['green', False], ['blue', False], ['yellow', False], ['red', False]], [['red', False], ['black', False], ['green', False], ['blue', False], ['yellow', False]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]]]
 True

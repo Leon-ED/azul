@@ -603,6 +603,7 @@ if __name__ == "__main__":
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
     else:
+        print("Sauvegarde")
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre = save
 
     #------Dessine les éléments à ne jamais effacer-------#
