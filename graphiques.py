@@ -5,13 +5,21 @@
 #---Imports
 from upemtk import *
 from menu import *
-from main import return_positions
 
 cote= 50
 ecart = 10
 largeur_fenetre = 1900
 hauteur_fenetre = 900
-
+def return_positions(joueur,type_pos):
+    #Type pos 0 : positions grille, type_pos 1 = positions plancher, type_pos 3 = points du joueur
+    dico_positions = dict()
+    #print(joueur,type_pos)
+    if joueur != 0:
+        dico_positions[1] =((250,200,10,210,300,500),(10,520),0)
+        dico_positions[2] = ((1400,200,1160,210,1450,500),(1160,520),0)
+        dico_positions[3]=  ((250,580,10,590,300,880),(10,900),0)
+        dico_positions[4]=((1400,580,1160,590,1450,880),(1160,900),0)
+        return dico_positions[joueur][type_pos]
 def dessiner_lignes_motif(joueur): #Affiche les lignes du motif
     '''
     Dessine les lignes de motif des deux joueurs.
