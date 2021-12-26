@@ -9,6 +9,7 @@ from graphiques import *
 from time import sleep
 from random import randint
 from menu import *
+from generer import *
 
 
 #---------------------------------Sac---------------------------------#
@@ -97,46 +98,12 @@ def select_fabrique(liste_des_fabriques,positions_tuiles_centre=[650,350],taille
     i = (x//50)-1
     j = (y//50)-1
     fabrique = []
-    selection = []
-    emplacements = []
-    if nombre_joueurs >=2:
-        if i == 0 or i==1:
-            fabrique = fabrique1
-
-        if i == 4 or i==5:
-            i-=4
-            fabrique = fabrique2
-
-        if i == 8 or i==9:
-            i-=8
-            fabrique = fabrique3
-
-        if i == 12 or i==13:
-            i-=12
-            fabrique = fabrique4
-
-        if i == 16 or i==17:
-            i-=16
-            fabrique = fabrique5
-
-    if nombre_joueurs >=3:
-        if i == 20 or i==21:
-            i-=20
-            fabrique = fabrique6
-
-        if i == 24 or i==25:
-            i-=24
-            fabrique = fabrique7
-
-    if nombre_joueurs >= 4:
-
-        if i == 28 or i==29:
-            i-=28
-            fabrique = fabrique8
-
-        if i == 32 or i==33:
-            i-=32
-            fabrique = fabrique9
+    emplacements = [0,4,8,12,16,20,24,28,32]
+    for pos in range(len(liste_des_fabriques)-1):
+        if i == emplacements[pos] or i == emplacements[pos] +1:
+            fabrique = liste_des_fabriques[pos+1]
+            i -= emplacements[pos]
+            break
     return j,i,fabrique
 
 
@@ -153,8 +120,10 @@ def select_tuiles(i,j,fabrique):
 
     '''
     if fabrique != centre_table and ( i>1 or liste_invalide(fabrique) or j>1):
+        print("Invalide 1")
         return -10
     if fabrique == centre_table and (j>=len(fabrique[i])):
+        print("Invalide 2")
         return -10
     compteur = 0
     couleur = fabrique[i][j]
@@ -504,16 +473,7 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
 
 
 
-def return_positions(joueur,type_pos):
-    #Type pos 0 : positions grille, type_pos 1 = positions plancher, type_pos 3 = points du joueur
-    dico_positions = dict()
-    #print(joueur,type_pos)
-    if joueur != 0:
-        dico_positions[1] =((250,200,10,210,300,500),(10,520),0)
-        dico_positions[2] = ((1400,200,1160,210,1450,500),(1160,520),0)
-        dico_positions[3]=  ((250,580,10,590,300,880),(10,900),0)
-        dico_positions[4]=((1400,580,1160,590,1450,880),(1160,900),0)
-        return dico_positions[joueur][type_pos]
+
 
 '''
 dico_positions[1] =((250,360,10,300,360,650),(10,730))
@@ -523,64 +483,6 @@ dico_positions[4]=()
 '''
 
 
-
-def generer_planchers(nombre_joueurs):
-    liste_planchers = []
-    if nombre_joueurs >=2:
-        global ligne_plancher_j1
-        ligne_plancher_j1 = []
-        global ligne_plancher_j2
-        ligne_plancher_j2 = []
-        liste_plancher = [ligne_plancher_j1,ligne_plancher_j2]
-    if nombre_joueurs >=3:
-        global ligne_plancher_j3
-        ligne_plancher_j3 = []
-        liste_plancher.append(ligne_plancher_j3)
-    if nombre_joueurs >=4:
-        global ligne_plancher_j4
-        ligne_plancher_j4 = []
-        liste_plancher.append(ligne_plancher_j4)
-    return liste_plancher
-
-def generer_grilles_joueurs(nombre_joueurs):
-    liste_grilles_joueurs = []
-    if nombre_joueurs >=2:
-
-        global grille_j1
-        grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        global grille_j2
-        grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-
-        liste_grilles_joueurs = [grille_j1,grille_j2]
-    if nombre_joueurs >=3:
-        global grille_j3
-        grille_j3 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        liste_grilles_joueurs.append(grille_j3)
-    if nombre_joueurs >=4:
-        global grille_j4
-        grille_j4 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        liste_grilles_joueurs.append(grille_j4)
-    return liste_grilles_joueurs
-
-def generer_palais(nombre_joueurs,palais):
-    liste_palais= []
-
-    if nombre_joueurs >=2:
-        global palais_j1
-        palais_j1 = palais.copy()
-        global palais_j2
-        palais_j2 = palais.copy()
-        liste_palais=[palais_j1,palais_j2]
-    if nombre_joueurs >=3:
-        global palais_j3
-        palais_j3 = palais.copy()
-        liste_palais.append(palais_j3)
-    if nombre_joueurs >=4:
-        global palais_j4
-        palais_j4 = palais.copy()
-        liste_palais.append(palais_j4)
-
-    return liste_palais
 
 
 
@@ -599,8 +501,6 @@ def remplir_palais(lst_palais,lst_grilles):
 
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
-
-
 
 
 def cherche_couleur_palais(palais_j,couleur,i):
@@ -622,16 +522,6 @@ def manche_finie(liste_fabriques,centre_table):
 def coup_possible(couleur,i,palais_j):
     j = cherche_couleur_palais(palais_j, couleur, i)
     return not palais_j[i][j][1]
-
-
-def re_generer_grilles(liste_grilles):
-    for grilles in liste_grilles:
-        for i in range(len(grilles)):
-            if 'vide' not in grilles[i]:
-                grilles[i][:] = ['vide']*len(grilles[i])
-
-
-    return liste_grilles
 
 def palais_complete(palais_j):
     for i in range(len(palais_j)):
@@ -655,6 +545,10 @@ def fin_partie(lst_grilles,lst_palais):
         return True
     print("La partie n'est pas finie.")
     return False
+
+
+
+
 if __name__ == "__main__":
     '''
     Tour : Se finit quand tous les joueurs composant la partie on joué
@@ -689,6 +583,7 @@ if __name__ == "__main__":
         nombre_joueurs = eval(settings.readline().strip())
         joueur_ia = eval(settings.readline().strip())
         low_graphismes = eval(settings.readline().strip())
+        reload = eval(settings.readline().strip())
 
 
 
@@ -699,7 +594,7 @@ if __name__ == "__main__":
     positions_tuiles_centre = [650,350]
 
     
-    if save[0]!= True:
+    if not reload:
     #------Génère les variables des joueurs selon leur nombre-------#
         fabriques_disponibles= generer_fabriques(nombre_joueurs)
         liste_planchers = generer_planchers(nombre_joueurs)
@@ -708,6 +603,7 @@ if __name__ == "__main__":
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
     else:
+        print("Sauvegarde")
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre = save
 
     #------Dessine les éléments à ne jamais effacer-------#
@@ -790,3 +686,4 @@ if __name__ == "__main__":
             joueurs_passes = 0
             joueur = 1
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre)
+

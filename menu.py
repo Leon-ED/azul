@@ -3,6 +3,7 @@
 '''Module permettant de créer les menus pour permettre au joueur de choisir ses paramètres de jeu'''
 
 #---Imports
+from genericpath import exists
 from upemtk import *
 from sauvegarde import *
 
@@ -27,6 +28,10 @@ def accueil():
     #Quitter
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
+
+    if existe("./files/settings.txt"):
+        rectangle(100,410,300,460)
+        texte(110,415,"Reprendre partie",police='Arial',taille=17)
 
 def clic_accueil():
     while True:
@@ -140,25 +145,6 @@ def clic_options(settings_config):
         '''
         if 100<=x<=250 and 410<=y<=460:
             return False
-
-
-
-
-def copy_file(chemin):
-    file_list = []
-    with open(chemin,'r') as files:
-        for lines in files:
-            file_list.append(eval(lines.strip()))
-
-    return file_list
-
-def ecrire_config(liste,chemin):
-    with open(chemin,'w') as files:
-        for elems in liste:
-            files.write(str(elems)+'\n')
-    return True
-
-
 
 
 def menu_jeu():
