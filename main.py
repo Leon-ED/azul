@@ -9,6 +9,7 @@ from graphiques import *
 from time import sleep
 from random import randint
 from menu import *
+from generer import *
 
 
 #---------------------------------Sac---------------------------------#
@@ -483,64 +484,6 @@ dico_positions[4]=()
 
 
 
-def generer_planchers(nombre_joueurs):
-    liste_planchers = []
-    if nombre_joueurs >=2:
-        global ligne_plancher_j1
-        ligne_plancher_j1 = []
-        global ligne_plancher_j2
-        ligne_plancher_j2 = []
-        liste_plancher = [ligne_plancher_j1,ligne_plancher_j2]
-    if nombre_joueurs >=3:
-        global ligne_plancher_j3
-        ligne_plancher_j3 = []
-        liste_plancher.append(ligne_plancher_j3)
-    if nombre_joueurs >=4:
-        global ligne_plancher_j4
-        ligne_plancher_j4 = []
-        liste_plancher.append(ligne_plancher_j4)
-    return liste_plancher
-
-def generer_grilles_joueurs(nombre_joueurs):
-    liste_grilles_joueurs = []
-    if nombre_joueurs >=2:
-
-        global grille_j1
-        grille_j1 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        global grille_j2
-        grille_j2 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-
-        liste_grilles_joueurs = [grille_j1,grille_j2]
-    if nombre_joueurs >=3:
-        global grille_j3
-        grille_j3 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        liste_grilles_joueurs.append(grille_j3)
-    if nombre_joueurs >=4:
-        global grille_j4
-        grille_j4 = [["vide"], ["vide", "vide"], ["vide", "vide", "vide"], ["vide", "vide", "vide", "vide"], ["vide", "vide", "vide", "vide", "vide"]]
-        liste_grilles_joueurs.append(grille_j4)
-    return liste_grilles_joueurs
-
-def generer_palais(nombre_joueurs,palais):
-    liste_palais= []
-
-    if nombre_joueurs >=2:
-        global palais_j1
-        palais_j1 = palais.copy()
-        global palais_j2
-        palais_j2 = palais.copy()
-        liste_palais=[palais_j1,palais_j2]
-    if nombre_joueurs >=3:
-        global palais_j3
-        palais_j3 = palais.copy()
-        liste_palais.append(palais_j3)
-    if nombre_joueurs >=4:
-        global palais_j4
-        palais_j4 = palais.copy()
-        liste_palais.append(palais_j4)
-
-    return liste_palais
-
 
 
 
@@ -558,8 +501,6 @@ def remplir_palais(lst_palais,lst_grilles):
 
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
-
-
 
 
 def cherche_couleur_palais(palais_j,couleur,i):
@@ -581,16 +522,6 @@ def manche_finie(liste_fabriques,centre_table):
 def coup_possible(couleur,i,palais_j):
     j = cherche_couleur_palais(palais_j, couleur, i)
     return not palais_j[i][j][1]
-
-
-def re_generer_grilles(liste_grilles):
-    for grilles in liste_grilles:
-        for i in range(len(grilles)):
-            if 'vide' not in grilles[i]:
-                grilles[i][:] = ['vide']*len(grilles[i])
-
-
-    return liste_grilles
 
 def palais_complete(palais_j):
     for i in range(len(palais_j)):
@@ -652,6 +583,7 @@ if __name__ == "__main__":
         nombre_joueurs = eval(settings.readline().strip())
         joueur_ia = eval(settings.readline().strip())
         low_graphismes = eval(settings.readline().strip())
+        reload = eval(settings.readline().strip())
 
 
 
@@ -662,7 +594,7 @@ if __name__ == "__main__":
     positions_tuiles_centre = [650,350]
 
     
-    if save[0]!= True:
+    if not reload:
     #------Génère les variables des joueurs selon leur nombre-------#
         fabriques_disponibles= generer_fabriques(nombre_joueurs)
         liste_planchers = generer_planchers(nombre_joueurs)

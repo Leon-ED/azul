@@ -142,25 +142,6 @@ def clic_options(settings_config):
             return False
 
 
-
-
-def copy_file(chemin):
-    file_list = []
-    with open(chemin,'r') as files:
-        for lines in files:
-            file_list.append(eval(lines.strip()))
-
-    return file_list
-
-def ecrire_config(liste,chemin):
-    with open(chemin,'w') as files:
-        for elems in liste:
-            files.write(str(elems)+'\n')
-    return True
-
-
-
-
 def menu_jeu():
     fenetre()
     config = copy_file("./files/settings.txt")
