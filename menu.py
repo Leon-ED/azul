@@ -29,7 +29,7 @@ def accueil():
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
 
-    if existe("./files/settings.txt"):
+    if existe('./files/save.txt'):
         rectangle(100,410,300,460)
         texte(110,415,"Reprendre partie",police='Arial',taille=17)
 
@@ -40,7 +40,7 @@ def clic_accueil():
             return 1
         if 100<=x<=250 and 270<=y<=320:
             return 2
-        if existe("./files/settings.txt") and 100<=x<=250 and 410<=y<=460:
+        if existe('./files/save.txt') and 100<=x<=250 and 410<=y<=460:
             return 4
         if 100<=x<=250 and 340<=y<=390:
             return False

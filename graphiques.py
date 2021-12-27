@@ -227,7 +227,31 @@ def afficher_mur_palais(joueur,palais_j,i,j):
     image((x)+60*j, (y+10)+60*i, "./images/"+str(palais_j[i][j][0])+str("_h.gif"),ancrage="nw")
 
 
-    
+def afficher_tout_palais(liste_palais):
+    joueur = 1
+    for palais in liste_palais:
+        x,y,_,_,_,_ = return_positions(joueur, 0)
+        print(joueur)
+        x+=70
+        for i in range(len(palais)):
+            for j in range(len(palais[i])):
+                if palais[i][j][1]:
+                    image((x)+60*j, (y+10)+60*i, "./images/"+str(palais[i][j][0])+str("_h.gif"),ancrage="nw")
+        joueur+=1
+                
+
+
+
+
+
+def afficher_scores(liste_scores):
+
+
+    for i in range(len(liste_scores)):
+        x,y,_,_,_,_= return_positions(i+1, 0)
+        if liste_scores[i] != 0:
+            texte(x-200,y+20,"Score : "+str(liste_scores[i]))
+
 def dessine_tuiles_lignes(grille,joueur,low_graphismes):
     '''
     Dessine les tuiles dans la grille du joueur
