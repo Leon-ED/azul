@@ -27,22 +27,22 @@ def re_generer_grilles(liste_grilles):
 
     return liste_grilles
 
-def generer_palais(nombre_joueurs,palais):
+def generer_palais(nombre_joueurs):
     liste_palais= []
 
     if nombre_joueurs >=2:
         global palais_j1
-        palais_j1 = palais.copy()
+        palais_j1 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
         global palais_j2
-        palais_j2 = palais.copy()
+        palais_j2 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
         liste_palais=[palais_j1,palais_j2]
     if nombre_joueurs >=3:
         global palais_j3
-        palais_j3 = palais.copy()
+        palais_j3 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
         liste_palais.append(palais_j3)
     if nombre_joueurs >=4:
         global palais_j4
-        palais_j4 = palais.copy()
+        palais_j4 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
         liste_palais.append(palais_j4)
 
     return liste_palais

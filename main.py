@@ -502,6 +502,7 @@ def remplir_palais(lst_palais,lst_grilles):
 
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
+        print(palais)
 
 
 def cherche_couleur_palais(palais_j,couleur,i):
@@ -605,11 +606,7 @@ if __name__ == "__main__":
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                     ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
-    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],
-             [["green",False],["blue",False],["yellow",False],["red",False],["black",False]],
-             [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
-             [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
-             [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
     malus_centre = True
     tour_fini = False
     partie_finie = False
@@ -629,7 +626,6 @@ if __name__ == "__main__":
 
 
     save = copy_file("./files/save.txt")
-    print("EEEE",save[0])
 
     positions_tuiles_centre = [650,350]
 
@@ -640,7 +636,7 @@ if __name__ == "__main__":
         fabriques_disponibles= generer_fabriques(nombre_joueurs)
         liste_planchers = generer_planchers(nombre_joueurs)
         liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-        liste_palais = generer_palais(nombre_joueurs, palais)
+        liste_palais = generer_palais(nombre_joueurs)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
     else:
@@ -656,7 +652,6 @@ if __name__ == "__main__":
 
     #------Boucle principale-------#
     while True:
-
         afficher_scores(liste_score)
 
     #------Met à jour les éléments relatifs au joueur qui joue-------#
@@ -729,5 +724,7 @@ if __name__ == "__main__":
             joueur = 1
 
         #---------A chaque fin de tour on sauvegarde la partie---------------#
+        print(liste_palais[0],"================================")
+        print(liste_palais[1],"==================")
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini)
 
