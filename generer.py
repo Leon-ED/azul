@@ -27,7 +27,9 @@ def re_generer_grilles(liste_grilles):
 
     return liste_grilles
 
+
 def generer_palais(nombre_joueurs):
+
     liste_palais= []
 
     if nombre_joueurs >=2:
@@ -43,6 +45,7 @@ def generer_palais(nombre_joueurs):
     if nombre_joueurs >=4:
         global palais_j4
         palais_j4 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+
         liste_palais.append(palais_j4)
 
     return liste_palais

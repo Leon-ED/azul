@@ -29,7 +29,9 @@ def accueil():
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
 
+
     if existe('./files/save.txt'):
+
         rectangle(100,410,300,460)
         texte(110,415,"Reprendre partie",police='Arial',taille=17)
 

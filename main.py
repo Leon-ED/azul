@@ -502,7 +502,7 @@ def remplir_palais(lst_palais,lst_grilles):
 
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
-        print(palais)
+
 
 
 def cherche_couleur_palais(palais_j,couleur,i):
@@ -548,6 +548,7 @@ def fin_partie(lst_grilles,lst_palais):
     print("La partie n'est pas finie.")
     return False
 
+
 def cree_sous_matrice(i,j):
     '''Retourne une sous_matrice de la matrice mat mais sous forme de liste'''
     sous_mat = [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]
@@ -582,12 +583,6 @@ def calculer_score(joueur,palais,i,j,liste_scores):
             break
         if palais[y][j][1]:
             compteur += 1
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -642,6 +637,7 @@ if __name__ == "__main__":
     else:
         print("Sauvegarde")
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini = save
+
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
@@ -722,9 +718,8 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
-
         #---------A chaque fin de tour on sauvegarde la partie---------------#
-        print(liste_palais[0],"================================")
-        print(liste_palais[1],"==================")
+
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini)
+
 
