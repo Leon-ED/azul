@@ -498,9 +498,11 @@ def remplir_palais(lst_palais,lst_grilles):
                 k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
                 #print(palais_j[i][k][1])
                 palais_j[i][k][1] = True
+                calculer_score(m+1,palais_j,i,k,liste_score)
 
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
+
 
 
 def cherche_couleur_palais(palais_j,couleur,i):
@@ -547,6 +549,40 @@ def fin_partie(lst_grilles,lst_palais):
     return False
 
 
+def cree_sous_matrice(i,j):
+    '''Retourne une sous_matrice de la matrice mat mais sous forme de liste'''
+    sous_mat = [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]
+    return sous_mat
+
+def offset(m,i,j):
+    '''Retourne True si position en dehors de la matrice m sinon retourne... False'''
+    n = len(m)
+    m = len(m[0])
+    if i < 0 or i >= n:
+        return True
+    if j < 0 or j >= m:
+        return True
+    return False
+
+
+def calculer_score(joueur,palais,i,j,liste_scores):
+    sous_mat = cree_sous_matrice(i,j)
+    if not all([palais[x][y][1] for x,y in sous_mat if not offset(palais,x,y)]):
+        print(joueur)
+        liste_score[joueur-1] += 1
+    
+    compteur = 0
+    for y in range(i,len(palais)): #De la case jusqu'au bas verticalement
+        if not palais[y][j][1]:
+            break
+        if palais[y][j][1]:
+            compteur += 1
+
+    for y in range(0,i): #De la case jusqu'au haut verticalement
+        if not palais[y][j][1]:
+            break
+        if palais[y][j][1]:
+            compteur += 1
 
 
 if __name__ == "__main__":
@@ -565,13 +601,9 @@ if __name__ == "__main__":
     sac = sac_plein()
     centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                     ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
-    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],
-             [["green",False],["blue",False],["yellow",False],["red",False],["black",False]],
-             [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
-             [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
-             [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
     malus_centre = True
-    Tour_fini = False
+    tour_fini = False
     partie_finie = False
     low_graphismes = False
     joueurs_passes = 0
@@ -589,31 +621,34 @@ if __name__ == "__main__":
 
 
     save = copy_file("./files/save.txt")
-    print("EEEE",save[0])
 
     positions_tuiles_centre = [650,350]
 
     
     if not reload:
     #------Génère les variables des joueurs selon leur nombre-------#
+        liste_score = [0,0,0,0]
         fabriques_disponibles= generer_fabriques(nombre_joueurs)
         liste_planchers = generer_planchers(nombre_joueurs)
         liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-        liste_palais = generer_palais(nombre_joueurs, palais)
+        liste_palais = generer_palais(nombre_joueurs)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
     else:
         print("Sauvegarde")
-        _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre = save
+        _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini = save
 
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
     dessiner_tout_palais(liste_palais)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
+    afficher_tout_palais(liste_palais)
+
 
     #------Boucle principale-------#
     while True:
+        afficher_scores(liste_score)
 
     #------Met à jour les éléments relatifs au joueur qui joue-------#
         positions_plancher = return_positions(joueur, 1)
@@ -629,7 +664,7 @@ if __name__ == "__main__":
         texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
 
         #------Fait jouer le joueur humain-------#
-        if tour_ordinateur(joueur, joueur_ia) == False:
+        if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
             tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
                 
             #------Si son tour n'est pas valide on le refait jouer jusqu'à qu'il soit valide-------#
@@ -637,7 +672,7 @@ if __name__ == "__main__":
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
         #------Fait jouer l'ordinateur-------#
-        elif tour_ordinateur(joueur, joueur_ia):
+        elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
             #print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
             dessine_tuiles_lignes(grille, joueur,low_graphismes)
@@ -653,9 +688,7 @@ if __name__ == "__main__":
                 malus_centre = False
             dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
             tour_fini = True
-
-
-
+       
         if fin_partie(liste_grilles_joueurs,liste_palais):
             texte((1800/2)-100, 900/2, 'Partie terminée',police='Arial')
             print("Jeu : La partie est terminée.")
@@ -665,8 +698,8 @@ if __name__ == "__main__":
             efface("fin_tour")
             joueurs_passes += 1
             joueur += 1
-            Tour_fini = False
-        if joueurs_passes == nombre_joueurs:
+            tour_fini = False
+        if joueurs_passes >= nombre_joueurs:
             tours+=1
             joueurs_passes = 0
             joueur = 1
@@ -685,5 +718,8 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
-        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre)
+        #---------A chaque fin de tour on sauvegarde la partie---------------#
+
+        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini)
+
 
