@@ -152,10 +152,10 @@ def clic_options(settings_config):
 
 def menu_jeu():
     fenetre()
-    config = copy_file("./files/settings.txt")
-    config[-1] = False
-    if config == []:
-        config = [2,[2],False,False]
+    config = [2,[2],False,False]
+    if existe("./files/settings.txt"):
+        config = copy_file("./files/settings.txt")
+        config[-1] = False
     print(config)
     
     while True:

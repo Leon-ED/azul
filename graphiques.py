@@ -231,7 +231,6 @@ def afficher_tout_palais(liste_palais):
     joueur = 1
     for palais in liste_palais:
         x,y,_,_,_,_ = return_positions(joueur, 0)
-        print(joueur)
         x+=70
         for i in range(len(palais)):
             for j in range(len(palais[i])):
@@ -250,7 +249,7 @@ def afficher_scores(liste_scores):
     for i in range(len(liste_scores)):
         x,y,_,_,_,_= return_positions(i+1, 0)
         if liste_scores[i] != 0:
-            texte(x-200,y+20,"Score : "+str(liste_scores[i]))
+            texte(x-200,y+20,"Score : "+str(liste_scores[i]),tag='fin_manche')
 
 def dessine_tuiles_lignes(grille,joueur,low_graphismes):
     '''
