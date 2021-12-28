@@ -310,7 +310,7 @@ def remplir_plancher(couleur,reste,grille_plancher):
         grille_plancher.append(couleur)
 
 
-def deplacer_vers_centre(selection):
+def deplacer_vers_centre(selection,centre=False):
     '''
     La fonction ajoute les éléments de la fabrique à la liste composant les tuilesdu centre de la table avant de remplacer celle-ci par la liste [-10]
 
@@ -321,13 +321,13 @@ def deplacer_vers_centre(selection):
     '''
     _,_,fabrique = selection
     i,j = 0,0
-    if fabrique == centre_table:
+    if fabrique == centre_table or centre:
         print("cebtre t")
         return
-    print(fabrique)
+    print(fabrique,"eeeeeeeeeeee deplacer")
     for lignes in fabrique:
         for elements in lignes:
-            while i <= len(centre_table)-1:
+            while i < len(centre_table)-1:
                 if j == len(centre_table[i]):
                     j = 0
                     i+=1
@@ -499,7 +499,11 @@ def ordinateur_choisir_couleur(fabrique):
     selection_ordinateur = select_tuiles(i, j, fabrique,ordinateur=True)
     print("selec ordi",selection_ordinateur)
     remove_couleur(selection_ordinateur)
-    deplacer_vers_centre(selection_ordinateur)
+    if len(fabrique)>2:
+        centre = True
+    else:
+        centre = False
+    deplacer_vers_centre(selection_ordinateur,centre)
     dessiner_selection(selection_ordinateur,positions_tuiles_centre,low_graphismes)
     return selection_ordinateur
 
