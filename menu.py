@@ -29,9 +29,7 @@ def accueil():
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
 
-
     if existe('./files/save.txt'):
-
         rectangle(100,410,300,460)
         texte(110,415,"Reprendre partie",police='Arial',taille=17)
 
@@ -154,10 +152,10 @@ def clic_options(settings_config):
 
 def menu_jeu():
     fenetre()
-    config = copy_file("./files/settings.txt")
-    config[-1] = False
-    if config == []:
-        config = [2,[2],False,False]
+    config = [2,[2],False,False]
+    if existe("./files/settings.txt"):
+        config = copy_file("./files/settings.txt")
+        config[-1] = False
     print(config)
     
     while True:
@@ -198,3 +196,5 @@ def menu_jeu():
 
 if __name__ == '__main__':
     menu_jeu()
+=======
+

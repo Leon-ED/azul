@@ -27,10 +27,10 @@ def ecrire_save(*args):
     liste_save.insert(0,True)
     return ecrire_config(liste_save,'./files/save.txt')
 
+
 def existe(chemin):
     if os.path.exists(chemin) and os.path.getsize(chemin) > 0:
         file = copy_file(chemin)
         if file[0] == True:
             return True
     return False
-
