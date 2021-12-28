@@ -13,6 +13,7 @@ from generer import *
 import copy
 
 
+
 #---------------------------------Sac---------------------------------#
 def sac_plein():
     '''
@@ -184,6 +185,7 @@ def select_tuiles(i,j,fabrique,ordinateur=False):
         if fabrique == centre_table and (j>=len(fabrique[i])):
             print("Invalide 2")
             return -10
+
     compteur = 0
     couleur = fabrique[i][j]
     if couleur == 'vide':
@@ -594,7 +596,6 @@ def remplir_couvercle(ligne_j,n):
             couvercle.append(couleur)
 
 
-
 def cherche_couleur_palais(palais_j,couleur,i):
     if i >= len(palais_j):
         return False
@@ -678,9 +679,6 @@ def determiner_vainqueur(liste_scores):
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
-
-
-
 if __name__ == "__main__":
     '''
     Tour : Se finit quand tous les joueurs composant la partie on joué
@@ -735,6 +733,7 @@ if __name__ == "__main__":
     else:
         print("Sauvegarde")
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours = save
+
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
@@ -774,6 +773,7 @@ if __name__ == "__main__":
         #------Fait jouer l'ordinateur-------#
         elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
             mise_a_jour()
+
             #print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
             dessine_tuiles_lignes(grille, joueur,low_graphismes)
@@ -831,4 +831,5 @@ if __name__ == "__main__":
 
         #---------A chaque fin de tour on sauvegarde la partie---------------#
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours)
+
 

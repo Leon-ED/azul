@@ -27,7 +27,9 @@ def re_generer_grilles(liste_grilles):
 
     return liste_grilles
 
+
 def generer_palais(nombre_joueurs):
+
     liste_palais= []
 
     if nombre_joueurs >=2:
