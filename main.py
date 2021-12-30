@@ -4,13 +4,12 @@
 
 #---Imports
 from upemtk import *
-from sauvegarde import *
+from fichiers import *
 from graphiques import *
 from time import sleep
 from random import randint,shuffle
 from menu import *
 from generer import *
-import copy
 
 
 
@@ -458,35 +457,35 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
                 break
     remplir_cases(selection_ordinateur, grille_joueur,0,i,pos_grille,ordinateur=True)
 
-def remplir_palais(lst_palais,lst_grilles):
+def remplir_palais(lst_palais,lst_grilles,liste_planchers):
     m = 0
     for grille_j in lst_grilles:
         palais_j = lst_palais[m]
         for i in range(len(grille_j)):
             if 'vide' not in grille_j[i]: #La ligne est remplie donc on remplit le palais
                 print("LIGNE :",grille_j[i])
-                remplir_couvercle(grille_j[i],len(grille_j[i])-1)
+                remplir_couvercle(grille_j[i],len(grille_j[i])-1,liste_planchers)
                 print('couvercle :',couvercle)
-                #print("ici")
                 k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
-                #print(palais_j[i][k][1])
                 palais_j[i][k][1] = True
                 calculer_score(m+1,palais_j,i,k,liste_score)
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
-        print(palais)
+        #print(palais)
 
 
-def remplir_couvercle(ligne_j,n):
-    if ligne_j in liste_planchers:
+def remplir_couvercle(ligne_j,n,liste_planchers,plancher=False):
+    if plancher:
         for couleurs in ligne_j:
             if couleurs != -1:
                 couvercle.append(couleurs)
     else:
         couleur = ligne_j[0]
         print("COULEUR",couleur)
-        for i in range(len(ligne_j)):
+        for i in range(len(ligne_j)-1):
+            print(i,ligne_j[i])
             couvercle.append(couleur)
+    print("Le couvercle contient :", len(couvercle)," tuiles")
 
 def cherche_couleur_palais(palais_j,couleur,i):
     if i >= len(palais_j):
@@ -562,61 +561,37 @@ def determiner_vainqueur(liste_scores):
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
+def init_varibles(nombre_joueurs):
 
-
+        global liste_palais; liste_palais = generer_palais(nombre_joueurs)
+        global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+        global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
+        global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+        global grille; grille = liste_grilles_joueurs[joueur-1]  
+        global plancher;plancher = liste_planchers[joueur-1]
 
 if __name__ == "__main__":
     '''
     Tour : Se finit quand tous les joueurs composant la partie on joué
     Manche : Se finit quand il n'y a plus de fabriques avec lesquelles jouer
     '''
-    #------Affiche le menu-------#
-    while not menu_jeu():
-        pass
-    #------Ferme le menu et lance la fenetre du jeu-------#
-    ferme_fenetre()
-    cree_fenetre(1800,1080)
+    while not menu_jeu():pass #On affiche le menu
+    cree_fenetre(1800,1080) #On crée la fenêtre du jeu
+    sac_plein() #On crée le sac
+    nombre_joueurs,joueur_ia,low_graphismes,reload = lire_config("./files/settings.txt") #On lit les paramètres du jeu depuis le fichier
+    if reload == True: #Pour être bien sûr qu'il soit égal à True
+        ''' On lit la sauvegarde si le joueur a choisi l'option reprendre la partie'''
+        save = copy_file("./files/save.txt")
+        print("Jeu : Chargement de la partie depuis la dernière sauvegarde")
 
-    #------Initialisation des variables du jeu-------#
-    sac_plein()
-    couvercle = list()
-    palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
-    malus_centre = True
-    tour_fini = False
-    partie_finie = False
-    low_graphismes = False
-    joueurs_passes = 0
-    tours = 0
-    joueur = 1
+        _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,\
+        liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,\
+        liste_score,partie_finie,tour_fini,sac,couvercle,tours = save #Initialisation des données selon le fichier de sauvegarde
 
-    #------Lit le fichier des paramètres-------#
-    with open ("./files/settings.txt","r") as settings:
-        nombre_joueurs = eval(settings.readline().strip())
-        joueur_ia = eval(settings.readline().strip())
-        low_graphismes = eval(settings.readline().strip())
-        reload = eval(settings.readline().strip())
-
-
-
-
-    save = copy_file("./files/save.txt")
-
-    positions_tuiles_centre = [650,350]
-
-    
-    if not reload:
-    #------Génère les variables des joueurs selon leur nombre-------#
-        liste_score = [0,0,0,0]
-        fabriques_disponibles= generer_fabriques(nombre_joueurs)
-        liste_planchers = generer_planchers(nombre_joueurs)
-        print(centre_table)
-        liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-        liste_palais = generer_palais(nombre_joueurs)
-        grille = liste_grilles_joueurs[joueur-1]
-        plancher = liste_planchers[joueur-1]
     else:
-        print("Sauvegarde")
-        _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours = save
+        init_varibles(nombre_joueurs)
+
+
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
@@ -636,24 +611,17 @@ if __name__ == "__main__":
         plancher = liste_planchers[joueur-1]
         #print(positions_grille)
 
-    #------Met à jour les graphiques susceptibles de changer à chaque tour-------#
-        dessiner_tuiles_centre(centre_table,low_graphismes)
-        dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
-        dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,low_graphismes)
-        texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
+        '''Affiche les éléments graphiques qui changent tous les tours'''
+        afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
 
 
-
-        print("EEEEEEEEEEEEEEEEEE",couvercle)
-        #------Fait jouer le joueur humain-------#
+        '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
-            tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
-                
-            #------Si son tour n'est pas valide on le refait jouer jusqu'à qu'il soit valide-------#
+            print(len(couvercle),"COUVRR")
             while not tour_fini:
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
-        #------Fait jouer l'ordinateur-------#
+            '''Cas où l'ordinateur doit jouer'''
         elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
             mise_a_jour()
             #print("JOUEUR",joueur)
@@ -694,20 +662,8 @@ if __name__ == "__main__":
             joueur = 1
 
         if manche_finie(fabriques_disponibles, centre_table):
-            for plancher in liste_planchers:
-                remplir_couvercle(plancher,0)
-                print(couvercle)
+            generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
             malus_centre = True
-            print("Jeu : La manche est terminée")
-            mise_a_jour()
-            sleep(0.3)
-            remplir_palais(liste_palais,liste_grilles_joueurs)
-            fabriques_disponibles= generer_fabriques(nombre_joueurs)
-            liste_planchers = generer_planchers(nombre_joueurs)
-            liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
-            mise_a_jour()
-            efface("fin_manche")
-            tours+=1
             joueurs_passes = 0
             joueur = 1
 

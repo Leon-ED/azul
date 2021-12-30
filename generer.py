@@ -1,22 +1,43 @@
-
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from random import shuffle,randint
 import copy
+from upemtk import *
+'''Module générant les variables du jeu'''
 
 
 
 
 '''============ Variables globales ============'''
-global sac
-sac = []
+
+palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],
+        [["green",False],["blue",False],["yellow",False],["red",False],["black",False]],
+        [["black",False],["green",False],["blue",False],["yellow",False],["red",False]],
+        [["red",False],["black",False],["green",False],["blue",False],["yellow",False]],
+        [["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+
 global centre_table
 centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                 ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
                 ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
-global COULEURS_JEU
-COULEURS_JEU = ["black", "yellow", "green","red","blue"]
-global couvercle
-couvercle = []
+
+global COULEURS_JEU;COULEURS_JEU = ["black", "yellow", "green","red","blue"]
+global sac;sac = []
+global tour_fini; tour_fini = False
+global couvercle; couvercle = []
+global malus_centre; malus_centre = True
+global partie_finie; partie_finie = False
+global low_graphismes; low_graphismes = False
+global joueurs_passes; joueurs_passes = 0
+global tours; tours = 0
+global joueur; joueur = 1
+global positions_tuiles_centre; positions_tuiles_centre = [650,350]
+global liste_score; liste_score = [0,0,0,0]
+global fabriques_disponibles
+
 '''==========================================='''
+
+
 def sac_plein():
     '''
     Retourne une liste de taille 100 comportant 20 elements de chaque couleurs: black,yellow,green,orange,blue.
@@ -36,17 +57,17 @@ def sac_est_vide():
 def fabriques_plein(liste):
     global sac
     taille = len(sac)
-    print("Le couvercle est :",couvercle)
-    print("Le sac est: ",sac,"\n Sa taille est de :",taille)
+    # print("Le couvercle est :",couvercle)
+    # print("Le sac est: ",sac,"\n Sa taille est de :",taille)
     for i in range(2):
         for j in range(2):
             if sac_est_vide() and couvercle != []:
-                print("Le sac est vide, on va le remplir")
-                print("Le couvercle est :",couvercle)
+                # print("Le sac est vide, on va le remplir")
+                # print("Le couvercle est :",couvercle)
                 sac = copy.deepcopy(couvercle)
-                print("Le sac est maintenant :",sac)
+                # print("Le sac est maintenant :",sac)
                 couvercle.clear()
-                print("Le couvercle est maintenant :",couvercle)
+                # print("Le couvercle est maintenant :",couvercle)
             elif sac_est_vide() and couvercle == [] and liste[0][0] in COULEURS_JEU:
                 print("Plus de tuiles !!!!!")
                 liste[i][j] = 'vide'
@@ -55,10 +76,10 @@ def fabriques_plein(liste):
             taille = len(sac)
             position = randint(0,taille-1)
             liste[i][j] = sac[position]
-            print("On a ajouté : ",liste[i][j]," à la liste")
+            # print("On a ajouté : ",liste[i][j]," à la liste")
             sac.pop(position)
 
-    print("La fabrique est mainteantn : ",liste)
+    # print("La fabrique est mainteantn : ",liste)
     return liste
 
 def generer_grilles_joueurs(nombre_joueurs):
@@ -84,7 +105,7 @@ def generer_grilles_joueurs(nombre_joueurs):
 def re_generer_grilles(liste_grilles):
     for grilles in liste_grilles:
         for i in range(len(grilles)):
-            if 'vide' not in grilles[i]:
+            if 'vide' not in grilles[i]: #Si la ligne est remplie alors on la vide
                 grilles[i][:] = ['vide']*len(grilles[i])
     return liste_grilles
 
@@ -93,17 +114,17 @@ def generer_palais(nombre_joueurs):
     liste_palais= []
     if nombre_joueurs >=2:
         global palais_j1
-        palais_j1 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+        palais_j1 = palais[:]
         global palais_j2
-        palais_j2 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+        palais_j2 = palais[:]
         liste_palais=[palais_j1,palais_j2]
     if nombre_joueurs >=3:
         global palais_j3
-        palais_j3 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+        palais_j3 = palais[:]
         liste_palais.append(palais_j3)
     if nombre_joueurs >=4:
         global palais_j4
-        palais_j4 = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
+        palais_j4 = palais[:]
         liste_palais.append(palais_j4)
 
     return liste_palais
@@ -156,6 +177,23 @@ def generer_fabriques(nombre_joueurs):
     lst_fabriques.append(centre_table)
     return lst_fabriques
 
+def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours):
+    import main;import time
+    print(len(couvercle))
+    for plancher in liste_planchers:
+        main.remplir_couvercle(plancher,0,liste_planchers,True)
+        print(couvercle)
+    print(len(couvercle))
+    print("Jeu : La manche est terminée")
+    mise_a_jour()
+    time.sleep(0.3)
+    main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
+    fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    liste_planchers = generer_planchers(nombre_joueurs)
+    liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
+    mise_a_jour()
+    efface("fin_manche")
+    tours+=1
 
 if __name__ == "__main__":
     print(generer_grilles_joueurs(3))

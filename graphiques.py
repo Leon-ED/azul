@@ -10,6 +10,14 @@ cote= 50
 ecart = 10
 largeur_fenetre = 1900
 hauteur_fenetre = 900
+
+def afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur):
+    dessiner_tuiles_centre(centre_table,low_graphismes)
+    dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
+    dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,low_graphismes)
+    texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
+
+
 def return_positions(joueur,type_pos):
     #Type pos 0 : positions grille, type_pos 1 = positions plancher, type_pos 3 = points du joueur
     dico_positions = dict()

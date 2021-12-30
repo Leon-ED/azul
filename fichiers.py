@@ -33,3 +33,11 @@ def existe(chemin):
         if file[0] == True:
             return True
     return False
+
+def lire_config(chemin):
+    with open (chemin,"r") as settings:
+        nombre_joueurs = eval(settings.readline().strip())
+        joueur_ia = eval(settings.readline().strip())
+        low_graphismes = eval(settings.readline().strip())
+        reload = eval(settings.readline().strip())
+    return nombre_joueurs,joueur_ia,low_graphismes,reload
