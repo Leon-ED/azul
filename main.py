@@ -13,78 +13,6 @@ from generer import *
 import copy
 
 
-#---------------------------------Sac---------------------------------#
-def sac_plein():
-    '''
-    Retourne une liste de taille 100 comportant 20 elements de chaque couleurs: black,yellow,green,orange,blue.
-    '''
-    global COULEURS_JEU
-    COULEURS_JEU = ["black", "yellow", "green","red","blue"]
-    sac = []
-    for colors in COULEURS_JEU:
-        for i in range(20):
-            sac.append(colors)
-    
-    shuffle(sac)
-    return sac
-
-def sac_est_vide():
-    '''
-    Retourne True si le taille du sac est nulle ou False si elle ne l'est pas.
-    '''
-    return len(sac) == 0
-
-#------------------------------Fabriques-------------------------------#
- 
-def fabriques_plein(liste):
-    global sac
-    taille = len(sac)
-    print("Le couvercle est :",couvercle)
-    print("Le sac est: ",sac,"\n Sa taille est de :",taille)
-    for i in range(2):
-        for j in range(2):
-            if sac_est_vide() and couvercle != []:
-                print("Le sac est vide, on va le remplir")
-                print("Le couvercle est :",couvercle)
-                sac = copy.deepcopy(couvercle)
-                print("Le sac est maintenant :",sac)
-                couvercle.clear()
-                print("Le couvercle est maintenant :",couvercle)
-            elif sac_est_vide() and couvercle == [] and liste[0][0] in COULEURS_JEU:
-                print("Plus de tuiles !!!!!")
-                liste[i][j] = 'vide'
-                continue
-
-            taille = len(sac)
-            position = randint(0,taille-1)
-            liste[i][j] = sac[position]
-            print("On a ajouté : ",liste[i][j]," à la liste")
-            sac.pop(position)
-
-    print("La fabrique est mainteantn : ",liste)
-    return liste
-  
-'''
-def fabriques_plein(liste):
-    taille = len(sac)
-    print("Couvercle : ",couvercle)
-    for i in range(2):
-        for j in range(2):
-            taille = len(sac)
-            print("Taille :",taille)
-            if sac_est_vide():
-                print("Couvercle utilisé")
-                sac.append(copy.deepcopy(couvercle))
-                print("LE SAC EST MTN : ",sac)
-                couvercle.clear()
-                taille = len(sac)
-            r = randint(0,taille-1)
-            liste[i][j] = sac[r]
-            sac.pop(r)
-    print(liste)
-    return liste
-(())'''
-
 
 def liste_invalide(fabrique):
     '''
@@ -303,10 +231,15 @@ def remplir_plancher(couleur,reste,grille_plancher):
 
     :return: rien
     '''
-    if len(grille_plancher) >= 7:
+    if len(grille_plancher) >= 7: #Plus de place dans le plancher --> selon les règles du jeu on place ces tuiles dans le couvercle
+        for i in range(reste):
+            couvercle.append(couleur)
         return
 
-    for i in range(min(7-len(grille_plancher),reste)):
+    for i in range(min(7-len(grille_plancher),reste)): #On boucle selon ce qui est le plus petit : le reste ou le place disponible (7)
+        if len(grille_plancher) >= 7: #Dans le cas où on dépasse la taille on va dans le couvercle
+            couvercle.append(couleur)
+            continue
         grille_plancher.append(couleur)
 
 
@@ -321,9 +254,10 @@ def deplacer_vers_centre(selection,centre=False):
     '''
     _,_,fabrique = selection
     i,j = 0,0
-    if fabrique == centre_table or centre:
-        print("cebtre t")
+    if fabrique == centre_table or centre: #Si la fabrique utilisée est celle du milieu
+        print("Centre table")
         return
+
     print(fabrique,"eeeeeeeeeeee deplacer")
     for lignes in fabrique:
         for elements in lignes:
@@ -337,11 +271,11 @@ def deplacer_vers_centre(selection,centre=False):
                     break
                 j+=1
     #fabriques_disponibles.remove(fabrique)
-    fabriques_disponibles.remove(fabrique)
-    fabrique[:] = [-10]
+    fabriques_disponibles.remove(fabrique) #La fabrique est vide donc on la retire de la liste
+    fabrique[:] = [-10] #On la remplace par -10 pour signaler qu'elle est vide
 
 
-def grille_pleine(grille_joueur,couleur=None):
+def jouer_couleur_grille(grille_joueur,couleur=None):
     '''
     Permet de savoir s'il est possible de placer une couleur donnée dans la grille du joueur
 
@@ -375,35 +309,13 @@ def grille_pleine(grille_joueur,couleur=None):
         return lignes_prises == len(grille_joueur)
 
 
-def generer_fabriques(nombre_joueurs):
-    global centre_table
-    if nombre_joueurs >=2:
-        global fabrique1
-        fabrique1 = fabriques_plein([[None,None],[None,None]])
-        global fabrique2
-        fabrique2  = fabriques_plein([[None,None],[None,None]])
-        global fabrique3
-        fabrique3 = fabriques_plein([[None,None],[None,None]])
-        global fabrique4
-        fabrique4 = fabriques_plein([[None,None],[None,None]])
-        global fabrique5
-        fabrique5 = fabriques_plein([[None,None],[None,None]])
-        lst_fabriques = ["vide",fabrique1,fabrique2,fabrique3,fabrique4,fabrique5]
-    if nombre_joueurs >=3:
-        global fabrique6
-        fabrique6 = fabriques_plein([[None,None],[None,None]])
-        global fabrique7
-        fabrique7 = fabriques_plein([[None,None],[None,None]])
-        lst_fabriques.extend([fabrique6,fabrique7])
-    if nombre_joueurs >=4:
-        global fabrique8
-        fabrique8 = fabriques_plein([[None,None],[None,None]])
-        global fabrique9
-        fabrique9 = fabriques_plein([[None,None],[None,None]])
-        lst_fabriques.extend([fabrique8,fabrique9])
+def ligne_palais_complete(palais_j):
+    for i in range(len(palais_j)):
+        if all([palais_j[i][j][1] for j in range(len(palais_j[i]))]):
+            return True
+    return False
 
-    lst_fabriques.append(centre_table)
-    return lst_fabriques
+
 
 
 def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille,liste_des_fabriques,malus):
@@ -520,7 +432,7 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
     i_min = 0
     i_max = 4
     fail = 0
-    if grille_pleine(grille_joueur,couleur):
+    if jouer_couleur_grille(grille_joueur,couleur):
         i = 5
   
     else:
@@ -545,23 +457,6 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
             else:
                 break
     remplir_cases(selection_ordinateur, grille_joueur,0,i,pos_grille,ordinateur=True)
-
-
-
-
-
-'''
-dico_positions[1] =((250,360,10,300,360,650),(10,730))
-dico_positions[2] = ((1400,360,1160,1450,360,650),(1160,730))
-dico_positions[3]=  ()
-dico_positions[4]=()
-'''
-
-
-
-
-
-
 
 def remplir_palais(lst_palais,lst_grilles):
     m = 0
@@ -593,8 +488,6 @@ def remplir_couvercle(ligne_j,n):
         for i in range(len(ligne_j)):
             couvercle.append(couleur)
 
-
-
 def cherche_couleur_palais(palais_j,couleur,i):
     if i >= len(palais_j):
         return False
@@ -615,19 +508,10 @@ def coup_possible(couleur,i,palais_j):
     j = cherche_couleur_palais(palais_j, couleur, i)
     return not palais_j[i][j][1]
 
-def palais_complete(palais_j):
-    for i in range(len(palais_j)):
-        for j in range(len(palais_j[i])):
-            if not palais_j[i][j][1]:
-                return False
-    return True
 
 def fin_partie(lst_grilles,lst_palais,liste_des_fabriques):
     print("Jeu : Test si la partie est finie : ",end="")
-    if any([grille_pleine(grilles) for grilles in lst_grilles]):
-        print("Une grille est pleine.")
-        return True
-    if any(palais_complete(palais) for palais in lst_palais):
+    if any(ligne_palais_complete(palais) for palais in lst_palais):
         print("Une ligne d'une palais a été complété.")
         return True
     if sac_est_vide() and couvercle == [] and fabriques_vides(liste_des_fabriques):
@@ -694,11 +578,8 @@ if __name__ == "__main__":
     cree_fenetre(1800,1080)
 
     #------Initialisation des variables du jeu-------#
-    sac = sac_plein()
+    sac_plein()
     couvercle = list()
-    centre_table = [["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
-                    ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"],
-                    ["vide","vide","vide","vide","vide","vide","vide","vide","vide","vide"]]
     palais = [[["blue",False],["yellow",False],["red",False],["black",False],["green",False]],[["green",False],["blue",False],["yellow",False],["red",False],["black",False]],[["black",False],["green",False],["blue",False],["yellow",False],["red",False]],[["red",False],["black",False],["green",False],["blue",False],["yellow",False]],[["yellow",False],["red",False],["black",False],["green",False],["blue",False]]]
     malus_centre = True
     tour_fini = False
@@ -728,6 +609,7 @@ if __name__ == "__main__":
         liste_score = [0,0,0,0]
         fabriques_disponibles= generer_fabriques(nombre_joueurs)
         liste_planchers = generer_planchers(nombre_joueurs)
+        print(centre_table)
         liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
         liste_palais = generer_palais(nombre_joueurs)
         grille = liste_grilles_joueurs[joueur-1]
@@ -738,7 +620,7 @@ if __name__ == "__main__":
     #------Dessine les éléments à ne jamais effacer-------#
     '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
     dessiner_tout_planchers(liste_planchers)
-    dessiner_tout_palais(liste_palais)
+    dessiner_tout_palais(liste_palais,low_graphismes)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
     afficher_tout_palais(liste_palais)
 
