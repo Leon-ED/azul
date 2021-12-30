@@ -1,0 +1,17 @@
+True
+2
+1
+[None]
+0
+[[['vide'], ['vide', 'vide'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['black', 'vide', 'vide', 'vide', 'vide']], [['vide'], ['vide', 'vide'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['black', 'vide', 'vide', 'vide', 'vide']]]
+[[], []]
+[['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]
+['vide', [['blue', 'green'], ['yellow', 'black']], [['red', 'red'], ['red', 'green']], [['red', 'green'], ['blue', 'blue']], [['black', 'red'], ['red', 'black']], [['red', 'green'], ['yellow', 'red']], [['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]]
+[[[['blue', False], ['yellow', False], ['red', False], ['black', True], ['green', True]], [['green', True], ['blue', False], ['yellow', False], ['red', False], ['black', True]], [['black', False], ['green', False], ['blue', True], ['yellow', True], ['red', False]], [['red', True], ['black', False], ['green', False], ['blue', False], ['yellow', False]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]], [[['blue', False], ['yellow', False], ['red', False], ['black', True], ['green', True]], [['green', False], ['blue', True], ['yellow', False], ['red', False], ['black', True]], [['black', False], ['green', False], ['blue', False], ['yellow', True], ['red', False]], [['red', False], ['black', False], ['green', False], ['blue', False], ['yellow', True]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]]]
+True
+[7, 6, 0, 0]
+False
+False
+['blue', 'green', 'green', 'green', 'black', 'blue', 'yellow', 'green', 'green', 'blue', 'black', 'green', 'yellow', 'green', 'black', 'black', 'yellow', 'blue', 'black', 'red', 'black', 'blue', 'green', 'yellow', 'red', 'blue', 'red', 'black', 'yellow', 'yellow', 'yellow', 'black', 'blue', 'blue', 'yellow', 'blue', 'red', 'green', 'blue', 'blue']
+['green', 'green', 'green', 'black', 'black', 'blue', 'blue', 'blue', 'black', 'blue', 'blue', 'red', 'red', 'red', 'blue', 'black', 'green', 'red', 'black', 'green', 'green', 'yellow', 'yellow', 'yellow', 'red', 'red', 'red', 'red', 'green', 'black', 'black', 'yellow', 'yellow', 'yellow', 'yellow', 'yellow', 'yellow', 'yellow']
+13
