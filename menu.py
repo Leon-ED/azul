@@ -5,7 +5,7 @@
 #---Imports
 from genericpath import exists
 from upemtk import *
-from sauvegarde import *
+from fichiers import *
 
 
 def fenetre():
@@ -179,10 +179,12 @@ def menu_jeu():
                 continue
             config[1] = choix
             ecrire_config(config,"./files/settings.txt")
+            ferme_fenetre()
             return True
         if choix == 4:
             config[-1] = True
             ecrire_config(config,"./files/settings.txt")
+            ferme_fenetre()
             return True
         if choix == 2:
             options(config)
@@ -196,4 +198,3 @@ def menu_jeu():
 
 if __name__ == '__main__':
     menu_jeu()
-
