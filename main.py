@@ -495,7 +495,7 @@ def cherche_couleur_palais(palais_j,couleur,i):
             return j
 
 
-def manche_finie(liste_fabriques,centre_table):
+def test_manche_finie(liste_fabriques,centre_table):
     for fabriques in liste_fabriques[1:]:
         if not liste_invalide(fabriques):
             return False
@@ -520,40 +520,78 @@ def fin_partie(lst_grilles,lst_palais,liste_des_fabriques):
 
     return False
 
-def cree_sous_matrice(i,j):
+def cree_sous_matrice(i,j,mat):
     '''Retourne une sous_matrice de la matrice mat mais sous forme de liste'''
     sous_mat = [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]
-    return sous_mat
-
+    sous_mat_valide = []
+    for i,j in sous_mat:
+        if not offset(mat,i,j):
+            sous_mat_valide.append((i,j))
+    return sous_mat_valide
 def offset(m,i,j):
     '''Retourne True si position en dehors de la matrice m sinon retourne... False'''
-    n = len(m)
-    m = len(m[0])
-    if i < 0 or i >= n:
+    i_max = len(m)-1
+    j_max = len(m[0])-1
+    print(i_max,j_max,"MAXX")
+
+    if i>i_max :
         return True
-    if j < 0 or j >= m:
+    if 0>i:
+        return True
+    if j>j_max:
+        return True
+    if 0>j:
         return True
     return False
 
 
+def cases_voisines_vides(palais,i,j):
+    print("CHOISI",i,j)
+    voisins = cree_sous_matrice(i,j,palais)
+    print(voisins,"voisins")
+    for i,j in voisins:
+        print(i,j)
+        if palais[i][j][1] == True:
+            return False
+    return True
+
+
 def calculer_score(joueur,palais,i,j,liste_scores):
-    sous_mat = cree_sous_matrice(i,j)
-    if not all([palais[x][y][1] for x,y in sous_mat if not offset(palais,x,y)]):
-        print(joueur)
-        liste_score[joueur-1] += 1
+
+    print("Calcul des points du joueur ", joueur)
+    if cases_voisines_vides(palais,i,j):
+            print("Aucune case adjacente +1 pts")
+            liste_score[joueur-1] += 1
+            return
     
     compteur = 0
-    for y in range(i,len(palais)): #De la case jusqu'au bas verticalement
-        if not palais[y][j][1]:
+    for y in range(i,len(palais)): #De la case jusqu'au bas
+        if palais[y][j][1] == False:
             break
         if palais[y][j][1]:
             compteur += 1
-
-    for y in range(0,i): #De la case jusqu'au haut verticalement
-        if not palais[y][j][1]:
+    print(compteur)
+    for y in range(i,-1,-1): #De la case jusqu'au haut
+        if palais[y][j][1] == False:
             break
         if palais[y][j][1]:
             compteur += 1
+    print(compteur)
+    '''
+    for x in range(j,len(palais)): #De la case jusqu'au bord droit
+        if palais[i][x][1] == False:
+            break
+        if palais[i][x][1]:
+            compteur += 1
+    print(compteur)
+    for x in range(j,-1,-1): #De la case jusqu'au bord gauche
+        if palais[i][x][1] == False:
+            break
+        if palais[i][x][1]:
+            compteur += 1
+    print(compteur)
+    '''
+    liste_score[joueur-1] += compteur
 
 
 
@@ -561,14 +599,18 @@ def determiner_vainqueur(liste_scores):
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
-def init_varibles(nombre_joueurs):
+def variables_debut_jeu(nombre_joueurs):
+    global liste_palais; liste_palais = generer_palais(nombre_joueurs)
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+    global grille; grille = liste_grilles_joueurs[joueur-1]  
+    global plancher;plancher = liste_planchers[joueur-1]
 
-        global liste_palais; liste_palais = generer_palais(nombre_joueurs)
-        global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
-        global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
-        global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-        global grille; grille = liste_grilles_joueurs[joueur-1]  
-        global plancher;plancher = liste_planchers[joueur-1]
+def variables_nouvelle_manche(nombre_joueurs):
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers; liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs; liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
 
 if __name__ == "__main__":
     '''
@@ -578,18 +620,18 @@ if __name__ == "__main__":
     while not menu_jeu():pass #On affiche le menu
     cree_fenetre(1800,1080) #On crée la fenêtre du jeu
     sac_plein() #On crée le sac
+    global fabriques_disponibles
     nombre_joueurs,joueur_ia,low_graphismes,reload = lire_config("./files/settings.txt") #On lit les paramètres du jeu depuis le fichier
     if reload == True: #Pour être bien sûr qu'il soit égal à True
         ''' On lit la sauvegarde si le joueur a choisi l'option reprendre la partie'''
         save = copy_file("./files/save.txt")
         print("Jeu : Chargement de la partie depuis la dernière sauvegarde")
-
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,\
         liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,\
-        liste_score,partie_finie,tour_fini,sac,couvercle,tours = save #Initialisation des données selon le fichier de sauvegarde
+        liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie = save #Initialisation des données selon le fichier de sauvegarde
 
     else:
-        init_varibles(nombre_joueurs)
+        variables_debut_jeu(nombre_joueurs)
 
 
     #------Dessine les éléments à ne jamais effacer-------#
@@ -602,27 +644,26 @@ if __name__ == "__main__":
 
     #------Boucle principale-------#
     while True:
-        afficher_scores(liste_score)
+
 
     #------Met à jour les éléments relatifs au joueur qui joue-------#
         positions_plancher = return_positions(joueur, 1)
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
-        #print(positions_grille)
 
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
-
+        afficher_scores(liste_score)
 
         '''Cas où un humain doit jouer'''
-        if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
+        if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             print(len(couvercle),"COUVRR")
             while not tour_fini:
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
             '''Cas où l'ordinateur doit jouer'''
-        elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini:
+        elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             mise_a_jour()
             #print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
@@ -661,12 +702,13 @@ if __name__ == "__main__":
             joueurs_passes = 0
             joueur = 1
 
-        if manche_finie(fabriques_disponibles, centre_table):
+        if test_manche_finie(fabriques_disponibles, centre_table) or manche_finie:
             generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
+            variables_nouvelle_manche(nombre_joueurs)
             malus_centre = True
             joueurs_passes = 0
             joueur = 1
 
         #---------A chaque fin de tour on sauvegarde la partie---------------#
-        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours)
+        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie)
 

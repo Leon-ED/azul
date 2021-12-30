@@ -33,7 +33,8 @@ global tours; tours = 0
 global joueur; joueur = 1
 global positions_tuiles_centre; positions_tuiles_centre = [650,350]
 global liste_score; liste_score = [0,0,0,0]
-global fabriques_disponibles
+global manche_finie;manche_finie = False
+
 
 '''==========================================='''
 
@@ -188,9 +189,6 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
     mise_a_jour()
     time.sleep(0.3)
     main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
-    fabriques_disponibles = generer_fabriques(nombre_joueurs)
-    liste_planchers = generer_planchers(nombre_joueurs)
-    liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
     mise_a_jour()
     efface("fin_manche")
     tours+=1
