@@ -7,10 +7,23 @@ from upemtk import *
 from fichiers import *
 from graphiques import *
 from time import sleep
-from random import randint,shuffle
+from random import randint
 from menu import *
 from generer import *
 
+
+def variables_debut_jeu(nombre_joueurs):
+    global liste_palais; liste_palais = generer_palais(nombre_joueurs)
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+    global grille; grille = liste_grilles_joueurs[joueur-1]  
+    global plancher;plancher = liste_planchers[joueur-1]
+
+def variables_nouvelle_manche(nombre_joueurs):
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers; liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs; liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
 
 
 def liste_invalide(fabrique):
@@ -76,17 +89,21 @@ def select_fabrique(liste_des_fabriques,positions_tuiles_centre=[650,350],taille
     if 2 >= ((y-positions_tuiles_centre[1])//taille) >= 0 and 10>=(x-positions_tuiles_centre[0])//taille>=0 and (tours != 0 or joueurs_passes !=0):
         i = (y-positions_tuiles_centre[1])//taille
         j = (x-positions_tuiles_centre[0])//taille
-        return i,j,centre_table
-
+        print("Centre table directement")
+        return i,j,centre_table    
     while (x//50)-1 < 0 or (y//50)-1 <0:
         x,y,_ = attente_clic()
     i = (x//50)-1
     j = (y//50)-1
+    print(i,j)
     fabrique = []
+    liste_des_fabriques = liste_des_fabriques[1:-1]
+    print(liste_des_fabriques)
     emplacements = [0,4,8,12,16,20,24,28,32]
-    for pos in range(len(liste_des_fabriques)-1):
-        if i == emplacements[pos] or i == emplacements[pos] +1:
-            fabrique = liste_des_fabriques[pos+1]
+    for pos in range(len(liste_des_fabriques)):
+        if i == emplacements[pos] or i == emplacements[pos]+1:
+            print(liste_des_fabriques[pos])
+            fabrique = liste_des_fabriques[pos]
             i -= emplacements[pos]
             break
     return j,i,fabrique
@@ -270,7 +287,7 @@ def deplacer_vers_centre(selection,centre=False):
                     break
                 j+=1
     #fabriques_disponibles.remove(fabrique)
-    fabriques_disponibles.remove(fabrique) #La fabrique est vide donc on la retire de la liste
+    fabriques_disponibles.remove(fabrique) #La fabrique est vide donc on la retire de la liste (cette ligne permet l'implémentation qui fait bouger les fabriques à leur suppression)
     fabrique[:] = [-10] #On la remplace par -10 pour signaler qu'elle est vide
 
 
@@ -318,8 +335,7 @@ def ligne_palais_complete(palais_j):
 
 
 def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille,liste_des_fabriques,malus):
-    i,j, fabrique = select_fabrique(liste_des_fabriques)
-    selection = select_tuiles(i, j, fabrique)
+    selection = -10
     while selection == -10:
             i,j, fabrique = select_fabrique(liste_des_fabriques)
             selection = select_tuiles(i, j, fabrique)
@@ -336,8 +352,11 @@ def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille
         x,y,clic = attente_clic()
         cases_valides = remplir_cases(selection, grille, x,y,positions_grille)
     if selection[2] == centre_table and malus:
-        plancher.append(-1)
-        global malus_centre
+        if len(plancher) >= 7:
+            plancher[-1] = -1
+        else:
+            plancher.append(-1)
+            global malus_centre
         malus_centre = False
     remove_couleur(selection)
     deplacer_vers_centre(selection)
@@ -466,9 +485,9 @@ def remplir_palais(lst_palais,lst_grilles,liste_planchers):
                 print("LIGNE :",grille_j[i])
                 remplir_couvercle(grille_j[i],len(grille_j[i])-1,liste_planchers)
                 print('couvercle :',couvercle)
+                liste_score[m-1]+=1
                 k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
                 palais_j[i][k][1] = True
-                calculer_score(m+1,palais_j,i,k,liste_score)
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
         #print(palais)
@@ -556,61 +575,23 @@ def cases_voisines_vides(palais,i,j):
     return True
 
 
-def calculer_score(joueur,palais,i,j,liste_scores):
-
-    print("Calcul des points du joueur ", joueur)
-    if cases_voisines_vides(palais,i,j):
-            print("Aucune case adjacente +1 pts")
-            liste_score[joueur-1] += 1
-            return
-    
-    compteur = 0
-    for y in range(i,len(palais)): #De la case jusqu'au bas
-        if palais[y][j][1] == False:
-            break
-        if palais[y][j][1]:
-            compteur += 1
-    print(compteur)
-    for y in range(i,-1,-1): #De la case jusqu'au haut
-        if palais[y][j][1] == False:
-            break
-        if palais[y][j][1]:
-            compteur += 1
-    print(compteur)
-    '''
-    for x in range(j,len(palais)): #De la case jusqu'au bord droit
-        if palais[i][x][1] == False:
-            break
-        if palais[i][x][1]:
-            compteur += 1
-    print(compteur)
-    for x in range(j,-1,-1): #De la case jusqu'au bord gauche
-        if palais[i][x][1] == False:
-            break
-        if palais[i][x][1]:
-            compteur += 1
-    print(compteur)
-    '''
-    liste_score[joueur-1] += compteur
-
-
+def calculer_score(liste_des_palais,liste_planchers,fin_partie=False):
+    global liste_score
+    if not fin_partie:
+        joueur = 0
+        liste_malus = [-1,-1,-2,-2,-2,-3,-3]
+        for planchers in liste_planchers:
+            for _,malus in zip(planchers,liste_malus):
+                liste_score[joueur] += malus
+                print(liste_score[joueur])
+            joueur += 1
+    elif fin_partie:
+        pass
 
 def determiner_vainqueur(liste_scores):
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
-def variables_debut_jeu(nombre_joueurs):
-    global liste_palais; liste_palais = generer_palais(nombre_joueurs)
-    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
-    global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
-    global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-    global grille; grille = liste_grilles_joueurs[joueur-1]  
-    global plancher;plancher = liste_planchers[joueur-1]
-
-def variables_nouvelle_manche(nombre_joueurs):
-    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
-    global liste_planchers; liste_planchers = generer_planchers(nombre_joueurs)
-    global liste_grilles_joueurs; liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
 
 if __name__ == "__main__":
     '''
@@ -639,13 +620,11 @@ if __name__ == "__main__":
     dessiner_tout_planchers(liste_planchers)
     dessiner_tout_palais(liste_palais,low_graphismes)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
-    afficher_tout_palais(liste_palais)
+    afficher_tout_palais(liste_palais,low_graphismes)
 
 
     #------Boucle principale-------#
     while True:
-
-
     #------Met à jour les éléments relatifs au joueur qui joue-------#
         positions_plancher = return_positions(joueur, 1)
         positions_grille = return_positions(joueur, 0)
@@ -654,7 +633,8 @@ if __name__ == "__main__":
 
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
-        afficher_scores(liste_score)
+        afficher_scores(liste_score,nombre_joueurs)
+
 
         '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:

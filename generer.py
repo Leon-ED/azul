@@ -115,9 +115,9 @@ def generer_palais(nombre_joueurs):
     liste_palais= []
     if nombre_joueurs >=2:
         global palais_j1
-        palais_j1 = palais[:]
+        palais_j1 = copy.deepcopy(palais)
         global palais_j2
-        palais_j2 = palais[:]
+        palais_j2 = copy.deepcopy(palais)
         liste_palais=[palais_j1,palais_j2]
     if nombre_joueurs >=3:
         global palais_j3
@@ -178,6 +178,9 @@ def generer_fabriques(nombre_joueurs):
     lst_fabriques.append(centre_table)
     return lst_fabriques
 
+
+
+
 def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours):
     import main;import time
     print(len(couvercle))
@@ -186,10 +189,10 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
         print(couvercle)
     print(len(couvercle))
     print("Jeu : La manche est terminée")
+    main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
+    main.calculer_score(liste_palais,liste_planchers)
     mise_a_jour()
     time.sleep(0.3)
-    main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
-    mise_a_jour()
     efface("fin_manche")
     tours+=1
 
