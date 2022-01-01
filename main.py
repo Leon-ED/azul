@@ -12,6 +12,20 @@ from menu import *
 from generer import *
 
 
+def variables_debut_jeu(nombre_joueurs):
+    global liste_palais; liste_palais = generer_palais(nombre_joueurs)
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
+    global grille; grille = liste_grilles_joueurs[joueur-1]  
+    global plancher;plancher = liste_planchers[joueur-1]
+
+def variables_nouvelle_manche(nombre_joueurs):
+    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
+    global liste_planchers; liste_planchers = generer_planchers(nombre_joueurs)
+    global liste_grilles_joueurs; liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
+
+
 def liste_invalide(fabrique):
     '''
     Evalue si la liste donnée est valide pour jouer.
@@ -561,34 +575,23 @@ def cases_voisines_vides(palais,i,j):
     return True
 
 
-def calculer_score(liste_des_palais,liste_planchers):
-    
-    joueur = 0
-    liste_malus = [-1,-1,-2,-2,-2,-3,-3]
-
-    for planchers in liste_planchers:
-        for _,malus in zip(planchers,liste_malus):
-            liste_score[joueur] += malus
-            print(liste_score[joueur])
-        joueur += 1
-
+def calculer_score(liste_des_palais,liste_planchers,fin_partie=False):
+    global liste_score
+    if not fin_partie:
+        joueur = 0
+        liste_malus = [-1,-1,-2,-2,-2,-3,-3]
+        for planchers in liste_planchers:
+            for _,malus in zip(planchers,liste_malus):
+                liste_score[joueur] += malus
+                print(liste_score[joueur])
+            joueur += 1
+    elif fin_partie:
+        pass
 
 def determiner_vainqueur(liste_scores):
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
-def variables_debut_jeu(nombre_joueurs):
-    global liste_palais; liste_palais = generer_palais(nombre_joueurs)
-    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
-    global liste_planchers;liste_planchers = generer_planchers(nombre_joueurs)
-    global liste_grilles_joueurs;liste_grilles_joueurs = generer_grilles_joueurs(nombre_joueurs)
-    global grille; grille = liste_grilles_joueurs[joueur-1]  
-    global plancher;plancher = liste_planchers[joueur-1]
-
-def variables_nouvelle_manche(nombre_joueurs):
-    global fabriques_disponibles;fabriques_disponibles = generer_fabriques(nombre_joueurs)
-    global liste_planchers; liste_planchers = generer_planchers(nombre_joueurs)
-    global liste_grilles_joueurs; liste_grilles_joueurs = re_generer_grilles(liste_grilles_joueurs)
 
 if __name__ == "__main__":
     '''
@@ -622,8 +625,6 @@ if __name__ == "__main__":
 
     #------Boucle principale-------#
     while True:
-
-
     #------Met à jour les éléments relatifs au joueur qui joue-------#
         positions_plancher = return_positions(joueur, 1)
         positions_grille = return_positions(joueur, 0)
