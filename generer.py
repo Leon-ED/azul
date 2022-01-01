@@ -115,9 +115,9 @@ def generer_palais(nombre_joueurs):
     liste_palais= []
     if nombre_joueurs >=2:
         global palais_j1
-        palais_j1 = palais[:]
+        palais_j1 = copy.deepcopy(palais)
         global palais_j2
-        palais_j2 = palais[:]
+        palais_j2 = copy.deepcopy(palais)
         liste_palais=[palais_j1,palais_j2]
     if nombre_joueurs >=3:
         global palais_j3
