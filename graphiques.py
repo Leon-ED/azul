@@ -238,7 +238,7 @@ def afficher_mur_palais(joueur,palais_j,i,j):
     image((x)+60*j, (y+10)+60*i, "./images/"+str(palais_j[i][j][0])+str("_h.gif"),ancrage="nw")
 
 
-def afficher_tout_palais(liste_palais,low_graphismes=True):
+def afficher_tout_palais(liste_palais,low_graphismes=False):
     joueur = 1
     for palais in liste_palais:
         x,y,_,_,_,_ = return_positions(joueur, 0)
@@ -247,7 +247,7 @@ def afficher_tout_palais(liste_palais,low_graphismes=True):
             for j in range(len(palais[i])):
                 if palais[i][j][1]:
                     if low_graphismes:
-                        texte((x)+60*j,(y+10)+60*i,str(palais[i][j][0]),police=13)
+                        rectangle((x)+60*j, (y+10)+60*i, (x+cote)+(cote+ecart)*j, (y+cote+10)+(ecart+cote)*i,epaisseur=2,remplissage=palais[i][j][0])
                     else:
                         image((x)+60*j, (y+10)+60*i, "./images/"+str(palais[i][j][0])+str("_h.gif"),ancrage="nw")
 

@@ -620,7 +620,7 @@ if __name__ == "__main__":
     dessiner_tout_planchers(liste_planchers)
     dessiner_tout_palais(liste_palais,low_graphismes)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
-    afficher_tout_palais(liste_palais)
+    afficher_tout_palais(liste_palais,low_graphismes)
 
 
     #------Boucle principale-------#
