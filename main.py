@@ -7,7 +7,7 @@ from upemtk import *
 from fichiers import *
 from graphiques import *
 from time import sleep
-from random import randint,shuffle
+from random import randint
 from menu import *
 from generer import *
 
@@ -76,16 +76,18 @@ def select_fabrique(liste_des_fabriques,positions_tuiles_centre=[650,350],taille
     if 2 >= ((y-positions_tuiles_centre[1])//taille) >= 0 and 10>=(x-positions_tuiles_centre[0])//taille>=0 and (tours != 0 or joueurs_passes !=0):
         i = (y-positions_tuiles_centre[1])//taille
         j = (x-positions_tuiles_centre[0])//taille
-        return i,j,centre_table
-
+        print("Centre table directement")
+        return i,j,centre_table    
     while (x//50)-1 < 0 or (y//50)-1 <0:
         x,y,_ = attente_clic()
     i = (x//50)-1
     j = (y//50)-1
+    print(i,j)
     fabrique = []
+    liste_des_fabriques = liste_des_fabriques[:-1]
     emplacements = [0,4,8,12,16,20,24,28,32]
     for pos in range(len(liste_des_fabriques)-1):
-        if i == emplacements[pos] or i == emplacements[pos] +1:
+        if i == emplacements[pos] or i == emplacements[pos]+1:
             fabrique = liste_des_fabriques[pos+1]
             i -= emplacements[pos]
             break
@@ -270,7 +272,7 @@ def deplacer_vers_centre(selection,centre=False):
                     break
                 j+=1
     #fabriques_disponibles.remove(fabrique)
-    fabriques_disponibles.remove(fabrique) #La fabrique est vide donc on la retire de la liste
+    fabriques_disponibles.remove(fabrique) #La fabrique est vide donc on la retire de la liste (cette ligne permet l'implémentation qui fait bouger les fabriques à leur suppression)
     fabrique[:] = [-10] #On la remplace par -10 pour signaler qu'elle est vide
 
 
@@ -318,8 +320,7 @@ def ligne_palais_complete(palais_j):
 
 
 def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille,liste_des_fabriques,malus):
-    i,j, fabrique = select_fabrique(liste_des_fabriques)
-    selection = select_tuiles(i, j, fabrique)
+    selection = -10
     while selection == -10:
             i,j, fabrique = select_fabrique(liste_des_fabriques)
             selection = select_tuiles(i, j, fabrique)
@@ -336,8 +337,11 @@ def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille
         x,y,clic = attente_clic()
         cases_valides = remplir_cases(selection, grille, x,y,positions_grille)
     if selection[2] == centre_table and malus:
-        plancher.append(-1)
-        global malus_centre
+        if len(plancher) >= 7:
+            plancher[-1] = -1
+        else:
+            plancher.append(-1)
+            global malus_centre
         malus_centre = False
     remove_couleur(selection)
     deplacer_vers_centre(selection)
