@@ -12,7 +12,6 @@ from menu import *
 from generer import *
 
 
-
 def liste_invalide(fabrique):
     '''
     Evalue si la liste donnée est valide pour jouer.
@@ -84,11 +83,13 @@ def select_fabrique(liste_des_fabriques,positions_tuiles_centre=[650,350],taille
     j = (y//50)-1
     print(i,j)
     fabrique = []
-    liste_des_fabriques = liste_des_fabriques[:-1]
+    liste_des_fabriques = liste_des_fabriques[1:-1]
+    print(liste_des_fabriques)
     emplacements = [0,4,8,12,16,20,24,28,32]
-    for pos in range(len(liste_des_fabriques)-1):
+    for pos in range(len(liste_des_fabriques)):
         if i == emplacements[pos] or i == emplacements[pos]+1:
-            fabrique = liste_des_fabriques[pos+1]
+            print(liste_des_fabriques[pos])
+            fabrique = liste_des_fabriques[pos]
             i -= emplacements[pos]
             break
     return j,i,fabrique
@@ -470,9 +471,9 @@ def remplir_palais(lst_palais,lst_grilles,liste_planchers):
                 print("LIGNE :",grille_j[i])
                 remplir_couvercle(grille_j[i],len(grille_j[i])-1,liste_planchers)
                 print('couvercle :',couvercle)
+                liste_score[m-1]+=1
                 k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
                 palais_j[i][k][1] = True
-                calculer_score(m+1,palais_j,i,k,liste_score)
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
         #print(palais)
@@ -560,43 +561,16 @@ def cases_voisines_vides(palais,i,j):
     return True
 
 
-def calculer_score(joueur,palais,i,j,liste_scores):
-
-    print("Calcul des points du joueur ", joueur)
-    if cases_voisines_vides(palais,i,j):
-            print("Aucune case adjacente +1 pts")
-            liste_score[joueur-1] += 1
-            return
+def calculer_score(liste_des_palais,liste_planchers):
     
-    compteur = 0
-    for y in range(i,len(palais)): #De la case jusqu'au bas
-        if palais[y][j][1] == False:
-            break
-        if palais[y][j][1]:
-            compteur += 1
-    print(compteur)
-    for y in range(i,-1,-1): #De la case jusqu'au haut
-        if palais[y][j][1] == False:
-            break
-        if palais[y][j][1]:
-            compteur += 1
-    print(compteur)
-    '''
-    for x in range(j,len(palais)): #De la case jusqu'au bord droit
-        if palais[i][x][1] == False:
-            break
-        if palais[i][x][1]:
-            compteur += 1
-    print(compteur)
-    for x in range(j,-1,-1): #De la case jusqu'au bord gauche
-        if palais[i][x][1] == False:
-            break
-        if palais[i][x][1]:
-            compteur += 1
-    print(compteur)
-    '''
-    liste_score[joueur-1] += compteur
+    joueur = 0
+    liste_malus = [-1,-1,-2,-2,-2,-3,-3]
 
+    for planchers in liste_planchers:
+        for _,malus in zip(planchers,liste_malus):
+            liste_score[joueur] += malus
+            print(liste_score[joueur])
+        joueur += 1
 
 
 def determiner_vainqueur(liste_scores):
@@ -658,7 +632,8 @@ if __name__ == "__main__":
 
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
-        afficher_scores(liste_score)
+        afficher_scores(liste_score,nombre_joueurs)
+
 
         '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
