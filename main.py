@@ -624,9 +624,6 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
         liste_score[joueur] += points
         return
 
-    elif fin_partie:
-        pass
-
 def determiner_vainqueur(liste_scores):
     '''Retourne le numéro du joueur avec le plus de points'''
     score_maximul = max(liste_scores)

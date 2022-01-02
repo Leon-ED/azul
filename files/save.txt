@@ -1,18 +1,1 @@
-True
-2
-1
-[None]
-0
-[[['vide'], ['vide', 'vide'], ['vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide'], ['black', 'black', 'vide', 'vide', 'vide']], [['vide'], ['vide', 'vide'], ['vide', 'vide', 'vide'], ['green', 'green', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide']]]
-[[], []]
-[['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]
-['vide', [['black', 'blue'], ['black', 'red']], [['yellow', 'blue'], ['blue', 'red']], [['red', 'red'], ['blue', 'green']], [['black', 'green'], ['yellow', 'black']], [['green', 'red'], ['blue', 'yellow']], [['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide'], ['vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide', 'vide']]]
-[[[['blue', False], ['yellow', False], ['red', False], ['black', True], ['green', False]], [['green', False], ['blue', False], ['yellow', False], ['red', True], ['black', False]], [['black', True], ['green', False], ['blue', False], ['yellow', False], ['red', False]], [['red', False], ['black', False], ['green', False], ['blue', True], ['yellow', False]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]], [[['blue', False], ['yellow', False], ['red', False], ['black', False], ['green', True]], [['green', False], ['blue', False], ['yellow', False], ['red', True], ['black', False]], [['black', False], ['green', False], ['blue', False], ['yellow', True], ['red', False]], [['red', False], ['black', False], ['green', False], ['blue', False], ['yellow', False]], [['yellow', False], ['red', False], ['black', False], ['green', False], ['blue', False]]]]
-True
-[4, 4, 0, 0]
-False
-False
-['blue', 'blue', 'black', 'yellow', 'black', 'yellow', 'yellow', 'green', 'yellow', 'green', 'blue', 'black', 'green', 'green', 'black', 'blue', 'red', 'red', 'red', 'blue', 'red', 'black', 'red', 'green', 'blue', 'yellow', 'green', 'yellow', 'green', 'green', 'green', 'green', 'red', 'red', 'red', 'green', 'red', 'black', 'yellow', 'yellow', 'black', 'yellow', 'blue', 'black', 'green', 'blue', 'blue', 'black', 'yellow', 'blue', 'yellow', 'yellow', 'yellow', 'green', 'yellow', 'black', 'green', 'red', 'blue', 'red']
-['red', 'black', 'black', 'blue', 'blue', 'blue', 'red', 'yellow', 'yellow']
-5
 False
