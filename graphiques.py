@@ -263,7 +263,7 @@ def afficher_scores(liste_scores,nombre_joueurs):
     for i in range(nombre_joueurs):
         x,y,_,_,_,_= return_positions(i+1, 0)
         print(liste_scores[i])
-        texte(x-200,y+20,"Score : "+str(liste_scores[i]),tag='fin_manche')
+        texte(x-200,y+20,"Score : "+str(liste_scores[i]),tag='score')
 
 def dessine_tuiles_lignes(grille,joueur,low_graphismes):
     '''

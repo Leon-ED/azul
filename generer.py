@@ -58,17 +58,17 @@ def sac_est_vide():
 def fabriques_plein(liste):
     global sac
     taille = len(sac)
-    # print("Le couvercle est :",couvercle)
-    # print("Le sac est: ",sac,"\n Sa taille est de :",taille)
+    print("Le couvercle est :",couvercle)
+    print("Le sac est: ",sac,"\n Sa taille est de :",taille)
     for i in range(2):
         for j in range(2):
             if sac_est_vide() and couvercle != []:
-                # print("Le sac est vide, on va le remplir")
-                # print("Le couvercle est :",couvercle)
+                print("Le sac est vide, on va le remplir")
+                print("Le couvercle est :",couvercle)
                 sac = copy.deepcopy(couvercle)
-                # print("Le sac est maintenant :",sac)
+                print("Le sac est maintenant :",sac)
                 couvercle.clear()
-                # print("Le couvercle est maintenant :",couvercle)
+                print("Le couvercle est maintenant :",couvercle)
             elif sac_est_vide() and couvercle == [] and liste[0][0] in COULEURS_JEU:
                 print("Plus de tuiles !!!!!")
                 liste[i][j] = 'vide'
@@ -121,11 +121,11 @@ def generer_palais(nombre_joueurs):
         liste_palais=[palais_j1,palais_j2]
     if nombre_joueurs >=3:
         global palais_j3
-        palais_j3 = palais[:]
+        palais_j3 = copy.deepcopy(palais)
         liste_palais.append(palais_j3)
     if nombre_joueurs >=4:
         global palais_j4
-        palais_j4 = palais[:]
+        palais_j4 = copy.deepcopy(palais)
         liste_palais.append(palais_j4)
 
     return liste_palais
@@ -190,8 +190,24 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
     main.calculer_score(liste_planchers=liste_planchers,fin_manche=True)
     mise_a_jour()
     time.sleep(0.3)
+    efface("score")
     efface("fin_manche")
     tours+=1
+
+def generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs):
+    efface("fin_tour")
+    from main import determiner_vainqueur
+    texte((1800/2)-100, 900/2, 'Partie terminée',police='Arial')
+    texte((1800/2)-100, 900/2+30, 'double clic pour fermer le jeu',police='Arial',taille=13)
+    print("Jeu : La partie est terminée.")
+    vainqueur = determiner_vainqueur(liste_score)
+    points = liste_score[vainqueur]
+    message_fin = f'Le gagnant est le joueur {vainqueur+1} avec : {points} points !'
+    texte((1800/2)-300, (900/2)-400, message_fin,police='Arial',couleur='red')
+    print("Le gagnant est le joueur : ",vainqueur+1," avec : ",liste_score[vainqueur], " points !")
+    efface("score")
+    mise_a_jour()
+
 
 if __name__ == "__main__":
     print(generer_grilles_joueurs(3))

@@ -328,7 +328,12 @@ def jouer_couleur_grille(grille_joueur,couleur=None):
 def ligne_palais_complete(palais_j):
     for i in range(len(palais_j)):
         if all([palais_j[i][j][1] for j in range(len(palais_j[i]))]):
+            print(i)
+            print(palais_j)
+            print([palais_j[i][j][1] for j in range(len(palais_j[i]))])
             return True
+        else:
+            continue
     return False
 
 
@@ -534,7 +539,7 @@ def coup_possible(couleur,i,palais_j):
 
 def fin_partie(lst_grilles,lst_palais,liste_des_fabriques):
     print("Jeu : Test si la partie est finie : ",end="")
-    if any(ligne_palais_complete(palais) for palais in lst_palais):
+    if any([ligne_palais_complete(palais) for palais in lst_palais]):
         print("Une ligne d'une palais a été complété.")
         return True
     if sac_est_vide() and couvercle == [] and fabriques_vides(liste_des_fabriques):
@@ -578,10 +583,11 @@ def cases_voisines_vides(palais,i,j):
     return True
 
 
-def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fin_manche=False,joueur = 0):
+def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fin_manche=False,joueur = 0,liste_palais=None):
     '''Calcule le score des joueurs pendant la partie et à la fin de la partie'''
     global liste_score
     if not fin_partie and fin_manche:
+        #efface("score")
         joueur = 0
         #------ Retire les points en fonction des éléments dans le plancher
         liste_malus = [-1,-1,-2,-2,-2,-3,-3]
@@ -590,6 +596,7 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
                 liste_score[joueur] += malus
                 print(liste_score[joueur])
             joueur += 1
+        #afficher_scores(liste_score,nombre_joueurs)
     elif not fin_partie and not fin_manche:
         if cases_voisines_vides(palais,i,j): #Si le case indiquée ne possède aucun voisins on ajoute juste un point
             liste_score[joueur] += 1
@@ -623,7 +630,28 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
             print("Total, ",points)
         liste_score[joueur] += points
         return
-
+    elif fin_partie:
+        #efface("score")
+        joueur = 0
+        for palais in liste_palais:
+            points = 0
+            for k in range(0,len(palais)):
+                if all([palais[i][k][1] for i in range(len(palais[k]))]): #Verification si les colonnes sont remplies
+                    points += 7
+                if all([palais[k][j][1] for j in range(len(palais[k]))]): #Verification si les lignes sont remplies
+                    points += 2 #Le joueur a remplie toute une ligne ou colonne il gagne 2 ou 7 points supplémentaires
+            
+            for couleur in COULEURS_JEU:
+                compteur = 0
+                for i in range(len(palais)):
+                    k = cherche_couleur_palais(palais,couleur,i)
+                    if compteur == 5:
+                        points += 10 #Le joueur 5 fois la meme couleur dans son palais il gagne 10 points supplémentaires
+                    if palais[i][k][1]:
+                        compteur += 1
+            liste_score[joueur] += points
+            joueur += 1
+        #afficher_scores(liste_score,nombre_joueurs)
 def determiner_vainqueur(liste_scores):
     '''Retourne le numéro du joueur avec le plus de points'''
     score_maximul = max(liste_scores)
@@ -631,18 +659,20 @@ def determiner_vainqueur(liste_scores):
 
 
 if __name__ == "__main__":
+    chemin_settings = "./files/settings.txt"
+    chemin_save = "./files/save.txt"
     '''
     Tour : Se finit quand tous les joueurs composant la partie on joué
     Manche : Se finit quand il n'y a plus de fabriques avec lesquelles jouer
     '''
-    while not menu_jeu():pass #On affiche le menu
+    while not menu_jeu(chemin_settings):pass #On affiche le menu
     cree_fenetre(1800,1080) #On crée la fenêtre du jeu
     sac_plein() #On crée le sac
     global fabriques_disponibles
-    nombre_joueurs,joueur_ia,low_graphismes,reload = lire_config("./files/settings.txt") #On lit les paramètres du jeu depuis le fichier
+    nombre_joueurs,joueur_ia,low_graphismes,reload = lire_config(chemin_settings) #On lit les paramètres du jeu depuis le fichier
     if reload == True: #Pour être bien sûr qu'il soit égal à True
         ''' On lit la sauvegarde si le joueur a choisi l'option reprendre la partie'''
-        save = copy_file("./files/save.txt")
+        save = copy_file(chemin_save)
         print("Jeu : Chargement de la partie depuis la dernière sauvegarde")
         _,nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,\
         liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,\
@@ -667,11 +697,10 @@ if __name__ == "__main__":
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
-        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie)
+
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
         afficher_scores(liste_score,nombre_joueurs)
-
 
         '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
@@ -682,14 +711,13 @@ if __name__ == "__main__":
             '''Cas où l'ordinateur doit jouer'''
         elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             mise_a_jour()
-            #print("JOUEUR",joueur)
             positions_grille = return_positions(joueur, 0)
-            dessine_tuiles_lignes(grille, joueur,low_graphismes)
+            # dessine_tuiles_lignes(grille, joueur,low_graphismes)
             ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
             dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
             mise_a_jour()
-            sleep(0.9)
+            sleep(0.7)
             efface("selection")
             ordinateur_coup(selection_ordinateur, grille,positions_grille,palais)
             if selection_ordinateur[2] == centre_table and malus_centre == True:
@@ -697,18 +725,16 @@ if __name__ == "__main__":
                 malus_centre = False
             dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
             mise_a_jour()
-            sleep(0.3)
             tour_fini = True
-       
+        
+        
         if fin_partie(liste_grilles_joueurs,liste_palais,fabriques_disponibles):
-
-            texte((1800/2)-100, 900/2, 'Partie terminée',police='Arial')
-            print("Jeu : La partie est terminée.")
-            print("Le gagnant est le joueur : ",determiner_vainqueur(liste_score)+1)
-            mise_a_jour()
-            sleep(3)
+            calculer_score(liste_planchers,fin_partie=True,liste_palais=liste_palais)
+            generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs)
+            afficher_scores(liste_score,nombre_joueurs)
+            attente_clic()
+            attente_clic()
             break
-
         if tour_fini:
             efface("fin_tour")
             joueurs_passes += 1
@@ -718,7 +744,6 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
-
         if test_manche_finie(fabriques_disponibles, centre_table) or manche_finie:
             generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
             variables_nouvelle_manche(nombre_joueurs)

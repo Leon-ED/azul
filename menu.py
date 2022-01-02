@@ -29,6 +29,7 @@ def accueil():
     rectangle(100,340,300,390)
     texte(155,345,"Quitter")
 
+    rectangle(10,550,15,555)
     if existe('./files/save.txt'):
         rectangle(100,410,300,460)
         texte(110,415,"Reprendre partie",police='Arial',taille=17)
@@ -44,7 +45,9 @@ def clic_accueil():
             return 4
         if 100<=x<=250 and 340<=y<=390:
             return False
-        
+        if 10<=x<=15 and 500<=y<=555:
+            print("ii")
+            return 99
 
 
 
@@ -150,11 +153,11 @@ def clic_options(settings_config):
             return False
 
 
-def menu_jeu():
+def menu_jeu(chemin):
     fenetre()
     config = [2,[2],False,False]
-    if existe("./files/settings.txt"):
-        config = copy_file("./files/settings.txt")
+    if existe(chemin):
+        config = copy_file(chemin)
         config[-1] = False
     print(config)
     
@@ -162,7 +165,7 @@ def menu_jeu():
         accueil()
         choix = clic_accueil()
         if not choix:
-            ecrire_config(config,"./files/settings.txt")
+            ecrire_config(config,chemin)
             print("Quitter")
             return False
         if choix == 1:
@@ -178,18 +181,21 @@ def menu_jeu():
                 print("Accueil")
                 continue
             config[1] = choix
-            ecrire_config(config,"./files/settings.txt")
+            ecrire_config(config,chemin)
             ferme_fenetre()
             return True
         if choix == 4:
             config[-1] = True
-            ecrire_config(config,"./files/settings.txt")
+            ecrire_config(config,chemin)
             ferme_fenetre()
             return True
         if choix == 2:
             options(config)
             choix = clic_options(config)
-
+        if choix == 99:
+            ecrire_config([4,[1,2,3,4],False,False],chemin)
+            ferme_fenetre()
+            return True
 
 
 
