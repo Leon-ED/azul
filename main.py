@@ -477,23 +477,26 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
     remplir_cases(selection_ordinateur, grille_joueur,0,i,pos_grille,ordinateur=True)
 
 def remplir_palais(lst_palais,lst_grilles,liste_planchers):
+    '''Remplit le palais à la fin de la manche si les lignes sont complétées.'''
     m = 0
     for grille_j in lst_grilles:
         palais_j = lst_palais[m]
         for i in range(len(grille_j)):
             if 'vide' not in grille_j[i]: #La ligne est remplie donc on remplit le palais
-                print("LIGNE :",grille_j[i])
+                # print("LIGNE :",grille_j[i])
                 remplir_couvercle(grille_j[i],len(grille_j[i])-1,liste_planchers)
-                print('couvercle :',couvercle)
-                liste_score[m-1]+=1
+                # print('couvercle :',couvercle)
+                # liste_score[m-1]+=1
                 k = cherche_couleur_palais(palais_j,grille_j[i][0], i)
                 palais_j[i][k][1] = True
+                calculer_score(liste_planchers,i=i,j=k,palais=palais_j,joueur=m)
                 afficher_mur_palais(m+1, palais_j,i,k)
         m+=1
         #print(palais)
 
 
 def remplir_couvercle(ligne_j,n,liste_planchers,plancher=False):
+    '''Remplit le couvercle du plateau avec les tuiles restantes pour les réutiliser'''
     if plancher:
         for couleurs in ligne_j:
             if couleurs != -1:
@@ -507,6 +510,7 @@ def remplir_couvercle(ligne_j,n,liste_planchers,plancher=False):
     print("Le couvercle contient :", len(couvercle)," tuiles")
 
 def cherche_couleur_palais(palais_j,couleur,i):
+    '''Retourne la position j du palais de la couleur indiquée'''
     if i >= len(palais_j):
         return False
     for j in range(len(palais_j[i])):
@@ -523,6 +527,7 @@ def test_manche_finie(liste_fabriques,centre_table):
     return True
 
 def coup_possible(couleur,i,palais_j):
+    '''Retourne True si cette couleur n'est pas déjà dans le palais et False s\'il l\'est déjà indiquant qu'on ne peut plus jouer cette couleur'''
     j = cherche_couleur_palais(palais_j, couleur, i)
     return not palais_j[i][j][1]
 
@@ -551,7 +556,6 @@ def offset(m,i,j):
     '''Retourne True si position en dehors de la matrice m sinon retourne... False'''
     i_max = len(m)-1
     j_max = len(m[0])-1
-    print(i_max,j_max,"MAXX")
 
     if i>i_max :
         return True
@@ -565,9 +569,8 @@ def offset(m,i,j):
 
 
 def cases_voisines_vides(palais,i,j):
-    print("CHOISI",i,j)
+    '''Retourne True si l\'élément indiqué ne possède aucun voisins'''
     voisins = cree_sous_matrice(i,j,palais)
-    print(voisins,"voisins")
     for i,j in voisins:
         print(i,j)
         if palais[i][j][1] == True:
@@ -575,20 +578,57 @@ def cases_voisines_vides(palais,i,j):
     return True
 
 
-def calculer_score(liste_des_palais,liste_planchers,fin_partie=False):
+def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fin_manche=False,joueur = 0):
+    '''Calcule le score des joueurs pendant la partie et à la fin de la partie'''
     global liste_score
-    if not fin_partie:
+    if not fin_partie and fin_manche:
         joueur = 0
+        #------ Retire les points en fonction des éléments dans le plancher
         liste_malus = [-1,-1,-2,-2,-2,-3,-3]
         for planchers in liste_planchers:
             for _,malus in zip(planchers,liste_malus):
                 liste_score[joueur] += malus
                 print(liste_score[joueur])
             joueur += 1
+    elif not fin_partie and not fin_manche:
+        if cases_voisines_vides(palais,i,j): #Si le case indiquée ne possède aucun voisins on ajoute juste un point
+            liste_score[joueur] += 1
+            return
+
+        compteur = 0
+        points = 0
+        print("====== Points du joueur ",joueur+1," ======","pour la tuile",palais[i][j][0]," placée en ligne : ",i+1)
+        if not offset(palais,i+1,j) and palais[i+1][j][1] or not offset(palais,i-1,j) and palais[i-1][j][1]:
+            for k in range(0,len(palais)):
+                if palais[k][j][1]:
+                    compteur += 1
+                if k == i:
+                    points += compteur
+                if not palais[k][j][1]:
+                    compteur = 0
+                if not palais[k][j][1] and k > i:
+                    break
+            print(" Verticalement : ",points," points")
+        compteur = 0
+        if not offset(palais,i,j+1) and palais[i][j+1][1] or not offset(palais,i,j-1) and palais[i][j-1][1]:
+            for k in range(0,len(palais[i])):
+                if palais[i][k][1]:
+                    compteur += 1
+                if k == j:
+                    points += compteur
+                if not palais[i][k][1]:
+                    compteur = 0
+                if not palais[i][k][1] and k > j:
+                    break
+            print("Total, ",points)
+        liste_score[joueur] += points
+        return
+
     elif fin_partie:
         pass
 
 def determiner_vainqueur(liste_scores):
+    '''Retourne le numéro du joueur avec le plus de points'''
     score_maximul = max(liste_scores)
     return liste_scores.index(score_maximul)
 
@@ -630,7 +670,7 @@ if __name__ == "__main__":
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
-
+        ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie)
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
         afficher_scores(liste_score,nombre_joueurs)
