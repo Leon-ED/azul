@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from random import shuffle,randint
 import copy
-from upemtk import *
+from src.upemtk import *
 '''Module générant les variables du jeu'''
 
 

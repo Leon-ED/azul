@@ -3,13 +3,13 @@
 '''Module principal du jeu s'occupant de la partie logique et de l'interaction avec l'utilisateur.'''
 
 #---Imports
-from upemtk import *
-from fichiers import *
-from graphiques import *
+from src.upemtk import *
+from src.fichiers import *
+from src.graphiques import *
 from time import sleep
 from random import randint
-from menu import *
-from generer import *
+from src.menu import *
+from src.generer import *
 
 
 def variables_debut_jeu(nombre_joueurs):
@@ -457,7 +457,6 @@ def ordinateur_coup(selection_ordinateur,grille_joueur,pos_grille,palais_ordi):
     fail = 0
     if jouer_couleur_grille(grille_joueur,couleur):
         i = 5
-  
     else:
         while True :
             if fail == 60:
@@ -697,11 +696,9 @@ if __name__ == "__main__":
         positions_grille = return_positions(joueur, 0)
         grille = liste_grilles_joueurs[joueur-1]
         plancher = liste_planchers[joueur-1]
-
         '''Affiche les éléments graphiques qui changent tous les tours'''
         afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grilles_joueurs,positions_tuiles_centre,joueur)
         afficher_scores(liste_score,nombre_joueurs)
-
         '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             print(len(couvercle),"COUVRR")
@@ -726,8 +723,6 @@ if __name__ == "__main__":
             dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
             mise_a_jour()
             tour_fini = True
-        
-        
         if fin_partie(liste_grilles_joueurs,liste_palais,fabriques_disponibles):
             calculer_score(liste_planchers,fin_partie=True,liste_palais=liste_palais)
             generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs)

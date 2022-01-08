@@ -3,8 +3,8 @@
 '''Module qui a pour but d'afficher tous les graphismes à l'écran en fonction des données envoyées.'''
 
 #---Imports
-from upemtk import *
-from menu import *
+from src.upemtk import *
+from src.menu import *
 
 cote= 50
 ecart = 10
@@ -285,3 +285,7 @@ def dessine_tuiles_lignes(grille,joueur,low_graphismes):
             else:
                 image(x-(cote+ecart)*nb_colonnes,  (y+(cote+ecart)*nb_lignes)+10, "./images/"+str(grille[nb_lignes][nb_colonnes])+str("_h.gif"),ancrage="nw",tag='fin_manche')
 
+if __name__ == "__main__":
+    cree_fenetre(100,100)
+    attente_clic()
+    ferme_fenetre()
