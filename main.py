@@ -133,6 +133,7 @@ def select_tuiles(i,j,fabrique,ordinateur=False):
     compteur = 0
     couleur = fabrique[i][j]
     if couleur == 'vide':
+        print("selec vide")
         return -10
     for lines in fabrique:
         for elems in lines:
@@ -208,8 +209,7 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
         if colors != 'vide' and colors != couleur_selection:
             #print("Ligne deja occupée")
             return False
-        if colors == 'vide':
-            longueur_ligne += 1
+    longueur_ligne = compteur_ligne(grille[i])
     #print("La tailles est de",longueur_ligne)
 
     '''S'il y a plus de cases que de place'''
@@ -395,6 +395,7 @@ def tour_ordinateur(num_joueur,liste_joueurs_ia):
 
 
 def lignes_jouables(grille_joueur,palais_joueur):
+    '''Retourne la liste formée par le numéro de ligne, la place disponible et la liste de couleur jouable'''
     elem_jouables = []
     for i in range(len(grille_joueur)):
         verif = True
@@ -430,6 +431,7 @@ def lignes_jouables(grille_joueur,palais_joueur):
 
 
 def compteur_ligne(ligne):
+    '''Retourne le nombre de place libre dans une ligne'''
     compteur = 0
     for elem in ligne:
         if elem == 'vide':
@@ -437,51 +439,86 @@ def compteur_ligne(ligne):
     return compteur
 
 def resume_fabriques(liste_fabriques):
+    '''Combine les matrices de fabrique en une seule liste'''
     resume = []
-    for ligne1,ligne2 in liste_fabriques[1:-1]:
-        resume.append(ligne1 + ligne2)
-    fab1,fab2,fab3 = liste_fabriques[-1]
+    for fabriques in liste_fabriques[1:]:
+        sous_liste = []
+        for lignes in fabriques:
+            sous_liste += lignes
+        resume.append(sous_liste)
 
-    resume.append(fab1+fab2+fab3)
+    print("resum",resume)
     return resume
 
 
-def ordinateur_choisir_fabrique_couleur(liste_des_fabriques,grille_ordi,palais_ordi):
+
+def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais_ordi):
+    '''
+    Analyse par ligne jouable, la place restante et les couleurs jouables et cherche au mieux parmis
+    les fabriques les meilleur coup pour l'ordinateur
+    '''
     liste_lignes = lignes_jouables(grille_ordi,palais_ordi)
     resume = resume_fabriques(liste_des_fabriques)
-    print(resume)
-    print(liste_lignes)
+    selection_secondaire = None
+    selection_ter = None
+    # shuffle(liste_lignes)
+    # shuffle(resume)
     for ligne,taille,couleurs in liste_lignes:
         if couleurs == 'all':
             couleurs = COULEURS_JEU
-        for i in range(len(resume)):
-            for j in range(len(resume[i])):
-                color = resume[i][j]
-                color_nombre = resume[i].count(color)
-                if color in couleurs and color_nombre == taille and color != 'vide':
-                    print("Trouvé")
-                    i_tuile = 0
-                    if j >=3:
-                        i_tuile = 1
-                    print("ordi",i_tuile,j)
-                    print(liste_des_fabriques[i+1])
-                    selection = select_tuiles(i_tuile,j%3,liste_des_fabriques[i+1])
+
+        numero_fabrique = 0
+        for fabriques in resume:
+            numero_fabrique += 1
+            real_fabrique = liste_des_fabriques[numero_fabrique]
+            len_fabrique = len(real_fabrique[0])
+            i = 0
+            j = 0
+            for tuiles in fabriques:
+                if j == len_fabrique:
+                    print(f'Taille : {len_fabrique}; j reset à {j}, i maintenant {i}')
+                    j = 0
+                    i += 1
+                print(f'{tuiles} correspond vrament à {real_fabrique[i][j]}')
+
+                if tuiles != 'vide' and tuiles in couleurs and fabriques.count(tuiles) == taille:
+                    print("Un elem a ete trouve",ligne)
+                    selection = select_tuiles(i,j,real_fabrique,ordinateur=True)
+                    print(ligne,taille,couleurs)
                     return selection,ligne
-                elif color in couleurs and color != 'vide':
-                    i_tuile = 0
-                    if j >=3:
-                        i_tuile = 1
-                    coups_potentiels = set()
-                    selection_secondaire = select_tuiles(i_tuile,j%3,liste_des_fabriques[i+1])
-                    coups_potentiels.add((i_tuile,j%3,i+1,taille-color_nombre,ligne))
-    print("Selection secondaire utilisée")
-    return selection_secondaire,ligne
+                
+                if tuiles != 'vide' and tuiles in couleurs:
+                    selection_secondaire = select_tuiles(i,j,real_fabrique,ordinateur=True)
+                    ligne_second = ligne
+                elif tuiles != 'vide':
+                    selection_ter = select_tuiles(i,j,real_fabrique,ordinateur=True)
+                    ligne_ter = 5
+                j += 1
+    if selection_secondaire != None:
+        print("selec secon",ligne)
+        print(ligne,taille,couleurs)
+        return selection_secondaire,ligne_second
+    elif selection_ter != None:
+        return selection_ter,ligne_ter
+    else:
+        return False,False
 
 
 
-                    
+
+
+
+
+
+
+
+
+
+
+
 def ordinateur_jouer_coup(selection,grille,positions_grilles,palais,ligne):
-    remplir_cases(selection,grille,0,ligne,positions_grilles,ordinateur=True)
+    reseul = remplir_cases(selection,grille,0,ligne,positions_grilles,ordinateur=True)
+    print(reseul)
     return True
 
 def ordinateur_choisir_fabrique(liste_des_fabriques):
@@ -618,10 +655,9 @@ def cherche_couleur_palais(palais_j,couleur,i):
             if palais_j[i][j][0] == couleur:
                 return j
     else:
-        print("Cherche couleur",i)
+        # print("Cherche couleur",i)
         couleur_non_jouables = set()
         for color,rempli in palais_j[i]:
-            print(color,rempli)
             if rempli == True:
                 print(color,"Non jouables")
                 couleur_non_jouables.add(color)
@@ -820,27 +856,44 @@ if __name__ == "__main__":
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
             '''Cas où l'ordinateur doit jouer'''
+            manche_finie = test_manche_finie(fabriques_disponibles,centre_table)
         elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             mise_a_jour()
             # dessine_tuiles_lignes(grille, joueur,low_graphismes)
             # ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             # selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
-            selection_ordinateur,ligne_ordi = ordinateur_choisir_fabrique_couleur(fabriques_disponibles,grille,palais)
-            print("selec ordi",selection_ordinateur)
-            remove_couleur(selection_ordinateur)
-            deplacer_vers_centre(selection_ordinateur)
-            dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
-            mise_a_jour()
-            sleep(0.7)
-            efface("selection")
-            ordinateur_jouer_coup(selection_ordinateur,grille,positions_grille,palais,ligne_ordi)
-            # ordinateur_coup(selection_ordinateur, grille,positions_grille,palais)
-            if selection_ordinateur[2] == centre_table and malus_centre == True:
-                plancher.append(-1)
-                malus_centre = False
-            dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
-            mise_a_jour()
-            tour_fini = True
+            selection_ordinateur,ligne_ordi = ordinateur_choisir_fabrique_couleur_2(fabriques_disponibles,grille,palais)
+            if selection_ordinateur != False:
+                print("selec ordi",selection_ordinateur)
+                remove_couleur(selection_ordinateur)
+                deplacer_vers_centre(selection_ordinateur)
+                dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
+                mise_a_jour()
+                sleep(0.7)
+                efface("selection")
+                ordinateur_jouer_coup(selection_ordinateur,grille,positions_grille,palais,ligne_ordi)
+                # ordinateur_coup(selection_ordinateur, grille,positions_grille,palais)
+                if selection_ordinateur[2] == centre_table and malus_centre == True:
+                    plancher.append(-1)
+                    malus_centre = False
+                dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
+                mise_a_jour()
+                tour_fini = True
+                manche_finie = test_manche_finie(fabriques_disponibles,centre_table)
+            else:
+                print("=====================")
+                print("=====================")
+                print("=====================")
+                print("=====================")
+                print("=====================")
+                print("=====================")
+                print("=====================")
+                manche_finie = True
+                tour_fini = True
+
+
+
+
         if fin_partie(liste_grilles_joueurs,liste_palais,fabriques_disponibles):
             calculer_score(liste_planchers,fin_partie=True,liste_palais=liste_palais)
             generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs)
@@ -857,12 +910,21 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
-        if test_manche_finie(fabriques_disponibles, centre_table) or manche_finie:
+        if manche_finie:
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            print("+++++++++++++++++++++++")
+            remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
             generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
             variables_nouvelle_manche(nombre_joueurs)
             malus_centre = True
             joueurs_passes = 0
             joueur = 1
+            manche_finie = False
 
         #---------A chaque fin de tour on sauvegarde la partie---------------#
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie)

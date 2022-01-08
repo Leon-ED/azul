@@ -75,6 +75,9 @@ def fabriques_plein(liste):
                 continue
 
             taille = len(sac)
+            if taille-1 < 1:
+                liste[i][j] = 'vide'
+                continue
             position = randint(0,taille-1)
             liste[i][j] = sac[position]
             # print("On a ajouté : ",liste[i][j]," à la liste")
@@ -186,7 +189,6 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
     print(len(couvercle))
     for plancher in liste_planchers:
         main.remplir_couvercle(plancher,0,liste_planchers,True)
-    main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
     main.calculer_score(liste_planchers=liste_planchers,fin_manche=True)
     mise_a_jour()
     time.sleep(0.3)
@@ -195,6 +197,7 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
     tours+=1
 
 def generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs):
+    
     efface("fin_tour")
     from main import determiner_vainqueur
     texte((1800/2)-100, 900/2, 'Partie terminée',police='Arial')
