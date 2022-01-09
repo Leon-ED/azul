@@ -16,10 +16,7 @@ def resume_fabriques(liste_fabriques):
             sous_liste += lignes
         resume.append(sous_liste)
 
-    print("resum",resume)
     return resume
-
-
 
 def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais_ordi,resume,liste_lignes):
     '''
@@ -43,15 +40,15 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
             j = 0
             for tuiles in fabriques:
                 if j == len_fabrique:
-                    print(f'Taille : {len_fabrique}; j reset à {j}, i maintenant {i}')
+                    # #print(f'Taille : {len_fabrique}; j reset à {j}, i maintenant {i}')
                     j = 0
                     i += 1
-                print(f'{tuiles} correspond vrament à {real_fabrique[i][j]}')
+                # #print(f'{tuiles} correspond vrament à {real_fabrique[i][j]}')
 
                 if tuiles != 'vide' and tuiles in couleurs and fabriques.count(tuiles) == taille:
-                    print("Un elem a ete trouve",ligne)
+                    # #print("Un elem a ete trouve",ligne)
                     selection = select_tuiles(i,j,real_fabrique,ordinateur=True)
-                    print(ligne,taille,couleurs)
+                    #print(ligne,taille,couleurs)
                     return selection,ligne
                 
                 if tuiles != 'vide' and tuiles in couleurs:
@@ -62,8 +59,8 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
                     ligne_ter = 5
                 j += 1
     if selection_secondaire != None:
-        print("selec secon",ligne)
-        print(ligne,taille,couleurs)
+        #print("selec secon",ligne)
+        #print(ligne,taille,couleurs)
         return selection_secondaire,ligne_second
     elif selection_ter != None:
         return selection_ter,ligne_ter
