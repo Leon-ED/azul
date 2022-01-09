@@ -23,10 +23,12 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
     Analyse par ligne jouable, la place restante et les couleurs jouables et cherche au mieux parmis
     les fabriques les meilleur coup pour l'ordinateur
     '''
-    selection_secondaire = None
-    selection_ter = None
+    print("JOUER ")
+    print("JOUER ")
+    print("JOUER ")
+    choix_possibles = None
+    selec_plancher = None
     shuffle(liste_lignes)
-    # shuffle(resume)
     for ligne,taille,couleurs in liste_lignes:
         if couleurs == 'all':
             couleurs = COULEURS_JEU
@@ -50,20 +52,40 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
                     selection = select_tuiles(i,j,real_fabrique,ordinateur=True)
                     #print(ligne,taille,couleurs)
                     return selection,ligne
-                
                 if tuiles != 'vide' and tuiles in couleurs:
-                    selection_secondaire = select_tuiles(i,j,real_fabrique,ordinateur=True)
-                    ligne_second = ligne
+                    choix_possibles = []
+                    element = (i,j,numero_fabrique,tuiles,ligne,taille,couleurs,taille-fabriques.count(tuiles))
+                    if element not in choix_possibles:
+                        choix_possibles.append(element)
+                    # selection_secondaire = select_tuiles(i,j,real_fabrique,ordinateur=True)
+                    # ligne_second = ligne
                 elif tuiles != 'vide':
-                    selection_ter = select_tuiles(i,j,real_fabrique,ordinateur=True)
-                    ligne_ter = 5
+                    selec_plancher = (i,j,real_fabrique,ligne)
+                
                 j += 1
-    if selection_secondaire != None:
-        #print("selec secon",ligne)
-        #print(ligne,taille,couleurs)
-        return selection_secondaire,ligne_second
-    elif selection_ter != None:
-        return selection_ter,ligne_ter
+
+    if choix_possibles != None:
+        return analayse_choix(choix_possibles,liste_des_fabriques)
+    elif selec_plancher != None:
+        i,j,real_fabrique,ligne = selec_plancher
+        return select_tuiles(i,j,real_fabrique,ordinateur=True),ligne
     else:
         return False,False
 
+def analayse_choix(set_possibilites,fabriques_disponibles):
+    print("ANALYSE CHOIX")
+    print("ANALYSE CHOIX")
+    print("ANALYSE CHOIX")
+    print("ANALYSE CHOIX")
+    choix = [None,None]
+    solution = []
+    pos = -1
+    print(set_possibilites)
+    for i,j,num_fabrique,tuiles,lignes,taille,couleurs,ecart in set_possibilites:
+        pos += 1
+        if tuiles != 'vide' and (choix[0] == None or abs(ecart) < abs(choix[0])):
+            choix = [ecart,pos]
+            solution = [i,j,num_fabrique,lignes]
+    i,j,num_fabrique,lignes = solution
+    selection = select_tuiles(i,j,fabriques_disponibles[num_fabrique],ordinateur=True),lignes
+    return selection
