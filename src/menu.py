@@ -184,7 +184,7 @@ def menu_jeu(chemin):
             ferme_fenetre()
             return True
         if choix == 4:
-            config[-1] = True
+            config[3] = True
             ecrire_config(config,chemin)
             ferme_fenetre()
             return True
