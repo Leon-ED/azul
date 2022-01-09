@@ -18,15 +18,15 @@ def accueil():
 
     #Jouer
     rectangle(100,200,300,250)
-    texte(155,205,"Jouer")
+    texte(155,205,"Jouer",police="Arial")
 
     #Options
     rectangle(100,270,300,320)
-    texte(150,275,"Options")
+    texte(150,275,"Options",police="Arial")
 
     #Quitter
     rectangle(100,340,300,390)
-    texte(155,345,"Quitter")
+    texte(155,345,"Quitter",police="Arial")
 
     rectangle(10,550,15,555)
     if existe('./files/save.txt'):
@@ -67,19 +67,19 @@ def clic_ia(nombre_joueurs):
 
 def jouer_ia():
     efface_tout()
-    texte(120,100,police='Arial',chaine='Jouer contre ?')
+    texte(120,100,police='Arial',chaine='Jouer contre ?',police="Arial")
 
     #Jouer
     rectangle(100,200,300,250)
-    texte(130,205,"Un humain")
+    texte(130,205,"Un humain",police="Arial")
 
     #Options
     rectangle(100,270,300,320)
-    texte(120,275,"L'ordinateur")
+    texte(120,275,"L'ordinateur",police="Arial")
 
     #Quitter
     rectangle(100,340,300,390)
-    texte(145,345,"Accueil")
+    texte(145,345,"Accueil",police="Arial")
 
 
 
@@ -101,18 +101,18 @@ def jouer():
 
     #Jouer
     rectangle(100,200,300,250)
-    texte(145,205,"2 joueurs")
+    texte(145,205,"2 joueurs",police="Arial")
 
     #Options
     rectangle(100,270,300,320)
-    texte(145,275,"3 joueurs")
+    texte(145,275,"3 joueurs",police="Arial")
 
     #Quitter
     rectangle(100,340,300,390)
-    texte(145,345,"4 joueurs")
+    texte(145,345,"4 joueurs",police="Arial")
 
     rectangle(100,410,300,460)
-    texte(150,415,"Retour")
+    texte(150,415,"Retour",police="Arial")
 
 def options(settings_config):
     efface_tout()
@@ -125,15 +125,15 @@ def options(settings_config):
     '''
     #Options
     rectangle(100,270,300,320)
-    texte(145,275,"3 joueurs")
+    texte(145,275,"3 joueurs",police="Arial")
 
     #Quitter
     rectangle(100,340,300,390)
-    texte(145,345,"4 joueurs")
+    texte(145,345,"4 joueurs",police="Arial")
     '''
 
     rectangle(100,410,300,460)
-    texte(150,415,"Retour")
+    texte(150,415,"Retour",police="Arial")
 
 
 def clic_options(settings_config):
