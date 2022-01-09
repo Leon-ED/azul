@@ -2,17 +2,20 @@ Projet Développement Python 1 : Jeu Azul
 Réalisé par DOUMI Sofiane & EDMEE Léon.
 
 
-Dernière modification : 12/12/2021
+Dernière modification : 09/01/2022
 
 Jeu:
 
 Pour lancer le jeu exécuter le fichier main.py à l'aide de Python3
- > Appuyer sur jouer puis sélectionner le mode de jeu.
+ > Appuyer sur jouer
+ > Selectionner le nombre de joueurs
+ > Sélectionner le mode joueur contre joueur / joueur contre ordinateur
 
 Un mode de test où les deux joueurs sont contrôlés par l'ordinateur est disponible en cliquant sur le carré
-en bas à gauche sur le menu 'accueil' dès le lancement du fichier.
+en bas à gauche sur le menu 'accueil' dès le lancement du fichier. Il oppose 4 joueurs contrôlés par l'ordinateur et jouent sans délai.
 
-> Le jeu s'arrête dès qu'il n'y a plus de tuiles en jeu : dans les fabriques ou dans la zone du centre.
+> Le jeu s'arrête dès qu'un joueur a rempli une ligne de son palais ou alors quand il n'y a plus de tuiles en jeu que ça soit dans le sac,
+le couvercle et les fabriques
 
 -----Phase 1 -----
 
@@ -52,5 +55,26 @@ Non implémenté / Bugs / Problèmes rencontrés:
     - Récupérer les tuiles "tombées" pour les remettre en jeu ---> Sera prêt pour la phase 3
     - Menu options où on peut choisir entre un mode bas graphiques (dessins avec upemtk) ou haut graphiques (utilisation d'images) ---> Sera prêt pour la phase 3
     (Toujours possible de choisir l'option soit même dans le main.py)
-
     - Le comptage des points ---> Sera prêt pour la phase 3
+
+-----Phase 3 -----
+
+Implémentations:
+    -Celles de la phase 1 et 2
+    -Les fabriques sont supprimées dynamiquement au fur et à mesure qu'elles sont jouées
+    -Comptage des points à la fin de la manche et à la fin de la partie
+    -Sauvegarde de la partie (automatique) et chargement d'une partie au choix si une sauvegarde existe
+    -Possibilité de choisir entre un mode décoré et un mode non décoré
+    -Enregistrement des tuiles non utilisées pour les réutiliser si le sac est vide : couvercle du jeu
+    
+
+    ---Extension du jeu :
+    -Amélioration du jeu de l'ordinateur auparavant il prenait une fabrique au hasard , une couleur au hasard et les placait dans une ligne au hasard.
+    Désormais :
+    -A chaque coup il calcul selon sa grille et selon son palais la place disponible et les couleurs qu'il peut placer
+    -Les matrices représentant les fabriques sont simplifiées en une liste.
+    -Pour chaque ligne et les possibilités de placement des tuiles , l'ordinateur analyse les fabriques et s'il peut remplir la ligne directement il le fait.
+    Sinon il continue  avec la ligne suivante et s'il ne trouve toujours rien, il joue analyse la "moins pire" des possibilités et la jouer.
+    L'ancienne version de l'ordinateur les faisait finir la partie avec énormément des points négatifs et très rarement en positif avec quand c'est le cas un  très faible score.
+    La nouvelle version rend l'ordinateur très compétitif , il ne termine jamais une partie avec des points négatifs mais avec beaucoup de points et est très difficile à battre !
+
