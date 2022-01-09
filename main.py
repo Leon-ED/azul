@@ -452,16 +452,14 @@ def resume_fabriques(liste_fabriques):
 
 
 
-def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais_ordi):
+def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais_ordi,resume,liste_lignes):
     '''
     Analyse par ligne jouable, la place restante et les couleurs jouables et cherche au mieux parmis
     les fabriques les meilleur coup pour l'ordinateur
     '''
-    liste_lignes = lignes_jouables(grille_ordi,palais_ordi)
-    resume = resume_fabriques(liste_des_fabriques)
     selection_secondaire = None
     selection_ter = None
-    # shuffle(liste_lignes)
+    shuffle(liste_lignes)
     # shuffle(resume)
     for ligne,taille,couleurs in liste_lignes:
         if couleurs == 'all':
@@ -502,19 +500,6 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
         return selection_ter,ligne_ter
     else:
         return False,False
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def ordinateur_jouer_coup(selection,grille,positions_grilles,palais,ligne):
     reseul = remplir_cases(selection,grille,0,ligne,positions_grilles,ordinateur=True)
@@ -818,6 +803,7 @@ if __name__ == "__main__":
     sac_plein() #On crée le sac
     global fabriques_disponibles
     nombre_joueurs,joueur_ia,low_graphismes,reload = lire_config(chemin_settings) #On lit les paramètres du jeu depuis le fichier
+    vitesse = 0
     if reload == True: #Pour être bien sûr qu'il soit égal à True
         ''' On lit la sauvegarde si le joueur a choisi l'option reprendre la partie'''
         save = copy_file(chemin_save)
@@ -831,7 +817,7 @@ if __name__ == "__main__":
 
 
     #------Dessine les éléments à ne jamais effacer-------#
-    '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant ainsi les performances.'''
+    '''Cela permet de ne pas à devoir les réafficher à chaque tour augmentant les performances.'''
     dessiner_tout_planchers(liste_planchers)
     dessiner_tout_palais(liste_palais,low_graphismes)
     dessiner_tout_grilles_joueurs(liste_grilles_joueurs)
@@ -856,20 +842,21 @@ if __name__ == "__main__":
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
             '''Cas où l'ordinateur doit jouer'''
-            manche_finie = test_manche_finie(fabriques_disponibles,centre_table)
         elif tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
             mise_a_jour()
             # dessine_tuiles_lignes(grille, joueur,low_graphismes)
             # ordinateur_fabrique = ordinateur_choisir_fabrique(fabriques_disponibles)
             # selection_ordinateur = ordinateur_choisir_couleur(ordinateur_fabrique)
-            selection_ordinateur,ligne_ordi = ordinateur_choisir_fabrique_couleur_2(fabriques_disponibles,grille,palais)
+            liste_lignes = lignes_jouables(grille,palais)
+            resume = resume_fabriques(fabriques_disponibles)
+            selection_ordinateur,ligne_ordi = ordinateur_choisir_fabrique_couleur_2(fabriques_disponibles,grille,palais,resume,liste_lignes)
             if selection_ordinateur != False:
                 print("selec ordi",selection_ordinateur)
                 remove_couleur(selection_ordinateur)
                 deplacer_vers_centre(selection_ordinateur)
                 dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
                 mise_a_jour()
-                sleep(0.7)
+                sleep(vitesse)
                 efface("selection")
                 ordinateur_jouer_coup(selection_ordinateur,grille,positions_grille,palais,ligne_ordi)
                 # ordinateur_coup(selection_ordinateur, grille,positions_grille,palais)
@@ -879,20 +866,17 @@ if __name__ == "__main__":
                 dessiner_tuiles_plancher(plancher,return_positions(joueur,1),low_graphismes)
                 mise_a_jour()
                 tour_fini = True
-                manche_finie = test_manche_finie(fabriques_disponibles,centre_table)
             else:
-                print("=====================")
-                print("=====================")
-                print("=====================")
-                print("=====================")
-                print("=====================")
-                print("=====================")
-                print("=====================")
                 manche_finie = True
                 tour_fini = True
 
 
-
+        if test_manche_finie(fabriques_disponibles,centre_table) or manche_finie:
+            generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
+            variables_nouvelle_manche(nombre_joueurs)
+            malus_centre = True
+            joueurs_passes = 0
+            joueur = 1
 
         if fin_partie(liste_grilles_joueurs,liste_palais,fabriques_disponibles):
             calculer_score(liste_planchers,fin_partie=True,liste_palais=liste_palais)
@@ -910,22 +894,7 @@ if __name__ == "__main__":
             tours+=1
             joueurs_passes = 0
             joueur = 1
-        if manche_finie:
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            print("+++++++++++++++++++++++")
-            remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
-            generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours)
-            variables_nouvelle_manche(nombre_joueurs)
-            malus_centre = True
-            joueurs_passes = 0
-            joueur = 1
-            manche_finie = False
+
 
         #---------A chaque fin de tour on sauvegarde la partie---------------#
         ecrire_save(nombre_joueurs,joueur,joueur_ia,joueurs_passes,liste_grilles_joueurs,liste_planchers,centre_table,fabriques_disponibles,liste_palais,malus_centre,liste_score,partie_finie,tour_fini,sac,couvercle,tours,manche_finie)
-

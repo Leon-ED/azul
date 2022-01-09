@@ -62,14 +62,15 @@ def fabriques_plein(liste):
     print("Le sac est: ",sac,"\n Sa taille est de :",taille)
     for i in range(2):
         for j in range(2):
-            if sac_est_vide() and couvercle != []:
+            if len(sac) < 4 and couvercle != []:
                 print("Le sac est vide, on va le remplir")
                 print("Le couvercle est :",couvercle)
-                sac = copy.deepcopy(couvercle)
+                for items in couvercle:
+                    sac.append(items)
                 print("Le sac est maintenant :",sac)
                 couvercle.clear()
                 print("Le couvercle est maintenant :",couvercle)
-            elif sac_est_vide() and couvercle == [] and liste[0][0] in COULEURS_JEU:
+            elif sac_est_vide() and couvercle == []: # and liste[0][0] in COULEURS_JEU:
                 print("Plus de tuiles !!!!!")
                 liste[i][j] = 'vide'
                 continue
@@ -186,7 +187,12 @@ def generer_fabriques(nombre_joueurs):
 
 def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joueurs,nombre_joueurs,tours):
     import main;import time
+    print("MANCHE FINUE")
+    print("MANCHE FINUE")
+    print("MANCHE FINUE")
+    print("MANCHE FINUE")
     print(len(couvercle))
+    main.remplir_palais(liste_palais,liste_grilles_joueurs,liste_planchers)
     for plancher in liste_planchers:
         main.remplir_couvercle(plancher,0,liste_planchers,True)
     main.calculer_score(liste_planchers=liste_planchers,fin_manche=True)
@@ -194,6 +200,7 @@ def generer_fin_manche(liste_planchers,couvercle,liste_palais,liste_grilles_joue
     time.sleep(0.3)
     efface("score")
     efface("fin_manche")
+    mise_a_jour()
     tours+=1
 
 def generer_fin_partie(liste_planchers,liste_palais,liste_score,nombre_joueurs):
