@@ -94,24 +94,24 @@ def select_fabrique(liste_des_fabriques,positions_tuiles_centre=[650,350],taille
     :return list: Liste sélectionnée par le joueur
     '''
     x,y,_ = attente_clic()
-    print(x,y)
+    # print(x,y)
     if 2 >= ((y-positions_tuiles_centre[1])//taille) >= 0 and 10>=(x-positions_tuiles_centre[0])//taille>=0 and (tours != 0 or joueurs_passes !=0):
         i = (y-positions_tuiles_centre[1])//taille
         j = (x-positions_tuiles_centre[0])//taille
-        print("Centre table directement")
+        # print("Centre table directement")
         return i,j,centre_table    
     while (x//50)-1 < 0 or (y//50)-1 <0:
         x,y,_ = attente_clic()
     i = (x//50)-1
     j = (y//50)-1
-    print(i,j)
+    # print(i,j)
     fabrique = []
     liste_des_fabriques = liste_des_fabriques[1:-1]
-    print(liste_des_fabriques)
+    # print(liste_des_fabriques)
     emplacements = [0,4,8,12,16,20,24,28,32]
     for pos in range(len(liste_des_fabriques)):
         if i == emplacements[pos] or i == emplacements[pos]+1:
-            print(liste_des_fabriques[pos])
+            # print(liste_des_fabriques[pos])
             fabrique = liste_des_fabriques[pos]
             i -= emplacements[pos]
             break
@@ -132,15 +132,15 @@ def select_tuiles(i,j,fabrique,ordinateur=False):
     '''
     if not ordinateur:
         if fabrique != centre_table and ( i>1 or liste_invalide(fabrique) or j>1):
-            print("Invalide 1")
+            # print("Invalide 1")
             return -10
         if fabrique == centre_table and (j>=len(fabrique[i])):
-            print("Invalide 2")
+            # print("Invalide 2")
             return -10
     compteur = 0
     couleur = fabrique[i][j]
     if couleur == 'vide':
-        print("selec vide")
+        # print("selec vide")
         return -10
     for lines in fabrique:
         for elems in lines:
@@ -158,7 +158,7 @@ def remove_couleur(selection):
     :return int: -10 si invalide
     :return None: si valide
     '''
-    print(selection)
+    # print(selection)
     couleur,nombre,fabrique = selection
     if liste_invalide(fabrique):
         return -10
@@ -195,14 +195,14 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
             remplir_plancher(couleur_selection, nombre_cases, plancher)
             return True
         '''Detecte les conditions qui font que la zone choisie n'est pas bonne'''
-        if x>pos_grille[4] or x<pos_grille[2] or y > pos_grille[5] or y < pos_grille[3]:
+        if x>pos_grille[4] or x<pos_grille[2] or y > pos_grille[5] or y < pos_grille[3] or x < (pos_grille[4])-(len(grille[i]))*(cote+ecart):
             #print(x,y,"Pos pas bonne")
             return False
         if 'vide' not in grille[i]:
             #print(x,y,"Pas de place")
             return False
         if not coup_possible(couleur_selection, i, liste_palais[joueur-1]):
-            print(f'Coup pas possible: joueur {joueur}, i={i},palais={liste_palais[joueur-1]}')
+            # print(f'Coup pas possible: joueur {joueur}, i={i},palais={liste_palais[joueur-1]}')
             return False
     elif ordinateur:
         i = y
@@ -280,17 +280,15 @@ def deplacer_vers_centre(selection,centre=False):
     _,_,fabrique = selection
     i,j = 0,0
     if fabrique == centre_table or centre: #Si la fabrique utilisée est celle du milieu
-        print("Centre table")
+        # print("Centre table")
         return
-
-    print(fabrique,"eeeeeeeeeeee deplacer")
     for lignes in fabrique:
         for elements in lignes:
             while i < len(centre_table)-1:
                 if j == len(centre_table[i]):
                     j = 0
                     i+=1
-                print(i,j)
+                # print(i,j)
                 if centre_table[i][j] == 'vide':
                     centre_table[i][j] = elements
                     break
@@ -337,9 +335,6 @@ def jouer_couleur_grille(grille_joueur,couleur=None):
 def ligne_palais_complete(palais_j):
     for i in range(len(palais_j)):
         if all([palais_j[i][j][1] for j in range(len(palais_j[i]))]):
-            print(i)
-            print(palais_j)
-            print([palais_j[i][j][1] for j in range(len(palais_j[i]))])
             return True
         else:
             continue
@@ -401,9 +396,8 @@ def tour_ordinateur(num_joueur,liste_joueurs_ia):
     return False
 
 def ordinateur_jouer_coup(selection,grille,positions_grilles,palais,ligne):
-    reseul = remplir_cases(selection,grille,0,ligne,positions_grilles,ordinateur=True)
-    print(reseul)
-    return reseul
+    resul = remplir_cases(selection,grille,0,ligne,positions_grilles,ordinateur=True)
+    return resul
 
 def lignes_jouables(grille_joueur,palais_joueur):
     '''Retourne la liste formée par le numéro de ligne, la place disponible et la liste de couleur jouable'''
@@ -411,7 +405,7 @@ def lignes_jouables(grille_joueur,palais_joueur):
     for i in range(len(grille_joueur)):
         verif = True
         if 'vide' not in grille_joueur[i]: #Pas de place pas la peine de chercher
-            print("Ligne vide",i)
+            # print("Ligne vide",i)
             continue
         ligne = [i]
         couleur_non_jouables = cherche_couleur_palais(palais_joueur,False,i) #Cherche les couleurs qui ne peuvent être placee en fonction du palais
@@ -431,9 +425,9 @@ def lignes_jouables(grille_joueur,palais_joueur):
             colors = COULEURS_JEU[:]
             for couleurs in COULEURS_JEU:
                 if couleurs in couleur_non_jouables:
-                    print("Ligne ,",couleurs,i)
+                    # print("Ligne ,",couleurs,i)
                     colors.remove(couleurs)
-                    print(colors)
+                    # print(colors)
             ligne.append(compteur_ligne(grille_joueur[i]))
             ligne.append(colors)
             elem_jouables.append(ligne)
@@ -467,11 +461,11 @@ def remplir_couvercle(ligne_j,n,liste_planchers,plancher=False):
                 couvercle.append(couleurs)
     else:
         couleur = ligne_j[0]
-        print("COULEUR",couleur)
+        # print("COULEUR",couleur)
         for i in range(len(ligne_j)-1):
-            print(i,ligne_j[i])
+            # print(i,ligne_j[i])
             couvercle.append(couleur)
-    print("Le couvercle contient :", len(couvercle)," tuiles")
+    # print("Le couvercle contient :", len(couvercle)," tuiles")
 
 def cherche_couleur_palais(palais_j,couleur,i):
     '''Retourne la position j du palais de la couleur indiquée'''
@@ -486,7 +480,8 @@ def cherche_couleur_palais(palais_j,couleur,i):
         couleur_non_jouables = set()
         for color,rempli in palais_j[i]:
             if rempli == True:
-                print(color,"Non jouables")
+                # print(color,"Non jouables")
+
                 couleur_non_jouables.add(color)
 
 
@@ -552,7 +547,7 @@ def cases_voisines_vides(palais,i,j):
     '''Retourne True si l\'élément indiqué ne possède aucun voisins'''
     voisins = cree_sous_matrice(i,j,palais)
     for i,j in voisins:
-        print(i,j)
+        # print(i,j)
         if palais[i][j][1] == True:
             return False
     return True
@@ -578,7 +573,7 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
 
         compteur = 0
         points = 0
-        print("====== Points du joueur ",joueur+1," ======","pour la tuile",palais[i][j][0]," placée en ligne : ",i+1)
+        # print("====== Points du joueur ",joueur+1," ======","pour la tuile",palais[i][j][0]," placée en ligne : ",i+1)
         if not offset(palais,i+1,j) and palais[i+1][j][1] or not offset(palais,i-1,j) and palais[i-1][j][1]:
             for k in range(0,len(palais)):
                 if palais[k][j][1]:
@@ -589,7 +584,7 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
                     compteur = 0
                 if not palais[k][j][1] and k > i:
                     break
-            print(" Verticalement : ",points," points")
+            # print(" Verticalement : ",points," points")
         compteur = 0
         if not offset(palais,i,j+1) and palais[i][j+1][1] or not offset(palais,i,j-1) and palais[i][j-1][1]:
             for k in range(0,len(palais[i])):
@@ -601,7 +596,7 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
                     compteur = 0
                 if not palais[i][k][1] and k > j:
                     break
-            print("Total, ",points)
+            # print("Total, ",points)
         liste_score[joueur] += points
         return
     elif fin_partie:
@@ -679,7 +674,7 @@ if __name__ == "__main__":
         afficher_scores(liste_score,nombre_joueurs)
         '''Cas où un humain doit jouer'''
         if not tour_ordinateur(joueur, joueur_ia) and not partie_finie and not tour_fini and not manche_finie:
-            print(len(couvercle),"COUVRR")
+            # print(len(couvercle),"COUVRR")
             while not tour_fini:
                  tour_fini = jouer_tour(joueur, plancher, grille, positions_plancher, positions_grille, fabriques_disponibles,malus_centre)
         
@@ -693,7 +688,7 @@ if __name__ == "__main__":
             resume = resume_fabriques(fabriques_disponibles)
             selection_ordinateur,ligne_ordi = ordinateur_choisir_fabrique_couleur_2(fabriques_disponibles,grille,palais,resume,liste_lignes)
             if selection_ordinateur != False:
-                print("selec ordi",selection_ordinateur)
+                # print("selec ordi",selection_ordinateur)
                 remove_couleur(selection_ordinateur)
                 deplacer_vers_centre(selection_ordinateur)
                 dessiner_selection(selection_ordinateur, positions_tuiles_centre,low_graphismes)
