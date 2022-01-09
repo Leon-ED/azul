@@ -78,5 +78,3 @@ Implémentations:
     Et s'il ne trouve toujours rien alors il place les tuiles dans le plancher
     L'ancienne version de l'ordinateur les faisait finir la partie avec énormément des points négatifs et très rarement en positif avec quand c'est le cas un  très faible score.
     La nouvelle version rend l'ordinateur très compétitif , il ne termine jamais une partie avec des points négatifs mais avec beaucoup de points et est très difficile à battre !
-
-

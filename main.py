@@ -368,6 +368,7 @@ def jouer_tour(joueur,plancher,grille,positions_plancher_centre,positions_grille
             global malus_centre
         malus_centre = False
     remove_couleur(selection)
+    print("SELECTION_JOUER", selection)
     deplacer_vers_centre(selection)
     dessiner_tuiles_plancher(plancher, return_positions(joueur, 1),low_graphismes)
     efface("fin_tour")
@@ -480,6 +481,7 @@ def cherche_couleur_palais(palais_j,couleur,i):
         for color,rempli in palais_j[i]:
             if rempli == True:
                 # print(color,"Non jouables")
+
                 couleur_non_jouables.add(color)
 
 

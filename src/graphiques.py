@@ -252,6 +252,7 @@ def afficher_scores(liste_scores,nombre_joueurs):
         #print(liste_scores[i])
         texte(x-200,y+20,"Score : "+str(liste_scores[i]),tag='score',police="Arial")
 
+
 def dessine_tuiles_lignes(grille,joueur,low_graphismes):
     '''
     Dessine les tuiles dans la grille du joueur

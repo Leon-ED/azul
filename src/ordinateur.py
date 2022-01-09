@@ -15,7 +15,6 @@ def resume_fabriques(liste_fabriques):
         for lignes in fabriques:
             sous_liste += lignes
         resume.append(sous_liste)
-
     return resume
 
 def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais_ordi,resume,liste_lignes):
@@ -23,9 +22,6 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
     Analyse par ligne jouable, la place restante et les couleurs jouables et cherche au mieux parmis
     les fabriques les meilleur coup pour l'ordinateur
     '''
-    print("JOUER ")
-    print("JOUER ")
-    print("JOUER ")
     choix_possibles = None
     selec_plancher = None
     shuffle(liste_lignes)
@@ -73,10 +69,6 @@ def ordinateur_choisir_fabrique_couleur_2(liste_des_fabriques,grille_ordi,palais
         return False,False
 
 def analayse_choix(set_possibilites,fabriques_disponibles):
-    print("ANALYSE CHOIX")
-    print("ANALYSE CHOIX")
-    print("ANALYSE CHOIX")
-    print("ANALYSE CHOIX")
     choix = [None,None]
     solution = []
     pos = -1
