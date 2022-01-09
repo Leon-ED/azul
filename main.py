@@ -195,7 +195,7 @@ def remplir_cases(selection,grille,x,y,pos_grille,ordinateur=False):
             remplir_plancher(couleur_selection, nombre_cases, plancher)
             return True
         '''Detecte les conditions qui font que la zone choisie n'est pas bonne'''
-        if x>pos_grille[4] or x<pos_grille[2] or y > pos_grille[5] or y < pos_grille[3]:
+        if x>pos_grille[4] or x<pos_grille[2] or y > pos_grille[5] or y < pos_grille[3] or x < (pos_grille[4])-(len(grille[i]))*(cote+ecart):
             #print(x,y,"Pos pas bonne")
             return False
         if 'vide' not in grille[i]:
