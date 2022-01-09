@@ -727,7 +727,6 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
         for planchers in liste_planchers:
             for _,malus in zip(planchers,liste_malus):
                 liste_score[joueur] += malus
-                print(liste_score[joueur])
             joueur += 1
         #afficher_scores(liste_score,nombre_joueurs)
     elif not fin_partie and not fin_manche:
@@ -782,6 +781,7 @@ def calculer_score(liste_planchers,i=None,j=None,palais=None,fin_partie=False,fi
                         points += 10 #Le joueur 5 fois la meme couleur dans son palais il gagne 10 points supplémentaires
                     if palais[i][k][1]:
                         compteur += 1
+            print("JEU : Le joueur {} a reçu {} points supplémentaires !".format(joueur+1,points))
             liste_score[joueur] += points
             joueur += 1
         #afficher_scores(liste_score,nombre_joueurs)
