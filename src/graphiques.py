@@ -95,9 +95,6 @@ def dessiner_tuiles_centre(liste_centre,low_graphismes):
     ##print(liste_centre)
     for i in range(len(liste_centre)):
         for j in range(len(liste_centre[i])):
-
-            if liste_centre[i][j] == 'vide':
-                nb_elem+=1
             if nb_elem == 10:
                 nb_elem = 0
                 nb_ligne +=1
@@ -106,7 +103,7 @@ def dessiner_tuiles_centre(liste_centre,low_graphismes):
                     rectangle(650+50*nb_elem, 400+50*nb_ligne, 700+50*nb_elem, 350+50*nb_ligne,remplissage=liste_centre[i][j],couleur='black',tag="fin_tour")
                 else:
                     image(650+50*nb_elem, 350+50*nb_ligne, "./images/"+str(liste_centre[i][j])+str("_h.gif"),ancrage="nw",tag="fin_tour")
-                nb_elem +=1
+            nb_elem +=1
 
             
 
@@ -247,12 +244,7 @@ def afficher_tout_palais(liste_palais,low_graphismes=False):
                         image((x)+60*j, (y+10)+60*i, "./images/"+str(palais[i][j][0])+str("_h.gif"),ancrage="nw")
 
         joueur+=1
-                
-
-
-
-
-
+            
 def afficher_scores(liste_scores,nombre_joueurs):
 
     for i in range(nombre_joueurs):
