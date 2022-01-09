@@ -67,7 +67,7 @@ def clic_ia(nombre_joueurs):
 
 def jouer_ia():
     efface_tout()
-    texte(120,100,police='Arial',chaine='Jouer contre ?',police="Arial")
+    texte(120,100,police='Arial',chaine='Jouer contre ?')
 
     #Jouer
     rectangle(100,200,300,250)

@@ -15,7 +15,7 @@ def afficher_tour(centre_table,low_graphismes,fabriques_disponibles,liste_grille
     dessiner_tuiles_centre(centre_table,low_graphismes)
     dessiner_toutes_tuiles_fabriques(fabriques_disponibles,low_graphismes)
     dessiner_toutes_tuiles_grilles(liste_grilles_joueurs,low_graphismes)
-    texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour",police="Arial") #Affiche quel joueur joue pour plus de clarté
+    texte(positions_tuiles_centre[0]+120,positions_tuiles_centre[1]-50,"Au tour du joueur: "+str(joueur),police='Arial',tag="fin_tour") #Affiche quel joueur joue pour plus de clarté
 
 
 def return_positions(joueur,type_pos):
